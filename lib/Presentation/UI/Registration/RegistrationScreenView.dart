@@ -2,6 +2,7 @@ import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
+import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenViewModel.dart';
 import 'package:flutter/material.dart';
@@ -363,5 +364,20 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   @override
   hideDialog() {
     MyDialogUtils.hideDialog(context: context);
+  }
+
+  @override
+  showLoading(String message) {
+    MyDialogUtils.showLoading(context: context, message: message);
+  }
+
+  @override
+  goTOHomeScreen() {
+    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+  }
+
+  @override
+  showSuccessMessage(String message) {
+    MyDialogUtils.showSuccessDialog(context: context, message: message );
   }
 }

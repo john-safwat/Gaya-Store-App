@@ -1,5 +1,3 @@
-import 'package:ecommerce/Data/Api/ApiManager.dart';
-import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/widgets.dart';
@@ -65,9 +63,21 @@ class RegistrationScreenViewModel extends ChangeNotifier {
       required DateTime date})async {
     if (password != rePassword){
       navigator!.showErrorMessage("Not The Same Password");
+      return;
     }
     String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-    var response =await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
-    print(response.message);
+    try{
+
+      navigator!.showLoading("Creating Your Account");
+      var response = await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
+      navigator!.hideDialog();
+      if (response.message == "The user is already Exists"){
+        navigator!.showErrorMessage("User Email is Already Exists");
+      }else {
+        navigator!.showSuccessMessage("Your Account Created Successfully" );
+      }
+    }catch (e){
+      navigator!.showErrorMessage(e.toString());
+    }
   }
 }

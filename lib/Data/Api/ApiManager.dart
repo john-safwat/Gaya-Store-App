@@ -12,7 +12,7 @@ class ApiManager {
     return _instance!;
   }
 
-  String baseUrl = '192.168.1.9';
+  String baseUrl = '192.168.43.231';
   String path = '/E-Commerce-BackEnd/addUser.php';
 
   Future<UserResponseDTO> addNewUser({

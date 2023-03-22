@@ -1,4 +1,5 @@
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Splash/SplashScreen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName :(_) => SplashScreen(),
         LoginScreen.routeName :(_) => LoginScreen(),
         RegistrationScreen.routeName :(_) => RegistrationScreen(),
+        HomeScreen.routeName :(_) => HomeScreen(),
       },
       initialRoute: SplashScreen.routeName,
       theme: MyTheme.darkTheme,
