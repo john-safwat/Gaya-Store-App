@@ -41,6 +41,8 @@ dependencies:
   quickalert: ^1.0.1
   flutter_rounded_date_picker: ^3.0.2
   intl: ^0.18.0
+  dio: ^5.0.3
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

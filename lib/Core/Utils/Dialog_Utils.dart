@@ -10,4 +10,7 @@ class MyDialogUtils{
       text: message,
     );
   }
+  static hideDialog({required BuildContext context}){
+    Navigator.pop(context);
+  }
 }

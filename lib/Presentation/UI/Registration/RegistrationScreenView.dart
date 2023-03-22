@@ -171,6 +171,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
     );
   }
 
+
   void showMyDatePicker()async{
     DateTime? newDateTime = await showRoundedDatePicker(
       context: context,
@@ -350,5 +351,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
   @override
   showErrorMessage(String message) {
     MyDialogUtils.showErrorDialog(context: context, message: message);
+  }
+
+  @override
+  hideDialog() {
+    MyDialogUtils.hideDialog(context: context);
   }
 }

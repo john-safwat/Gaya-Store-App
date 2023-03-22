@@ -1,9 +1,11 @@
+import 'package:ecommerce/Data/Api/ApiManager.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class RegistrationScreenViewModel extends ChangeNotifier {
+  ApiManager apiManager = ApiManager();
   RegistrationScreenNavigator? navigator ;
-
   // validate if the name don't contain any special character
   String? nameValidation(String input) {
     if (input.isEmpty) {
@@ -61,5 +63,12 @@ class RegistrationScreenViewModel extends ChangeNotifier {
     if (password != rePassword){
       navigator!.showErrorMessage("Not The Same Password");
     }
+    String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    apiManager.addNewUser(
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+        dateTime: datetime);
   }
 }
