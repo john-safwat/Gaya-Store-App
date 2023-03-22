@@ -13,7 +13,7 @@ class UserDTO {
     passwordEncrypted = json['passwordEncrypted'];
     phone = json['phone'];
     birthDate = json['birthDate'];
-    userToken = json['userToken'];
+    userToken = json['token'];
   }
   String? name;
   String? email;
@@ -29,7 +29,7 @@ class UserDTO {
     map['passwordEncrypted'] = passwordEncrypted;
     map['phone'] = phone;
     map['birthDate'] = birthDate;
-    map['userToken'] = userToken;
+    map['token'] = userToken;
     return map;
   }
 

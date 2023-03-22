@@ -60,24 +60,32 @@ class RegistrationScreenViewModel extends ChangeNotifier {
       required String password,
       required String rePassword,
       required String phone,
-      required DateTime date})async {
+      required DateTime date,
+        //required AppConfigProvider provider
+      })async {
     if (password != rePassword){
       navigator!.showErrorMessage("Not The Same Password");
       return;
     }
     String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     try{
-
       navigator!.showLoading("Creating Your Account");
       var response = await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
       navigator!.hideDialog();
       if (response.message == "The user is already Exists"){
         navigator!.showErrorMessage("User Email is Already Exists");
       }else {
-        navigator!.showSuccessMessage("Your Account Created Successfully" );
+        navigator!.updateToken(response.token!);
+        navigator!.showSuccessMessage("Your Account Created Successfully" , goToHome);
       }
     }catch (e){
       navigator!.showErrorMessage(e.toString());
     }
   }
+
+  void goToHome(){
+    navigator!.hideDialog();
+    navigator!.goToPickImageScreen();
+  }
+
 }

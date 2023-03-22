@@ -20,13 +20,15 @@ class MyDialogUtils{
       text: message,
     );
   }
-  static showSuccessDialog ({required BuildContext context , required String message}){
+  static showSuccessDialog ({required BuildContext context , required String message , Function? action}){
     QuickAlert.show(
       context: context,
       type: QuickAlertType.success,
       text: message,
       onConfirmBtnTap: () {
-        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        if(action != null){
+          action();
+        }
       }
     );
   }

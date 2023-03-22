@@ -1,8 +1,9 @@
 import 'package:ecommerce/Core/DI/di.dart';
+import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
-import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
+import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenViewModel.dart';
 import 'package:flutter/material.dart';
@@ -350,9 +351,8 @@ class _RegistrationScreenState extends State<RegistrationScreen>
           password: passwordController.text,
           rePassword: rePasswordController.text,
           phone: phoneController.text,
-          date: date);
-    } else {
-      debugPrint("invalid data");
+          date: date,
+          );
     }
   }
 
@@ -372,12 +372,19 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   }
 
   @override
-  goTOHomeScreen() {
-    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+  goToPickImageScreen() {
+    Navigator.pushReplacementNamed(context, PickImageScreen.routeName);
   }
 
   @override
-  showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message );
+  showSuccessMessage(String message, Function action) {
+    MyDialogUtils.showSuccessDialog(
+        context: context, message: message, action: action);
+  }
+
+  @override
+  updateToken(String token) {
+    var provider = Provider.of<AppConfigProvider>(context, listen: false);
+    provider.updateToken(token);
   }
 }
