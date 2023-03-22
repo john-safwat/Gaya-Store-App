@@ -1,3 +1,5 @@
+import 'package:ecommerce/Domain/Models/UserModel/UserResponse.dart';
+
 import 'UserDTO.dart';
 
 class UserResponseDTO {
@@ -24,5 +26,11 @@ class UserResponseDTO {
       map['user'] = user?.toJson();
     }
     return map;
+  }
+  UserResponse toDomina(){
+    return UserResponse(
+      message: message,
+      token: user!.userToken,
+    );
   }
 }

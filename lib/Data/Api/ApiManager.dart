@@ -4,6 +4,14 @@ import 'package:intl/intl.dart';
 import '../Models/UserModel/UserResponseDTO.dart';
 
 class ApiManager {
+  ApiManager._();
+  static ApiManager? _instance;
+
+  static ApiManager getApiManager(){
+    _instance ??= ApiManager._();
+    return _instance!;
+  }
+
   String baseUrl = '192.168.1.9';
   String path = '/E-Commerce-BackEnd/addUser.php';
 

@@ -1,11 +1,14 @@
 import 'package:ecommerce/Data/Api/ApiManager.dart';
+import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
+import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class RegistrationScreenViewModel extends ChangeNotifier {
-  ApiManager apiManager = ApiManager();
   RegistrationScreenNavigator? navigator ;
+  AuthRegistrationUseCase useCase;
+  RegistrationScreenViewModel(this.useCase);
   // validate if the name don't contain any special character
   String? nameValidation(String input) {
     if (input.isEmpty) {
@@ -59,16 +62,12 @@ class RegistrationScreenViewModel extends ChangeNotifier {
       required String password,
       required String rePassword,
       required String phone,
-      required DateTime date}) {
+      required DateTime date})async {
     if (password != rePassword){
       navigator!.showErrorMessage("Not The Same Password");
     }
     String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-    apiManager.addNewUser(
-        name: name,
-        email: email,
-        password: password,
-        phone: phone,
-        dateTime: datetime);
+    var response =await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
+    print(response.message);
   }
 }

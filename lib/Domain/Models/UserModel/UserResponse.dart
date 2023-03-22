@@ -1,14 +1,8 @@
-import '../../../Data/Models/UserDto.dart';
-
 class UserResponse {
   UserResponse({
-    this.statusCode,
     this.message,
-    this.user,
+    this.token,
   });
-
-  String? statusCode;
   String? message;
-  User? user;
-
+  String? token;
 }

@@ -1,11 +1,14 @@
+import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
+import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 class RegistrationScreen extends StatefulWidget {
   static const String routeName = "RegistrationScreen";
 
@@ -13,9 +16,11 @@ class RegistrationScreen extends StatefulWidget {
   State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> implements RegistrationScreenNavigator{
+class _RegistrationScreenState extends State<RegistrationScreen>
+    implements RegistrationScreenNavigator {
   bool isVisible = false;
-  RegistrationScreenViewModel viewModel = RegistrationScreenViewModel();
+  RegistrationScreenViewModel viewModel = RegistrationScreenViewModel(
+      AuthRegistrationUseCase(injectAuthRepository()));
   DateTime date = DateTime.now();
 
   final formKey = GlobalKey<FormState>();
@@ -36,6 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
     super.dispose();
     viewModel.navigator = null;
   }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -63,105 +69,106 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
                   ),
                   // the text field
                   Form(
-                    key: formKey,
-                    child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // the name data field
-                      dataFormField(
-                        hintText: "Name",
-                        titleText: "Enter Your Name",
-                        icon: const Icon(Icons.badge_outlined),
-                        keyboardType: TextInputType.text,
-                        inputController: nameController,
-                        validation: viewModel.nameValidation,
-                      ),
-                      // the Email data field
-                      dataFormField(
-                        hintText: "Email",
-                        titleText: "Enter Your Email",
-                        icon: const Icon(Icons.email_outlined),
-                        keyboardType: TextInputType.text,
-                        inputController: emailController,
-                        validation: viewModel.emailValidation,
-                      ),
-                      passwordFormField(
-                        hintText: "Password",
-                        titleText: "Enter Password",
-                        keyboardType: TextInputType.text,
-                        inputController: passwordController,
-                        validation: viewModel.passwordValidation,
-                      ),
-                      passwordFormField(
-                        hintText: "Re-Password",
-                        titleText: "Confirm Password",
-                        keyboardType: TextInputType.text,
-                        inputController: rePasswordController,
-                        validation: viewModel.passwordValidation,
-                      ),
-                      // the Phone data field
-                      dataFormField(
-                        hintText: "Phone",
-                        titleText: "Enter Your Phone Number",
-                        icon: const Icon(Icons.phone),
-                        keyboardType: TextInputType.number,
-                        inputController: phoneController,
-                        validation: viewModel.phoneValidation,
-                      ),
-                      const SizedBox(height: 30,),
-                      // date piker
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text(
-                            "Birth Date",
-                            style: TextStyle(
-                              color: MyTheme.blue,
-                              fontSize: 20
-                            ),
+                          // the name data field
+                          dataFormField(
+                            hintText: "Name",
+                            titleText: "Enter Your Name",
+                            icon: const Icon(Icons.badge_outlined),
+                            keyboardType: TextInputType.text,
+                            inputController: nameController,
+                            validation: viewModel.nameValidation,
                           ),
-                          InkWell(
-                            onTap: (){
-                              showMyDatePicker();
-                            },
-                            child: Text(
-                              DateFormat.yMMMd().format(date),
-                              style: const TextStyle(
-                                  color: MyTheme.blue,
-                                  fontSize: 20
+                          // the Email data field
+                          dataFormField(
+                            hintText: "Email",
+                            titleText: "Enter Your Email",
+                            icon: const Icon(Icons.email_outlined),
+                            keyboardType: TextInputType.text,
+                            inputController: emailController,
+                            validation: viewModel.emailValidation,
+                          ),
+                          passwordFormField(
+                            hintText: "Password",
+                            titleText: "Enter Password",
+                            keyboardType: TextInputType.text,
+                            inputController: passwordController,
+                            validation: viewModel.passwordValidation,
+                          ),
+                          passwordFormField(
+                            hintText: "Re-Password",
+                            titleText: "Confirm Password",
+                            keyboardType: TextInputType.text,
+                            inputController: rePasswordController,
+                            validation: viewModel.passwordValidation,
+                          ),
+                          // the Phone data field
+                          dataFormField(
+                            hintText: "Phone",
+                            titleText: "Enter Your Phone Number",
+                            icon: const Icon(Icons.phone),
+                            keyboardType: TextInputType.number,
+                            inputController: phoneController,
+                            validation: viewModel.phoneValidation,
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          // date piker
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Birth Date",
+                                style: TextStyle(
+                                    color: MyTheme.blue, fontSize: 20),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  showMyDatePicker();
+                                },
+                                child: Text(
+                                  DateFormat.yMMMd().format(date),
+                                  style: const TextStyle(
+                                      color: MyTheme.blue, fontSize: 20),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          // the registration button
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                register();
+                              },
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  )),
+                                  backgroundColor:
+                                      MaterialStateProperty.all(MyTheme.blue)),
+                              child: const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Register Now",
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          )
+                          ),
                         ],
-                      ),
-                      const SizedBox(height: 10,),
-                      // the registration button
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            register();
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
-                            backgroundColor: MaterialStateProperty.all(MyTheme.blue)
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(15.0),
-                            child: Text(
-                              "Register Now",
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ))
+                      ))
                 ],
               ),
             ),
@@ -171,8 +178,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
     );
   }
 
-
-  void showMyDatePicker()async{
+  void showMyDatePicker() async {
     DateTime? newDateTime = await showRoundedDatePicker(
       context: context,
       initialDate: date,
@@ -186,8 +192,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
         accentColor: MyTheme.darkBlue,
         dialogBackgroundColor: MyTheme.lightBlue,
         disabledColor: Colors.orange,
-        accentTextTheme:const TextTheme(
-          bodyText2 : TextStyle(color: Colors.white),
+        accentTextTheme: const TextTheme(
+          bodyText2: TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -202,8 +208,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
     required String titleText,
     required Icon icon,
     required TextInputType keyboardType,
-    required TextEditingController inputController ,
-    required Function validation,}) {
+    required TextEditingController inputController,
+    required Function validation,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -259,12 +266,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
   }
 
   // function to show the password text field in the screen
-  Widget passwordFormField({
-    required String hintText,
-    required String titleText,
-    required TextInputType keyboardType,
-    required TextEditingController inputController ,
-    required Function validation}) {
+  Widget passwordFormField(
+      {required String hintText,
+      required String titleText,
+      required TextInputType keyboardType,
+      required TextEditingController inputController,
+      required Function validation}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -309,7 +316,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
                 child: Icon(
                   isVisible
                       ? Icons.visibility_outlined
-                      :Icons.visibility_off_outlined,
+                      : Icons.visibility_off_outlined,
                   color: MyTheme.blue,
                 )),
             enabledBorder: OutlineInputBorder(
@@ -330,20 +337,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
           ),
         ),
       ],
-    );}
+    );
+  }
 
   // call the function register from the viewModel
-  void register(){
-    if(formKey.currentState!.validate()){
+  void register() {
+    if (formKey.currentState!.validate()) {
       viewModel.register(
-        name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-        rePassword: rePasswordController.text,
-        phone: phoneController.text,
-        date: date
-      );
-    }else{
+          name: nameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+          rePassword: rePasswordController.text,
+          phone: phoneController.text,
+          date: date);
+    } else {
       debugPrint("invalid data");
     }
   }
