@@ -72,11 +72,12 @@ class RegistrationScreenViewModel extends ChangeNotifier {
       navigator!.showLoading("Creating Your Account");
       var response = await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
       navigator!.hideDialog();
-      if (response.message == "The user is already Exists"){
+      if (response.statusCode == "409"){
         navigator!.showErrorMessage("User Email is Already Exists");
+      }else if (response.statusCode == "400") {
+        navigator!.showErrorMessage("Invalid User Data");
       }else {
-        navigator!.updateToken(response.token!);
-        navigator!.showSuccessMessage("Your Account Created Successfully" , goToHome);
+        navigator!.showSuccessMessage("Your Account Created Successfully", goToHome);
       }
     }catch (e){
       navigator!.showErrorMessage(e.toString());

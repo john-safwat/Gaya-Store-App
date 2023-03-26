@@ -2,34 +2,34 @@ class UserDTO {
   UserDTO({
       this.name, 
       this.email, 
-      this.passwordEncrypted, 
+      this.password, 
       this.phone, 
       this.birthDate, 
-      this.userToken,});
+      this.token,});
 
   UserDTO.fromJson(dynamic json) {
     name = json['name'];
     email = json['email'];
-    passwordEncrypted = json['passwordEncrypted'];
+    password = json['password'];
     phone = json['phone'];
     birthDate = json['birthDate'];
-    userToken = json['token'];
+    token = json['token'];
   }
   String? name;
   String? email;
-  String? passwordEncrypted;
+  String? password;
   String? phone;
   String? birthDate;
-  String? userToken;
+  String? token;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['name'] = name;
     map['email'] = email;
-    map['passwordEncrypted'] = passwordEncrypted;
+    map['password'] = password;
     map['phone'] = phone;
     map['birthDate'] = birthDate;
-    map['token'] = userToken;
+    map['token'] = token;
     return map;
   }
 

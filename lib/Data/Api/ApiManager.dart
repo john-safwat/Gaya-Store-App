@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
+import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
-import '../Models/UserModel/UserResponseDTO.dart';
 
 class ApiManager {
   ApiManager._();
@@ -15,12 +15,12 @@ class ApiManager {
     return _instance!;
   }
 
-  String baseUrl = '192.168.1.9';
-  String addUserPath = '/E-Commerce-BackEnd/addUser.php';
+  String baseUrl = '192.168.43.231';
+  String addUserPath = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
   String addUserImagePath = '/E-Commerce-BackEnd/addUserImage.php';
 
   // function to call database to add user
-  Future<UserResponseDTO> addNewUser({
+  Future<CreateUserResponseDTO> addNewUser({
     required String name,
     required String email,
     required String password,
@@ -35,7 +35,7 @@ class ApiManager {
       'phone':phone,
       'birthDate':dateTime,
     });
-    return UserResponseDTO.fromJson(jsonDecode(response.body));
+    return CreateUserResponseDTO.fromJson(jsonDecode(response.body));
   }
 
   // function to update user image

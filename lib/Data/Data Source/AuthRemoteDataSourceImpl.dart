@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:ecommerce/Data/Api/ApiManager.dart';
-import 'package:ecommerce/Domain/Models/UserModel/UserResponse.dart';
+import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
 import 'package:flutter/material.dart';
 
 import '../../Domain/Repository/Auth_Ropsitory_Contract.dart';
@@ -10,7 +10,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl(this.apiManager);
 
   @override
-  Future<UserResponse?> addNewUser(
+  Future<CreateUserResponse?> addNewUser(
       {required String name,
       required String email,
       required String password,
@@ -23,7 +23,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         phone: phone,
         dateTime: dateTime);
 
-    return response.toDomina();
+    return response.toDomain();
   }
 
   @override

@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:ecommerce/Domain/Models/UserModel/UserResponse.dart';
+import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
 import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
 class AuthRepositoryImpl implements AuthRepository {
   AuthRemoteDataSource remoteDataSource;
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<UserResponse?> addNewUser(
+  Future<CreateUserResponse?> addNewUser(
       {required String name,
       required String email,
       required String password,

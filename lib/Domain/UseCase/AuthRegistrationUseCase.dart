@@ -1,11 +1,11 @@
-import 'package:ecommerce/Domain/Models/UserModel/UserResponse.dart';
+import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
 import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
 
 class AuthRegistrationUseCase {
   AuthRepository repository;
   AuthRegistrationUseCase(this.repository);
 
-  Future<UserResponse> invoke({
+  Future<CreateUserResponse> invoke({
     required String name,
     required String email,
     required String password,
