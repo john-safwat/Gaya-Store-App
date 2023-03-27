@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,9 +14,9 @@ class ApiManager {
     return _instance!;
   }
 
-  String baseUrl = '192.168.43.231';
+  String baseUrl = '192.168.1.9';
   String addUserPath = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
-  String addUserImagePath = '/E-Commerce-BackEnd/addUserImage.php';
+  String addUserImagePath = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -49,9 +48,7 @@ class ApiManager {
     var multipartFile = http.MultipartFile("image", stream, length, filename: basename(image.path));
     request.files.add(multipartFile);
     request.fields['token'] = token;
-
     var respond = await request.send();
-
     if(respond.statusCode==200){
       return "Image Uploaded";
     }else{

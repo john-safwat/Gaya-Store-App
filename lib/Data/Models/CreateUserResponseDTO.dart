@@ -31,7 +31,7 @@ class CreateUserResponseDTO {
     return CreateUserResponse(
       message: message,
       statusCode: statusCode,
-      token: user!.token
+      token: user?.token??""
     );
   }
 

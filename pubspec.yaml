@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.18.0
   dio: ^5.0.3
   http: ^0.13.5
+  blur: ^3.0.0
 
 dev_dependencies:
   flutter_test:

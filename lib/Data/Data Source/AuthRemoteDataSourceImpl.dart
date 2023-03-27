@@ -22,7 +22,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         password: password,
         phone: phone,
         dateTime: dateTime);
-
     return response.toDomain();
   }
 

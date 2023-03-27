@@ -6,7 +6,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<CreateUserResponse?> addNewUser(
+  Future<CreateUserResponse> addNewUser(
       {required String name,
       required String email,
       required String password,
@@ -19,8 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
         phone: phone,
         dateTime: dateTime);
-
-    return response;
+    return response!;
   }
 
   @override

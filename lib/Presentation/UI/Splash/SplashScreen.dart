@@ -1,5 +1,6 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class SplashScreen extends StatelessWidget {
         ),
         duration: const Duration(milliseconds:3000),
         animationDuration: const Duration(milliseconds: 1000),
-        defaultNextScreen: RegistrationScreen(),
+        defaultNextScreen: LoginScreen(),
       )
     );
   }
