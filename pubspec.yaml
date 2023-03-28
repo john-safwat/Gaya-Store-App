@@ -44,6 +44,10 @@ dependencies:
   dio: ^5.0.3
   http: ^0.13.5
   blur: ^3.0.0
+  animated_bottom_navigation_bar: ^1.2.0
+  flashy_tab_bar2: ^0.0.6
+  salomon_bottom_bar: ^3.3.1
+  flutter_snake_navigationbar: ^0.6.1
 
 dev_dependencies:
   flutter_test:
