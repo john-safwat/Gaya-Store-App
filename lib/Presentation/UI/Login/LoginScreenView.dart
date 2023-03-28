@@ -1,5 +1,10 @@
+import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
+import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
+import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenViewModel.dart';
+import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +19,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> implements LoginScreenNavigator{
 
 
   LoginScreenViweModel viewModel = LoginScreenViweModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
@@ -27,6 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isVisible = false;
 
   @override
+  void initState() {
+    super.initState();
+    viewModel.navigator = this;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    viewModel.navigator = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => viewModel,
@@ -36,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.all(20.0),
             child: Form(
+              key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,7 +194,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if(formKey.currentState!.validate()){
+                            viewModel.onLoginButtonPress(emailController.text , passwordController.text);
+                          }
+                        },
                         style: ButtonStyle(
                             shape:
                                 MaterialStateProperty.all(RoundedRectangleBorder(
@@ -204,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-
+                                viewModel.onCreateAccountButtonPress();
                               },
                               child: const Text(
                                 "Create Account",
@@ -225,4 +247,43 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  @override
+  goToCreateAccountScreen() {
+    Navigator.pushNamed(context, RegistrationScreen.routeName);
+  }
+
+  @override
+  goToHomeScreen() {
+    Navigator.popAndPushNamed(context, HomeScreen.routeName);
+  }
+
+  @override
+  showErrorMessage(String message) {
+    MyDialogUtils.showErrorDialog(context: context, message: message);
+  }
+
+  @override
+  hideDialog() {
+    MyDialogUtils.hideDialog(context: context);
+  }
+
+  @override
+  showLoading(String message) {
+    MyDialogUtils.showLoading(context: context, message: message);
+  }
+
+
+  @override
+  showSuccessMessage(String message, Function action) {
+    MyDialogUtils.showSuccessDialog(
+        context: context, message: message, action: action);
+  }
+
+  @override
+  updateToken(String token) {
+    var provider = Provider.of<AppConfigProvider>(context, listen: false);
+    provider.updateToken(token);
+  }
+
 }

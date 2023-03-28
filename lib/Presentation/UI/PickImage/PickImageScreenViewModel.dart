@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:ecommerce/Domain/UseCase/AuthUploadUserImageUseCase.dart';
@@ -21,7 +22,13 @@ class PickImageScreenViewModel extends ChangeNotifier{
           navigator!.hideDialog();
           navigator!.showErrorMessage("Can't Upload the Image");
         }
-      } catch(e) {
+      }on IOException{
+        navigator!.hideDialog();
+        navigator!.showErrorMessage("Check Your Internet");
+      } on TimeoutException catch (e){
+        navigator!.hideDialog();
+        navigator!.showErrorMessage("Request Timed Out");
+      }catch (e){
         navigator!.hideDialog();
         navigator!.showErrorMessage(e.toString());
       }

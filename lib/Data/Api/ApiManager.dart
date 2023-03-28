@@ -18,7 +18,7 @@ class ApiManager {
   String baseUrl = '192.168.1.9';
   String addUserRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
   String addUserImageRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
-  String loginRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
+  String loginRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/login';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -65,7 +65,6 @@ class ApiManager {
       'email':email,
       'password':password,
     });
-
     return LoginResponseDTO.fromJson(jsonDecode(response.body));
   }
 }

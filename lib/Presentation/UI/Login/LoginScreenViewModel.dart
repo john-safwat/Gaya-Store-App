@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:ecommerce/Domain/UseCase/AuthLoginUserCase.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +33,37 @@ class LoginScreenViweModel extends ChangeNotifier {
   }
 
   // code on login press
-  void onLoginButtonPress(){
-
+  void onLoginButtonPress(String email , String password) async {
+    navigator!.showLoading("Logging You In");
+    try{
+      var response = await useCase.login(email: email, password: password);
+      if (response.statusCode == '200'){
+        navigator!.hideDialog();
+        navigator!.updateToken(response.token!);
+        navigator!.showSuccessMessage(response.message!, goToHome);
+      }else{
+        navigator!.hideDialog();
+        navigator!.showErrorMessage(response.message!);
+      }
+    }on IOException{
+      navigator!.hideDialog();
+      navigator!.showErrorMessage("Check Your Internet");
+    } on TimeoutException catch (e){
+      navigator!.hideDialog();
+      navigator!.showErrorMessage("Request Timed Out");
+    }catch (e){
+      navigator!.hideDialog();
+      navigator!.showErrorMessage(e.toString());
+    }
   }
   // code on create Account press
   void onCreateAccountButtonPress(){
-
+    navigator!.goToCreateAccountScreen();
   }
 
+  // code go to home screen
+  void goToHome(){
+    navigator!.hideDialog();
+    navigator!.goToHomeScreen();
+  }
 }

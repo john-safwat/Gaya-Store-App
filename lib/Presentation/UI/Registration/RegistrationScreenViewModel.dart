@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/widgets.dart';
@@ -80,6 +83,12 @@ class RegistrationScreenViewModel extends ChangeNotifier {
         navigator!.updateToken(response.token!);
         navigator!.showSuccessMessage(response.message!, goToHome);
       }
+    }on IOException{
+      navigator!.hideDialog();
+      navigator!.showErrorMessage("Check Your Internet");
+    } on TimeoutException catch (e){
+      navigator!.hideDialog();
+      navigator!.showErrorMessage("Request Timed Out");
     }catch (e){
       navigator!.hideDialog();
       navigator!.showErrorMessage(e.toString());

@@ -49,6 +49,18 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Create Your Account",
+            style: TextStyle(
+              color: MyTheme.darkBlue
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme:const IconThemeData(color: MyTheme.darkBlue),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -346,13 +358,13 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   void register() {
     if (formKey.currentState!.validate()) {
       viewModel.register(
-          name: nameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          rePassword: rePasswordController.text,
-          phone: phoneController.text,
-          date: date,
-          );
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        rePassword: rePasswordController.text,
+        phone: phoneController.text,
+        date: date,
+      );
     }
   }
 
@@ -372,11 +384,6 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   }
 
   @override
-  goToPickImageScreen() {
-    Navigator.pushReplacementNamed(context, PickImageScreen.routeName);
-  }
-
-  @override
   showSuccessMessage(String message, Function action) {
     MyDialogUtils.showSuccessDialog(
         context: context, message: message, action: action);
@@ -387,4 +394,10 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     var provider = Provider.of<AppConfigProvider>(context, listen: false);
     provider.updateToken(token);
   }
+
+  @override
+  goToPickImageScreen() {
+    Navigator.pushReplacementNamed(context, PickImageScreen.routeName);
+  }
+
 }
