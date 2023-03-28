@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Core/DI/di.dart';
+import '../../../Domain/UseCase/AuthLoginUserCase.dart';
+
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'Login Screen';
 
@@ -13,7 +16,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  LoginScreenViweModel viewModel = LoginScreenViweModel();
+
+  LoginScreenViweModel viewModel = LoginScreenViweModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
 
 
   final formKey = GlobalKey<FormState>();
@@ -60,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   // text field
                   TextFormField(
-                    validator: (value) {},
+                    validator: (value) => viewModel.emailValidation(value!),
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     enableIMEPersonalizedLearning: true,
@@ -104,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   // text field
                   TextFormField(
-                    validator: (value) {},
+                    validator: (value) => viewModel.passwordValidation(value!),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: passwordController,
                     enableIMEPersonalizedLearning: true,
@@ -199,7 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+
+                              },
                               child: const Text(
                                 "Create Account",
                                 style: TextStyle(

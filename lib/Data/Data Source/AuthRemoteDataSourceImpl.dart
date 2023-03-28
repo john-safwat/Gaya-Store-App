@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ecommerce/Data/Api/ApiManager.dart';
 import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
+import 'package:ecommerce/Domain/Models/LoginResponse.dart';
 import 'package:flutter/material.dart';
 
 import '../../Domain/Repository/Auth_Ropsitory_Contract.dart';
@@ -29,5 +30,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<String> uploadUserImage({required File image, required String token}) async {
     var response = await apiManager.uploadUserImage(image, token);
     return response;
+  }
+
+  @override
+  Future<LoginResponse> login({required String email, required String password})async {
+     var response = await apiManager.login(email, password);
+     return response.toDomain();
   }
 }

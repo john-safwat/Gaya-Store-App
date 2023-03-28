@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
+import 'package:ecommerce/Domain/Models/LoginResponse.dart';
 
 abstract class AuthRemoteDataSource {
   Future<CreateUserResponse?> addNewUser({
@@ -12,6 +13,7 @@ abstract class AuthRemoteDataSource {
   });
 
   Future<String> uploadUserImage({required File image , required String token});
+  Future<LoginResponse> login ({required String email ,  required String password});
 }
 
 abstract class AuthRepository {
@@ -24,5 +26,6 @@ abstract class AuthRepository {
   });
 
   Future<String> uploadUserImage({required File image , required String token});
+  Future<LoginResponse> login ({required String email ,  required String password});
 
 }

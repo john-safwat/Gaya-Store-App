@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
+import 'package:ecommerce/Data/Models/LoginResponseDTO.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,8 +16,9 @@ class ApiManager {
   }
 
   String baseUrl = '192.168.1.9';
-  String addUserPath = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
-  String addUserImagePath = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
+  String addUserRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
+  String addUserImageRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
+  String loginRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -26,7 +28,7 @@ class ApiManager {
     required String phone,
     required String dateTime,
   }) async {
-    Uri uri = Uri.http(baseUrl, addUserPath);
+    Uri uri = Uri.http(baseUrl, addUserRoute);
     var response  = await http.post(uri , body: {
       'name':name,
       'email':email,
@@ -39,7 +41,7 @@ class ApiManager {
 
   // function to update user image
   Future<String> uploadUserImage(File image , String token)async {
-    Uri uri = Uri.http(baseUrl, addUserImagePath);
+    Uri uri = Uri.http(baseUrl, addUserImageRoute);
 
     var stream= http.ByteStream(DelegatingStream.typed(image.openRead()));
     var length= await image.length();
@@ -54,5 +56,16 @@ class ApiManager {
     }else{
       return "Upload Failed";
     }
+  }
+
+  // function to login
+  Future<LoginResponseDTO> login(String email , String password )async{
+    Uri uri = Uri.http(baseUrl , loginRoute);
+    var response  = await http.post(uri , body: {
+      'email':email,
+      'password':password,
+    });
+
+    return LoginResponseDTO.fromJson(jsonDecode(response.body));
   }
 }
