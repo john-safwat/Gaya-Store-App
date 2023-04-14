@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../Repository/Auth_Ropsitory_Contract.dart';
+import '../Repository/Auth_Ropository_Contract.dart';
 
 class AuthUploadUserImageUseCase {
   AuthRepository repository;

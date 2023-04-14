@@ -1,5 +1,5 @@
 import 'package:ecommerce/Domain/Models/LoginResponse.dart';
-import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
+import 'package:ecommerce/Domain/Repository/Auth_Ropository_Contract.dart';
 class AuthLoginUserCase {
   AuthRepository repository ;
   AuthLoginUserCase({required this.repository});

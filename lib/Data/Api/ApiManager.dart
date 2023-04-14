@@ -6,6 +6,8 @@ import 'package:ecommerce/Data/Models/LoginResponseDTO.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
+import '../Models/CategoriesResponseDTO.dart';
+
 class ApiManager {
   ApiManager._();
   static ApiManager? _instance;
@@ -19,6 +21,7 @@ class ApiManager {
   String addUserRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
   String addUserImageRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
   String loginRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/login';
+  String getCategoriesRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/home/category/categories';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -67,4 +70,13 @@ class ApiManager {
     });
     return LoginResponseDTO.fromJson(jsonDecode(response.body));
   }
+
+  // function to get the categories data
+
+  Future<CategoriesResponseDTO> getCategories ()async{
+    Uri uri = Uri.http(baseUrl , getCategoriesRoute);
+    var response =await  http.get(uri);
+    return CategoriesResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
 }

@@ -1,7 +1,10 @@
 import 'package:ecommerce/Data/Api/ApiManager.dart';
 import 'package:ecommerce/Data/Data%20Source/AuthRemoteDataSourceImpl.dart';
+import 'package:ecommerce/Data/Data%20Source/CategoriesRemoteDataSource.dart';
 import 'package:ecommerce/Data/Repository/AuthRepositoryImpl.dart';
-import 'package:ecommerce/Domain/Repository/Auth_Ropsitory_Contract.dart';
+import 'package:ecommerce/Data/Repository/CategoriesRepository.dart';
+import 'package:ecommerce/Domain/Repository/Auth_Ropository_Contract.dart';
+import 'package:ecommerce/Domain/Repository/Categories_Repository_Contract.dart';
 
 // api manager instance
 ApiManager getApiManger(){
@@ -18,4 +21,17 @@ AuthRepository getAuthRepository(AuthRemoteDataSource remoteDataSource){
 // function inject
 AuthRepository injectAuthRepository(){
   return getAuthRepository(getAuthRemoteDataSource(getApiManger()));
+}
+
+// Categories Remote Data Source
+CategoriesRemoteDataSource getCategoriesRemoteDataSource(ApiManager apiManager){
+  return CategoriesRemoteDataSourceImpl(apiManager);
+}
+// Categories Repository
+CategoriesRepository getCategoriesRepository(CategoriesRemoteDataSource remoteDataSource){
+  return CategoriesRepositoryImpl(remoteDataSource);
+}
+// function inject
+CategoriesRepository injectCategoriesRepository(){
+  return getCategoriesRepository(getCategoriesRemoteDataSource(getApiManger()));
 }

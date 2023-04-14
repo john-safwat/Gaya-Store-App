@@ -4,7 +4,7 @@ import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
 import 'package:ecommerce/Domain/Models/LoginResponse.dart';
 import 'package:flutter/material.dart';
 
-import '../../Domain/Repository/Auth_Ropsitory_Contract.dart';
+import '../../Domain/Repository/Auth_Ropository_Contract.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   ApiManager apiManager;
