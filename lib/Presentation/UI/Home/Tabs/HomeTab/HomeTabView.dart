@@ -2,9 +2,9 @@ import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabViewModel.dart';
-import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/CategoryShowWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Widgets/CategoryShowWidget.dart';
 
 class HomeTabView extends StatefulWidget {
   const HomeTabView({Key? key}) : super(key: key);
@@ -52,18 +52,16 @@ class _HomeTabViewState extends State<HomeTabView> {
                       fontWeight: FontWeight.bold,
                       color: MyTheme.darkBlue),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => CategoryShowWidget(
-                          image: value.categories![index].image!,
-                          name: value.categories![index].name!),
-                      itemCount: value.categories!.length,
-                    ),
-                  ),
-                )
+                SizedBox(
+                  height: 180,
+                  child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) => CategoryShowWidget(
+                            image: value.categories![index].image!,
+                            name: value.categories![index].name!),
+                        itemCount: value.categories!.length,
+                      ),
+                ),
               ],
             );
           }

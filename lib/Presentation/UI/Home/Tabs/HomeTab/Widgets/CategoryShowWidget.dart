@@ -14,6 +14,7 @@ class CategoryShowWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
+
           children: [
             Container(
               padding:const EdgeInsets.all(15),
@@ -29,7 +30,8 @@ class CategoryShowWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               style:const TextStyle(
                   fontSize: 14,
-                  color: MyTheme.darkBlue
+                  color: MyTheme.darkBlue,
+                  fontWeight: FontWeight.bold
               ),
             )
           ],
