@@ -14,7 +14,6 @@ class CategoryShowWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-
           children: [
             Container(
               padding:const EdgeInsets.all(15),

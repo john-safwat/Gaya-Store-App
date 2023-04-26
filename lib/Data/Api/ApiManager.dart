@@ -3,6 +3,7 @@ import 'dart:io';
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
 import 'package:ecommerce/Data/Models/LoginResponseDTO.dart';
+import 'package:ecommerce/Data/Models/ProductsResponseDTO.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,10 +19,11 @@ class ApiManager {
   }
 
   String baseUrl = '192.168.1.9';
-  String addUserRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/create';
-  String addUserImageRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/uploadImage';
-  String loginRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/users/login';
-  String getCategoriesRoute = '/E-Commerce-BackEnd/E-Commerce-Database/public/api/home/category/categories';
+  String addUserRoute = '/Gaya-Store/public/api/users/create';
+  String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
+  String loginRoute = '/Gaya-Store/public/api/users/login';
+  String getCategoriesRoute = '/Gaya-Store/public/api/home/category/categories';
+  String getAllNewAddedProductsRoute = '/Gaya-Store/public/api/home/product/allNewAddedProducts';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -72,11 +74,17 @@ class ApiManager {
   }
 
   // function to get the categories data
-
   Future<CategoriesResponseDTO> getCategories ()async{
     Uri uri = Uri.http(baseUrl , getCategoriesRoute);
     var response =await  http.get(uri);
     return CategoriesResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  // function to get all new added products
+  Future<ProductsResponseDTO> getAllNewAddedProducts() async{
+    Uri url = Uri.http(baseUrl , getAllNewAddedProductsRoute);
+    var response = await http.get(url);
+    return ProductsResponseDTO.fromJson(jsonDecode(response.body));
   }
 
 }
