@@ -1,10 +1,14 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Domain/Models/Categories.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
+import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabViewModel.dart';
+import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/BannerSlideShow.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/Categories.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/errorWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,14 +19,22 @@ class HomeTabView extends StatefulWidget {
   State<HomeTabView> createState() => _HomeTabViewState();
 }
 
-class _HomeTabViewState extends State<HomeTabView> {
-  HomeTabViewModel viewModel =
-      HomeTabViewModel(GetCategoriesUseCase(injectCategoriesRepository()),GetNewAddedProductsUseCase(injectProductRepository()));
+class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator{
+  HomeTabViewModel viewModel = HomeTabViewModel(
+      GetCategoriesUseCase(injectCategoriesRepository()),
+      GetNewAddedProductsUseCase(injectProductRepository()));
   @override
   void initState() {
     super.initState();
     viewModel.getCategories();
     viewModel.getNewAddedProducts();
+    viewModel.navigator = this;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    viewModel.navigator = null;
   }
 
   @override
@@ -31,11 +43,19 @@ class _HomeTabViewState extends State<HomeTabView> {
       create: (context) => viewModel,
       child: Consumer<HomeTabViewModel>(
         builder: (context, value, child) {
-          if (value.errorMessage != null) { // if the value of error message is not null then user will be able to try again
-            return errorWidget(value.errorMessage!,value.onTryAgainButtonPress);
-          } else if (value.categories == null || value.products == null) { // if there is no error and dat not loaded it will show circular progress indicator
-            return const Center(child: CircularProgressIndicator(color: MyTheme.darkBlue,),);
-          } else { // this will show the data if loaded
+          if (value.errorMessage != null) {
+            // if the value of error message is not null then user will be able to try again
+            return errorWidget(
+                value.errorMessage!, value.onTryAgainButtonPress);
+          } else if (value.categories == null || value.products == null) {
+            // if there is no error and dat not loaded it will show circular progress indicator
+            return const Center(
+              child: CircularProgressIndicator(
+                color: MyTheme.darkBlue,
+              ),
+            );
+          } else {
+            // this will show the data if loaded
             return Column(
               children: [
                 Row(),
@@ -54,21 +74,18 @@ class _HomeTabViewState extends State<HomeTabView> {
                       color: MyTheme.darkBlue),
                 ),
                 CategoriesList(value.categories!),
-                Expanded(child: ListView.separated(
-                  itemBuilder: (context, index) => Text(value.products![index].name!),
-                  itemCount: value.products!.length,
-                  separatorBuilder: (context, index) => Container(
-                    height: 2,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.black,
-                    margin:const EdgeInsets.symmetric(vertical: 20),
-                  ),
-                ))
+                const SizedBox(height: 20,),
+                BannerSlideShow(),
               ],
             );
           }
         },
       ),
     );
+  }
+
+  @override
+  void goToProductListScreen(Categories category) {
+    Navigator.pushNamed(context, ProductsListScreen.routeName , arguments: category);
   }
 }
