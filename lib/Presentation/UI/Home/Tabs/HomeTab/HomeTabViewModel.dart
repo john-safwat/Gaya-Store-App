@@ -50,6 +50,7 @@ class HomeTabViewModel extends ChangeNotifier {
 
   void onTryAgainButtonPress(){
     getCategories();
+    getNewAddedProducts();
   }
 
   void goToProductsListScreen(Categories category){

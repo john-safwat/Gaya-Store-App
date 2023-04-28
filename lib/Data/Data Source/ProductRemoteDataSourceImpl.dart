@@ -12,4 +12,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     return response.toDomain();
   }
 
+  @override
+  Future<ProductsResponse> getProductsByCategory(double categoryId)async {
+    var response = await apiManager.getProductsByCategory(categoryId);
+    return response.toDomain();
+  }
+
 }

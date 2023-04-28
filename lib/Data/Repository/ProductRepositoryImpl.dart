@@ -11,4 +11,10 @@ class ProductRepositoryImpl implements ProductRepository {
     return response;
   }
 
+  @override
+  Future<ProductsResponse> getProductsByCategory(double categoryId)async {
+    var response = await remoteDataSource.getProductsByCategory(categoryId);
+    return response;
+  }
+
 }

@@ -24,6 +24,7 @@ class ApiManager {
   String loginRoute = '/Gaya-Store/public/api/users/login';
   String getCategoriesRoute = '/Gaya-Store/public/api/home/category/categories';
   String getAllNewAddedProductsRoute = '/Gaya-Store/public/api/home/product/allNewAddedProducts';
+  String getProductsByCategoryRoute = '/Gaya-Store/public/api/home/product/getProductsByCategory';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -83,6 +84,13 @@ class ApiManager {
   // function to get all new added products
   Future<ProductsResponseDTO> getAllNewAddedProducts() async{
     Uri url = Uri.http(baseUrl , getAllNewAddedProductsRoute);
+    var response = await http.get(url);
+    return ProductsResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  // function to get products by category
+  Future<ProductsResponseDTO> getProductsByCategory(double categoryId) async{
+    Uri url = Uri.http(baseUrl , getProductsByCategoryRoute , {'categoryId':categoryId.toString()});
     var response = await http.get(url);
     return ProductsResponseDTO.fromJson(jsonDecode(response.body));
   }
