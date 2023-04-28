@@ -137,8 +137,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             children: [
                               const Text(
                                 "Birth Date",
-                                style: TextStyle(
-                                    color: MyTheme.blue, fontSize: 20),
+                                style: TextStyle(color: MyTheme.blue, fontSize: 20),
                               ),
                               InkWell(
                                 onTap: () {
@@ -146,8 +145,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                                 },
                                 child: Text(
                                   DateFormat.yMMMd().format(date),
-                                  style: const TextStyle(
-                                      color: MyTheme.blue, fontSize: 20),
+                                  style: const TextStyle(color: MyTheme.blue, fontSize: 20),
                                 ),
                               )
                             ],

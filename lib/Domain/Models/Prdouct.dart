@@ -6,7 +6,7 @@ class Product {
     this.price,
     this.mainImage,
     this.brand,
-    this.rating,});
+    this.rating,this.isInWishList = false});
 
   num? id;
   String? name;
@@ -15,5 +15,6 @@ class Product {
   String? mainImage;
   String? brand;
   num? rating;
+  bool? isInWishList;
 
 }

@@ -34,11 +34,7 @@ class CategoryShowWidget extends StatelessWidget {
               Text(
                 categories.name!,
                 textAlign: TextAlign.center,
-                style:const TextStyle(
-                    fontSize: 14,
-                    color: MyTheme.darkBlue,
-                    fontWeight: FontWeight.bold
-                ),
+                style: Theme.of(context).textTheme.headline4,
               )
             ],
           ),

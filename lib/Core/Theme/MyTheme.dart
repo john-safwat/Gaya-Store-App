@@ -13,6 +13,25 @@ class MyTheme {
     scaffoldBackgroundColor: backGround ,
     primaryColor: darkBlue,
     canvasColor: darkBlue,
+    textTheme: const TextTheme(
+      headline1: TextStyle(
+        color: darkBlue,
+        fontSize: 18 ,
+        fontWeight: FontWeight.bold
+      ),
+      headline2: TextStyle(
+          color: darkBlue,
+          fontSize: 18 ,
+      ),
+      headline3: TextStyle(
+        color: darkBlue,
+        fontSize: 16 ,
+      ),
+      headline4: TextStyle(
+        color: darkBlue,
+        fontSize: 14 ,
+      ),
+    ),
     appBarTheme:const AppBarTheme(
       backgroundColor: darkBlue,
       centerTitle: true,
