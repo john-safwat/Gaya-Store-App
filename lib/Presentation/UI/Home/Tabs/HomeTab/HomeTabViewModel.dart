@@ -56,4 +56,8 @@ class HomeTabViewModel extends ChangeNotifier {
     navigator!.goToProductListScreen(category);
   }
 
+  void onWidgetPress(Product product){
+    navigator!.goToProductDetailsScreen(product);
+  }
+
 }

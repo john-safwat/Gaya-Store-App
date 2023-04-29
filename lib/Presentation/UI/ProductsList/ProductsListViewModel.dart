@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductsByCategoryIdUseCase.dart';
+import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListNavigator.dart';
 import 'package:flutter/material.dart';
 
 class ProductsListViewModel extends ChangeNotifier{
   GetProductsByCategoryIdUseCase useCase ;
   ProductsListViewModel(this.useCase);
+  ProductsListNavigator? navigator;
 
   String? errorMessage ;
   List<Product>? products ;
@@ -31,5 +33,9 @@ class ProductsListViewModel extends ChangeNotifier{
 
   void onTryAgainButtonPress(){
     getProductsByCategoryId(categoryId);
+  }
+
+  void onWidgetPress(Product product){
+    navigator!.goToProductDetailsScreen(product);
   }
 }

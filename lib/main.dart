@@ -4,6 +4,7 @@ import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
 import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenView.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   MyApp(this.token);
   @override
   Widget build(BuildContext context) {
-    AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
+    AppConfigProvider provider = Provider.of<AppConfigProvider>(context , listen: false);
     provider.updateToken(token);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         RegistrationScreen.routeName: (_) => RegistrationScreen(),
         PickImageScreen.routeName: (_) => PickImageScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
-        ProductsListScreen.routeName:(_)=> ProductsListScreen()
+        ProductsListScreen.routeName:(_)=> ProductsListScreen(),
+        ProductDetailsScreen.routeName:(_) =>ProductDetailsScreen(),
       },
 
       home: AnimatedSplashScreen(

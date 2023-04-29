@@ -103,7 +103,7 @@ class ApiManager {
   }
 
   // function to get product Details
-  Future<ProductDetailsResponseDTO> getProductDetails(int productId , String token) async {
+  Future<ProductDetailsResponseDTO> getProductDetails(String productId , String token) async {
     Uri url = Uri.http(
         baseUrl,
         getProductDetailsRoute,

@@ -1,6 +1,7 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/Models/Categories.dart';
+import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/ProductWidget.dart';
@@ -10,6 +11,7 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/BannerSlideS
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/Categories.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/ProductList.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +104,7 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
                         ),
                       ],
                     ),
-                    HomeProductList(value.products!),
+                    HomeProductList(value.products! , value.onWidgetPress),
                   ],
                 ),
             );
@@ -116,5 +118,10 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
   void goToProductListScreen(Categories category) {
     Navigator.pushNamed(context, ProductsListScreen.routeName,
         arguments: category);
+  }
+
+  @override
+  void goToProductDetailsScreen(Product product) {
+    Navigator.pushNamed(context, ProductDetailsScreen.routeName , arguments: product);
   }
 }

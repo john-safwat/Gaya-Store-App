@@ -19,7 +19,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductDetailsResponse> getProductDetails(int productId, String token)async {
+  Future<ProductDetailsResponse> getProductDetails(String productId, String token)async {
     var response = await remoteDataSource.getProductDetails(productId, token);
     return response;
   }

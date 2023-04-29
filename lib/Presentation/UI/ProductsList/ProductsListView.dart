@@ -1,8 +1,11 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/Models/Categories.dart';
+import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductsByCategoryIdUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/ProductWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
+import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListNavigator.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +19,18 @@ class ProductsListScreen extends StatefulWidget {
   State<ProductsListScreen> createState() => _ProductsListScreenState();
 }
 
-class _ProductsListScreenState extends State<ProductsListScreen> {
+class _ProductsListScreenState extends State<ProductsListScreen> implements ProductsListNavigator{
   ProductsListViewModel viewModel = ProductsListViewModel(GetProductsByCategoryIdUseCase(injectProductRepository()));
+  @override
+  void initState() {
+    super.initState();
+    viewModel.navigator = this ;
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    viewModel.navigator = null ;
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -58,7 +71,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                               mainAxisExtent: 280,
                               childAspectRatio: 0.75
                             ),
-                            itemBuilder: (context, index) => ProductWidget(value.products![index]),
+                            itemBuilder: (context, index) => ProductWidget(value.products![index], value.onWidgetPress),
                             itemCount: value.products!.length,
                           ),
                       );
@@ -70,4 +83,11 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
         ),
     );
   }
+
+  @override
+  void goToProductDetailsScreen(Product product) {
+    Navigator.pushNamed(context, ProductDetailsScreen.routeName , arguments: product);
+  }
+
+
 }
