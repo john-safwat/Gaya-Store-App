@@ -11,7 +11,7 @@ class BannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeTabViewModel viewModel = Provider.of<HomeTabViewModel>(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Stack(
         alignment: bannerData.alignmentGeometry,
         children: [

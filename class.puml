@@ -1,0 +1,636 @@
+@startuml
+set namespaceSeparator ::
+
+class "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider" {
+  +String token
+  +void updateToken()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+
+class "ecommerce::Core::Theme::MyTheme.dart::MyTheme" {
+  {static} +Color darkBlue
+  {static} +Color blue
+  {static} +Color lightBlue
+  {static} +Color backGround
+  {static} +ThemeData darkTheme
+}
+
+"ecommerce::Core::Theme::MyTheme.dart::MyTheme" o-- "dart::ui::Color"
+"ecommerce::Core::Theme::MyTheme.dart::MyTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "ecommerce::Core::Utils::Dialog_Utils.dart::MyDialogUtils" {
+  {static} +dynamic showErrorDialog()
+  {static} +dynamic showLoading()
+  {static} +dynamic showSuccessDialog()
+  {static} +dynamic hideDialog()
+}
+
+class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
+  {static} -ApiManager? _instance
+  +String baseUrl
+  +String addUserRoute
+  +String addUserImageRoute
+  +String loginRoute
+  +String getCategoriesRoute
+  +String getAllNewAddedProductsRoute
+  +String getProductsByCategoryRoute
+  {static} +ApiManager getApiManager()
+  +Future<CreateUserResponseDTO> addNewUser()
+  +Future<String> uploadUserImage()
+  +Future<LoginResponseDTO> login()
+  +Future<CategoriesResponseDTO> getCategories()
+  +Future<ProductsResponseDTO> getAllNewAddedProducts()
+  +Future<ProductsResponseDTO> getProductsByCategory()
+}
+
+"ecommerce::Data::Api::ApiManager.dart::ApiManager" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+
+class "ecommerce::Data::Data%20Source::AuthRemoteDataSourceImpl.dart::AuthRemoteDataSourceImpl" {
+  +ApiManager apiManager
+  +Future<CreateUserResponse?> addNewUser()
+  +Future<String> uploadUserImage()
+  +Future<LoginResponse> login()
+}
+
+"ecommerce::Data::Data%20Source::AuthRemoteDataSourceImpl.dart::AuthRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+"ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::AuthRemoteDataSourceImpl.dart::AuthRemoteDataSourceImpl"
+
+class "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::CategoriesRemoteDataSourceImpl" {
+  +ApiManager apiManager
+  +Future<CategoriesResponse> getCategories()
+}
+
+"ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::CategoriesRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+"ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::CategoriesRemoteDataSourceImpl"
+
+class "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl" {
+  +ApiManager apiManager
+  +Future<ProductsResponse> getNewAddedProduct()
+  +Future<ProductsResponse> getProductsByCategory()
+}
+
+"ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+"ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl"
+
+class "ecommerce::Data::Models::CategoriesDTO.dart::CategoriesDTO" {
+  +num? id
+  +String? name
+  +String? image
+  +Map<String, dynamic> toJson()
+  +Categories toDomain()
+}
+
+class "ecommerce::Data::Models::CategoriesResponseDTO.dart::CategoriesResponseDTO" {
+  +String? statusCode
+  +String? message
+  +List<CategoriesDTO>? categories
+  +Map<String, dynamic> toJson()
+  +CategoriesResponse toDomain()
+}
+
+class "ecommerce::Data::Models::CreateUserResponseDTO.dart::CreateUserResponseDTO" {
+  +String? statusCode
+  +String? message
+  +UserDTO? user
+  +Map<String, dynamic> toJson()
+  +CreateUserResponse toDomain()
+}
+
+"ecommerce::Data::Models::CreateUserResponseDTO.dart::CreateUserResponseDTO" o-- "ecommerce::Data::Models::UserDTO.dart::UserDTO"
+
+class "ecommerce::Data::Models::LoginResponseDTO.dart::LoginResponseDTO" {
+  +String? statusCode
+  +String? message
+  +String? token
+  +Map<String, dynamic> toJson()
+  +LoginResponse toDomain()
+}
+
+class "ecommerce::Data::Models::ProductsDTO.dart::ProductsDTO" {
+  +num? id
+  +String? name
+  +String? category
+  +num? price
+  +String? mainImage
+  +String? brand
+  +num? rating
+  +Map<String, dynamic> toJson()
+  +Product toDomain()
+}
+
+class "ecommerce::Data::Models::ProductsResponseDTO.dart::ProductsResponseDTO" {
+  +String? status
+  +String? message
+  +num? page
+  +List<ProductsDTO>? products
+  +Map<String, dynamic> toJson()
+  +ProductsResponse toDomain()
+}
+
+class "ecommerce::Data::Models::UserDTO.dart::UserDTO" {
+  +String? name
+  +String? email
+  +String? password
+  +String? phone
+  +String? birthDate
+  +String? token
+  +Map<String, dynamic> toJson()
+}
+
+class "ecommerce::Data::Repository::AuthRepositoryImpl.dart::AuthRepositoryImpl" {
+  +AuthRemoteDataSource remoteDataSource
+  +Future<CreateUserResponse> addNewUser()
+  +Future<String> uploadUserImage()
+  +Future<LoginResponse> login()
+}
+
+"ecommerce::Data::Repository::AuthRepositoryImpl.dart::AuthRepositoryImpl" o-- "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRemoteDataSource"
+"ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRepository" <|-- "ecommerce::Data::Repository::AuthRepositoryImpl.dart::AuthRepositoryImpl"
+
+class "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesRepositoryImpl" {
+  +CategoriesRemoteDataSource remoteDataSource
+  +Future<CategoriesResponse> getCategories()
+}
+
+"ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesRepositoryImpl" o-- "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRemoteDataSource"
+"ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRepository" <|-- "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesRepositoryImpl"
+
+class "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" {
+  +ProductRemoteDataSource remoteDataSource
+  +Future<ProductsResponse> getNewAddedProduct()
+  +Future<ProductsResponse> getProductsByCategory()
+}
+
+"ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource"
+"ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository" <|-- "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl"
+
+class "ecommerce::Domain::Models::Categories.dart::Categories" {
+  +num? id
+  +String? name
+  +String? image
+}
+
+class "ecommerce::Domain::Models::CategoriesResponse.dart::CategoriesResponse" {
+  +String? statusCode
+  +String? message
+  +List<Categories>? categories
+}
+
+class "ecommerce::Domain::Models::CreateUserResponse.dart::CreateUserResponse" {
+  +String? statusCode
+  +String? message
+  +String? token
+}
+
+class "ecommerce::Domain::Models::LoginResponse.dart::LoginResponse" {
+  +String? statusCode
+  +String? message
+  +String? token
+}
+
+class "ecommerce::Domain::Models::Prdouct.dart::Product" {
+  +num? id
+  +String? name
+  +String? category
+  +num? price
+  +String? mainImage
+  +String? brand
+  +num? rating
+  +bool? isInWishList
+}
+
+class "ecommerce::Domain::Models::ProductsResponse.dart::ProductsResponse" {
+  +String? status
+  +String? message
+  +List<Product>? products
+}
+
+abstract class "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRemoteDataSource" {
+  +Future<CreateUserResponse?> addNewUser()
+  +Future<String> uploadUserImage()
+  +Future<LoginResponse> login()
+}
+
+abstract class "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRepository" {
+  +Future<CreateUserResponse?> addNewUser()
+  +Future<String> uploadUserImage()
+  +Future<LoginResponse> login()
+}
+
+abstract class "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRemoteDataSource" {
+  +Future<CategoriesResponse> getCategories()
+}
+
+abstract class "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRepository" {
+  +Future<CategoriesResponse> getCategories()
+}
+
+abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" {
+  +Future<ProductsResponse> getNewAddedProduct()
+  +Future<ProductsResponse> getProductsByCategory()
+}
+
+abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository" {
+  +Future<ProductsResponse> getNewAddedProduct()
+  +Future<ProductsResponse> getProductsByCategory()
+}
+
+class "ecommerce::Domain::UseCase::AuthLoginUserCase.dart::AuthLoginUserCase" {
+  +AuthRepository repository
+  +Future<LoginResponse> login()
+}
+
+"ecommerce::Domain::UseCase::AuthLoginUserCase.dart::AuthLoginUserCase" o-- "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRepository"
+
+class "ecommerce::Domain::UseCase::AuthRegistrationUseCase.dart::AuthRegistrationUseCase" {
+  +AuthRepository repository
+  +Future<CreateUserResponse> invoke()
+}
+
+"ecommerce::Domain::UseCase::AuthRegistrationUseCase.dart::AuthRegistrationUseCase" o-- "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRepository"
+
+class "ecommerce::Domain::UseCase::AuthUploadUserImageUseCase.dart::AuthUploadUserImageUseCase" {
+  +AuthRepository repository
+  +Future<String> uploadUserImage()
+}
+
+"ecommerce::Domain::UseCase::AuthUploadUserImageUseCase.dart::AuthUploadUserImageUseCase" o-- "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRepository"
+
+class "ecommerce::Domain::UseCase::GetCategoriesUseCase.dart::GetCategoriesUseCase" {
+  +CategoriesRepository categoriesRepository
+  +Future<CategoriesResponse> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetCategoriesUseCase.dart::GetCategoriesUseCase" o-- "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRepository"
+
+class "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase" {
+  +ProductRepository repository
+  +Future<ProductsResponse> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" {
+  +ProductRepository repository
+  +Future<ProductsResponse> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::main.dart::MyApp" {
+  +String token
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::main.dart::MyApp"
+
+class "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWidget" {
+  +String errorMessage
+  +Function onTryAgainPress
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWidget"
+
+class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" {
+  +Product product
+  +State<ProductWidget> createState()
+}
+
+"ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget"
+
+class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::_ProductWidgetState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::_ProductWidgetState"
+
+class "ecommerce::Presentation::UI::Home::HomeScreenView.dart::HomeScreen" {
+  {static} +String routeName
+  +State<HomeScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::HomeScreenView.dart::HomeScreen"
+
+class "ecommerce::Presentation::UI::Home::HomeScreenView.dart::_HomeScreenState" {
+  +List<Widget> tabs
+  +int selectedIndex
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::HomeScreenView.dart::_HomeScreenState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartTabView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartTabView"
+
+abstract class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabNavigator.dart::HomeTabNavigator" {
+  +void goToProductListScreen()
+}
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::HomeTabView" {
+  +State<HomeTabView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::HomeTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_HomeTabViewState" {
+  +HomeTabViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void goToProductListScreen()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_HomeTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_HomeTabViewState"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabNavigator.dart::HomeTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_HomeTabViewState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel" {
+  +GetCategoriesUseCase categoriesUseCase
+  +GetNewAddedProductsUseCase newAddedProductsUseCase
+  +HomeTabNavigator? navigator
+  +String? errorMessage
+  +List<Categories>? categories
+  +List<Product>? products
+  +void getCategories()
+  +void getNewAddedProducts()
+  +void onTryAgainButtonPress()
+  +void goToProductsListScreen()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel" o-- "ecommerce::Domain::UseCase::GetCategoriesUseCase.dart::GetCategoriesUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel" o-- "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabNavigator.dart::HomeTabNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerSlideShow" {
+  +List<BannerData> bannersData
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerSlideShow"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" {
+  +int id
+  +AlignmentGeometry alignmentGeometry
+  +String title
+  +String titleOnButton
+  +String image
+  +Color textColor
+  +Categories categories
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "flutter::src::painting::alignment.dart::AlignmentGeometry"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "dart::ui::Color"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "ecommerce::Domain::Models::Categories.dart::Categories"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerWiget.dart::BannerWidget" {
+  +BannerData bannerData
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerWiget.dart::BannerWidget" o-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerWiget.dart::BannerWidget"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::Categories.dart::CategoriesList" {
+  +List<Categories> categories
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::Categories.dart::CategoriesList"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget" {
+  +Categories categories
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget" o-- "ecommerce::Domain::Models::Categories.dart::Categories"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget"
+
+class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList" {
+  +List<Product> products
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList"
+
+class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::WishListTabView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::WishListTabView"
+
+abstract class "ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator" {
+  +dynamic goToCreateAccountScreen()
+  +dynamic goToHomeScreen()
+  +dynamic showErrorMessage()
+  +dynamic showSuccessMessage()
+  +dynamic showLoading()
+  +dynamic updateToken()
+  +dynamic hideDialog()
+}
+
+class "ecommerce::Presentation::UI::Login::LoginScreenView.dart::LoginScreen" {
+  {static} +String routeName
+  +State<LoginScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Login::LoginScreenView.dart::LoginScreen"
+
+class "ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState" {
+  +LoginScreenViweModel viewModel
+  +GlobalKey<FormState> formKey
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +bool isVisible
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +dynamic goToCreateAccountScreen()
+  +dynamic goToHomeScreen()
+  +dynamic showErrorMessage()
+  +dynamic hideDialog()
+  +dynamic showLoading()
+  +dynamic showSuccessMessage()
+  +dynamic updateToken()
+}
+
+"ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState" o-- "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel"
+"ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState"
+"ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator" <|-- "ecommerce::Presentation::UI::Login::LoginScreenView.dart::_LoginScreenState"
+
+class "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" {
+  +AuthLoginUserCase useCase
+  +LoginScreenNavigator? navigator
+  +String? emailValidation()
+  +String? passwordValidation()
+  +void onLoginButtonPress()
+  +void onCreateAccountButtonPress()
+  +void goToHome()
+}
+
+"ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" o-- "ecommerce::Domain::UseCase::AuthLoginUserCase.dart::AuthLoginUserCase"
+"ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" o-- "ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel"
+
+abstract class "ecommerce::Presentation::UI::PickImage::PickImageScreenNavidator.dart::PickImageScreenNavigator" {
+  +dynamic showErrorMessage()
+  +dynamic showSuccessMessage()
+  +dynamic showLoading()
+  +dynamic goToHomeScreen()
+  +dynamic hideDialog()
+}
+
+class "ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::PickImageScreen" {
+  {static} +String routeName
+  +State<PickImageScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::PickImageScreen"
+
+class "ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState" {
+  +ImagePicker picker
+  +XFile? images
+  +File? image
+  +PickImageScreenViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +dynamic showErrorMessage()
+  +dynamic hideDialog()
+  +dynamic showLoading()
+  +dynamic showSuccessMessage()
+  +dynamic goToHomeScreen()
+}
+
+"ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState" o-- "image_picker::image_picker.dart::ImagePicker"
+"ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState" o-- "cross_file::src::types::interface.dart::XFile"
+"ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState" o-- "dart::io::File"
+"ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState" o-- "ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState"
+"ecommerce::Presentation::UI::PickImage::PickImageScreenNavidator.dart::PickImageScreenNavigator" <|-- "ecommerce::Presentation::UI::PickImage::PickImageScreenView.dart::_PickImageScreenState"
+
+class "ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel" {
+  +AuthUploadUserImageUseCase useCase
+  +PickImageScreenNavigator? navigator
+  +void uploadImage()
+  +void goToHomeScreen()
+}
+
+"ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel" o-- "ecommerce::Domain::UseCase::AuthUploadUserImageUseCase.dart::AuthUploadUserImageUseCase"
+"ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel" o-- "ecommerce::Presentation::UI::PickImage::PickImageScreenNavidator.dart::PickImageScreenNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel"
+
+abstract class "ecommerce::Presentation::UI::ProductsList::ProductsListNavigator.dart::ProductsListNavigator" {
+}
+
+class "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::ProductsListScreen" {
+  {static} +String routeName
+  +State<ProductsListScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::ProductsListScreen"
+
+class "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::_ProductsListScreenState" {
+  +ProductsListViewModel viewModel
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::_ProductsListScreenState" o-- "ecommerce::Presentation::UI::ProductsList::ProductsListViewModel.dart::ProductsListViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::_ProductsListScreenState"
+
+class "ecommerce::Presentation::UI::ProductsList::ProductsListViewModel.dart::ProductsListViewModel" {
+  +GetProductsByCategoryIdUseCase useCase
+  +String? errorMessage
+  +List<Product>? products
+  +double categoryId
+  +void getProductsByCategoryId()
+  +void onTryAgainButtonPress()
+}
+
+"ecommerce::Presentation::UI::ProductsList::ProductsListViewModel.dart::ProductsListViewModel" o-- "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::ProductsList::ProductsListViewModel.dart::ProductsListViewModel"
+
+abstract class "ecommerce::Presentation::UI::Registration::RegistrationScreenNavigator.dart::RegistrationScreenNavigator" {
+  +dynamic showErrorMessage()
+  +dynamic showSuccessMessage()
+  +dynamic showLoading()
+  +dynamic goToPickImageScreen()
+  +dynamic updateToken()
+  +dynamic hideDialog()
+}
+
+class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::RegistrationScreen" {
+  {static} +String routeName
+  +State<RegistrationScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::RegistrationScreen"
+
+class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" {
+  +bool isVisible
+  +RegistrationScreenViewModel viewModel
+  +DateTime date
+  +GlobalKey<FormState> formKey
+  +TextEditingController nameController
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController rePasswordController
+  +TextEditingController phoneController
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void showMyDatePicker()
+  +Widget dataFormField()
+  +Widget passwordFormField()
+  +void register()
+  +dynamic showErrorMessage()
+  +dynamic hideDialog()
+  +dynamic showLoading()
+  +dynamic showSuccessMessage()
+  +dynamic updateToken()
+  +dynamic goToPickImageScreen()
+}
+
+"ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenNavigator.dart::RegistrationScreenNavigator" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState"
+
+class "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" {
+  +RegistrationScreenNavigator? navigator
+  +AuthRegistrationUseCase useCase
+  +String? nameValidation()
+  +String? emailValidation()
+  +String? passwordValidation()
+  +String? phoneValidation()
+  +void register()
+  +void goToHome()
+}
+
+"ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "ecommerce::Presentation::UI::Registration::RegistrationScreenNavigator.dart::RegistrationScreenNavigator"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "ecommerce::Domain::UseCase::AuthRegistrationUseCase.dart::AuthRegistrationUseCase"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel"
+
+
+@enduml

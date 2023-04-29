@@ -8,9 +8,11 @@ class HomeProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 280,
-        margin: const EdgeInsets.only(bottom: 20),
+        height: 260,
+        margin: const EdgeInsets.only(bottom: 10),
         child: ListView.builder(
+          physics:const BouncingScrollPhysics(),
+
           itemBuilder: (context, index) => ProductWidget(products[index]),
           itemCount: products.length,
           scrollDirection: Axis.horizontal,

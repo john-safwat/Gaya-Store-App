@@ -17,7 +17,7 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: 180,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10 , vertical: 10),
       decoration: BoxDecoration(
           color: MyTheme.lightBlue,
           border: Border.all(
@@ -48,8 +48,7 @@ class _ProductWidgetState extends State<ProductWidget> {
           )),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.only(
-                  top: 15, right: 10, left: 15, bottom: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,6 +84,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     ],
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -94,22 +94,24 @@ class _ProductWidgetState extends State<ProductWidget> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
-                      IconButton(
-                          onPressed: () {
+                      InkWell(
+                          onTap: () {
                             setState(() {
                               widget.product.isInWishList =
                                   !widget.product.isInWishList!;
                             });
                           },
-                          icon: widget.product.isInWishList!
+                          child: widget.product.isInWishList!
                               ? const Icon(
                                   Icons.favorite_rounded,
                                   color: MyTheme.darkBlue,
+                                  size: 30,
                                 )
                               : const Icon(
                                   Icons.favorite_border_rounded,
                                   color: MyTheme.darkBlue,
-                                ))
+                                  size: 30,
+                          ))
                     ],
                   )
                 ],

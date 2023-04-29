@@ -33,13 +33,11 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
             category.name == null?"none text":category.name!
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: Column(
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Consumer<ProductsListViewModel>(
                   builder: (context, value, child) {
-
                     if (value.errorMessage != null) {
                       // if the value of error message is not null then user will be able to try again
                       return errorWidget(value.errorMessage!, value.onTryAgainButtonPress);
@@ -56,7 +54,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                           child: GridView.builder(
                             gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              mainAxisSpacing: 15,
+                              mainAxisSpacing: 0,
                               mainAxisExtent: 280,
                               childAspectRatio: 0.75
                             ),
@@ -64,25 +62,12 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                             itemCount: value.products!.length,
                           ),
                       );
-                      return Expanded(
-                            child: ListView.separated(
-                              itemBuilder: (context, index) => Text(value.products![index].name!),
-                              itemCount: value.products!.length,
-                              separatorBuilder: (context, index) => Container(
-                                height: 2,
-                                width: MediaQuery.of(context).size.width,
-                                margin:const EdgeInsets.symmetric(vertical: 10),
-                              ),
-                            )
-
-                      );
                     }
                   },
               ),
             ],
           ),
         ),
-      ),
     );
   }
 }

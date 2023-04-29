@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:ecommerce/Domain/Models/Categories.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabNavigator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class HomeTabViewModel extends ChangeNotifier {
   GetCategoriesUseCase categoriesUseCase ;
