@@ -368,6 +368,46 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           :[],
                       ),
                       const SizedBox(height: 20,),
+                      // your rating
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const[
+                          Text("Your Rating", style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: MyTheme.darkBlue
+                          ),),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RatingBar.builder(
+                              initialRating: value.product!.userRating ==null ? 0 :double.parse(value.product!.userRating.toString()),
+                              minRating: 1,
+                              ignoreGestures: value.product!.userRating !=null ,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 35,
+                              onRatingUpdate: (rate) {},
+                              itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 2.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextFormField(
+                        decoration:const InputDecoration(
+                          hintText: "Enter Your Opinion"
+                        ),
+                      )
                     ],
                   ),
                 );
