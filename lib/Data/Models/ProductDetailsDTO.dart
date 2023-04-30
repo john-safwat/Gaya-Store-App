@@ -86,7 +86,7 @@ class ProductDetailsDTO {
       price: price,
       rating: rating,
       description: description,
-      descriptionImage: description,
+      descriptionImage: descriptionImage,
       feedBack: feedBack?.map((e) => e.toDomain()).toList(),
       quantity: quantity,
       userComment: userComment,

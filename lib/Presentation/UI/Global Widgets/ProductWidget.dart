@@ -110,12 +110,12 @@ class _ProductWidgetState extends State<ProductWidget> {
                             child: widget.product.isInWishList!
                                 ? const Icon(
                                     Icons.favorite_rounded,
-                                    color: MyTheme.darkBlue,
+                                    color: MyTheme.blue,
                                     size: 30,
                                   )
                                 : const Icon(
                                     Icons.favorite_border_rounded,
-                                    color: MyTheme.darkBlue,
+                                    color: MyTheme.blue,
                                     size: 30,
                             ))
                       ],

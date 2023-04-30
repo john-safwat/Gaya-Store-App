@@ -13,6 +13,7 @@ class ProductDetailsViewModel extends ChangeNotifier{
   String? errorMessage;
   AppConfigProvider? provider;
   String? id;
+  String image ='' ;
 
   void getProductDetails(String id ,AppConfigProvider provider)async{
     this.id =id;
@@ -20,6 +21,7 @@ class ProductDetailsViewModel extends ChangeNotifier{
     try{
       var response = await useCase.invoke(id , provider.token);
       product = response;
+      image = product!.images![0];
       notifyListeners();
     }on IOException catch(e){
       errorMessage = "Check Your Internet Connection";
@@ -32,5 +34,10 @@ class ProductDetailsViewModel extends ChangeNotifier{
 
   void onTryAgainPress(){
     getProductDetails(id!, provider!);
+  }
+
+  void onImagePress(int index){
+    image = product!.images![index];
+    notifyListeners();
   }
 }
