@@ -14,9 +14,12 @@ abstract class ProductRepository{
   Future<ProductDetailsResponse> getProductDetails(String productId , String token);
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
+  Future<Product> readData();
+
 }
 
 abstract class ProductLocalDataSource {
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
+  Future<Product> readData();
 }

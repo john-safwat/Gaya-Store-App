@@ -38,4 +38,10 @@ class ProductRepositoryImpl implements ProductRepository {
     return response;
   }
 
+  @override
+  Future<Product> readData() async{
+    var response = await localDataSource.readData();
+    return response;
+  }
+
 }

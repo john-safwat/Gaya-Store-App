@@ -46,4 +46,9 @@ class SQLdb{
     return "Product Delete From Wish List";
   }
 
+  readData(String sql) async{
+    Database? myDb = _db;
+    var response =  await myDb!.rawInsert(sql);
+    return response;
+  }
 }
