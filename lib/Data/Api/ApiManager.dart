@@ -19,7 +19,7 @@ class ApiManager {
     return _instance!;
   }
 
-  String baseUrl = '192.168.43.231';
+  String baseUrl = '192.168.1.9';
   String addUserRoute = '/Gaya-Store/public/api/users/create';
   String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
   String loginRoute = '/Gaya-Store/public/api/users/login';

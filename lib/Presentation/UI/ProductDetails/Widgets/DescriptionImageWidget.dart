@@ -11,7 +11,10 @@ class DescriptionImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-
+      decoration: BoxDecoration(
+        border: Border.all(width: 2,color: MyTheme.lightBlue),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: CachedNetworkImage(
         imageUrl: image,
         imageBuilder: (context, imageProvider) => ClipRRect(

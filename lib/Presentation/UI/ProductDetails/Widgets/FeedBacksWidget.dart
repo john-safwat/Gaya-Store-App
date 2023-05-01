@@ -60,8 +60,8 @@ class FeedBacksWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 10,
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5,
 
                       )
                     ]

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class HomeProductList extends StatelessWidget {
   List<Product> products ;
   Function onProductPress;
-  HomeProductList(this.products , this.onProductPress);
+  Function onFavoritePress;
+  HomeProductList(this.products , this.onProductPress , this.onFavoritePress);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,7 +14,7 @@ class HomeProductList extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         child: ListView.builder(
           physics:const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => ProductWidget(products[index] , onProductPress),
+          itemBuilder: (context, index) => ProductWidget(products[index] , onProductPress , onFavoritePress),
           itemCount: products.length,
           scrollDirection: Axis.horizontal,
     ));

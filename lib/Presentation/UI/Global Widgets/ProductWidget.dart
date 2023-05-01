@@ -7,8 +7,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class ProductWidget extends StatefulWidget {
   Product product ;
   Function onWidgetPress;
+  Function onFavoritePress;
 
-  ProductWidget(this.product , this.onWidgetPress);
+  ProductWidget(this.product , this.onWidgetPress , this.onFavoritePress);
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -102,9 +103,9 @@ class _ProductWidgetState extends State<ProductWidget> {
                         ),
                         InkWell(
                             onTap: () {
+                              widget.onFavoritePress(widget.product);
                               setState(() {
-                                widget.product.isInWishList =
-                                    !widget.product.isInWishList!;
+                                widget.product.isInWishList = !widget.product.isInWishList!;
                               });
                             },
                             child: widget.product.isInWishList!

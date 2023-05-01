@@ -3,6 +3,8 @@ import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
+import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsViewModel.dart';
@@ -15,6 +17,7 @@ import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/ImagesListWidge
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/NameWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/DescriptionWIdget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/PriceWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/UserRatingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +31,10 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ProductDetailsViewModel viewModel = ProductDetailsViewModel(
-      GetProductDetailsUseCase(injectProductRepository()));
+    GetProductDetailsUseCase(injectProductRepository()),
+    AddToWishListUseCase(injectProductRepository()),
+    DeleteFromWishListUseCase(injectProductRepository())
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     AppConfigProvider provider =
         Provider.of<AppConfigProvider>(context, listen: false);
     if (viewModel.id == null) {
-      viewModel.getProductDetails(product.id!.toString(), provider);
+      viewModel.getProductDetails(product.id!.toString(), provider, product);
     }
     return ChangeNotifierProvider(
       create: (context) => viewModel,
@@ -80,12 +86,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       // price
                       PriceWidget(value.product!.price!.toString()),
                       // the buttons
-                      ButtonsWidget(product.isInWishList!),
+                      ButtonsWidget(product.isInWishList! , value.onFavoritePress),
                       // description Image
                       DescriptionImageWidget(value.product!.descriptionImage!),
                       // feedBacks
                       FeedBacksWidget(double.parse(value.product!.rating!.toString()), value.product!.feedBack),
-                      // your rating
+                      // user rating
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const[
@@ -96,57 +102,110 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      UserRatingWidget(value.product!.userRating == null? null : value.product!.userRating!.toString()),
+                      Form(
+                        child: Column(
                           children: [
-                            RatingBar.builder(
-                              initialRating: value.product!.userRating ==null ? 0 :double.parse(value.product!.userRating.toString()),
-                              minRating: 1,
-                              ignoreGestures: value.product!.userRating !=null ,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 35,
-                              onRatingUpdate: (rate) {},
-                              itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 2.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                            Container(
+                              margin:const EdgeInsets.all(10),
+                              child:value.product!.userComment == null ? TextFormField(
+                                maxLines: 6,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Your Opinion",
+                                  fillColor: MyTheme.lightBlue,
+                                  filled: true,
+                                  hintStyle: TextStyle(
+                                    fontSize: 18 ,
+                                    color: MyTheme.darkBlue.withOpacity(0.7),
+                                  ),
+                                  contentPadding:const EdgeInsets.all(20),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  errorBorder:  OutlineInputBorder(
+                                    borderSide:const BorderSide(width: 2, color: Colors.red),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  disabledBorder:  OutlineInputBorder(
+                                    borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  enabledBorder:  OutlineInputBorder(
+                                    borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusedErrorBorder:  OutlineInputBorder(
+                                    borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ):Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(40),
+                                    decoration: BoxDecoration(
+                                        color: MyTheme.lightBlue,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.2),
+                                            blurRadius: 5,
+                                          )
+                                        ]
+                                    ),
+                                    child: Text(
+                                      value.product!.userComment!,
+                                      style:const TextStyle(
+                                          fontSize: 22,
+                                          color: MyTheme.darkBlue
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: (){
+
+                                    },
+                                    icon:const Icon(Icons.edit, color: MyTheme.darkBlue,),
+                                    highlightColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Enter Your Opinion",
-                          fillColor: MyTheme.lightBlue,
-                          contentPadding:const EdgeInsets.all(20),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          errorBorder:  OutlineInputBorder(
-                            borderSide:const BorderSide(width: 2, color: Colors.red),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          disabledBorder:  OutlineInputBorder(
-                            borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          enabledBorder:  OutlineInputBorder(
-                            borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusedErrorBorder:  OutlineInputBorder(
-                            borderSide:const BorderSide(width: 2, color: MyTheme.darkBlue),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: (){},
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(MyTheme.darkBlue),
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ))
+                                      ),
+                                      child:const Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
+                        )
                       )
                     ],
                   ),

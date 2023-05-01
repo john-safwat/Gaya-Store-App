@@ -1,9 +1,16 @@
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:flutter/material.dart';
 
-class ButtonsWidget extends StatelessWidget {
+class ButtonsWidget extends StatefulWidget {
   bool isInWishList ;
-  ButtonsWidget(this.isInWishList);
+  Function onFavoritePress;
+  ButtonsWidget(this.isInWishList , this.onFavoritePress);
+
+  @override
+  State<ButtonsWidget> createState() => _ButtonsWidgetState();
+}
+
+class _ButtonsWidgetState extends State<ButtonsWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -43,14 +50,19 @@ class ButtonsWidget extends StatelessWidget {
           width: 20,
         ),
         InkWell(
-          onTap: (){},
+          onTap: (){
+            widget.onFavoritePress();
+            setState(() {
+              widget.isInWishList = !widget.isInWishList;
+            });
+          },
           child: Container(
             height: 55,
             width: 55,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: MyTheme.darkBlue),
-            child: isInWishList
+            child: widget.isInWishList
                 ? const Icon(Icons.favorite_rounded , size: 30,color: MyTheme.backGround,)
                 : const Icon(Icons.favorite_border_rounded , size:30, color: MyTheme.backGround,),
           ),
