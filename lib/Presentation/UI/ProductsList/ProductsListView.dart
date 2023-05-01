@@ -1,5 +1,6 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Categories.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
@@ -97,5 +98,20 @@ class _ProductsListScreenState extends State<ProductsListScreen>
   void goToProductDetailsScreen(Product product) {
     Navigator.pushNamed(context, ProductDetailsScreen.routeName,
         arguments: product);
+  }
+
+  @override
+  void hideDialog() {
+    MyDialogUtils.hideDialog(context: context);
+  }
+
+  @override
+  void showLoading() {
+    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
+  }
+
+  @override
+  void showSuccessMessage(String message) {
+    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }

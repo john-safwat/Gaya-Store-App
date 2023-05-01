@@ -28,6 +28,8 @@ class MyDialogUtils{
       onConfirmBtnTap: () {
         if(action != null){
           action();
+        }else {
+          Navigator.pop(context);
         }
       }
     );

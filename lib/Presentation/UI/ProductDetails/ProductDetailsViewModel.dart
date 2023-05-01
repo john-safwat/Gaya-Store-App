@@ -6,6 +6,7 @@ import 'package:ecommerce/Domain/Models/ProductDetails.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsNavigator.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsViewModel extends ChangeNotifier {
@@ -21,6 +22,7 @@ class ProductDetailsViewModel extends ChangeNotifier {
   String? id;
   Product? abstractProduct;
   String image = '';
+  ProductDetailsNavigator? navigator;
 
   void getProductDetails(String id, AppConfigProvider provider , Product abstractProduct) async {
     this.id = id;
@@ -51,11 +53,16 @@ class ProductDetailsViewModel extends ChangeNotifier {
 
   void onFavoritePress() async{
     if (!abstractProduct!.isInWishList!) {
+      navigator!.showLoading();
       var response = await addToWishListUseCase.invoke(abstractProduct!);
-      print(response);
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
     }else {
+      navigator!.showLoading();
       var response = await deleteFromWishListUseCase.invoke(int.parse(abstractProduct!.id!.toString()));
-      print(response);
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
     }
+    abstractProduct!.isInWishList = !abstractProduct!.isInWishList!;
   }
 }

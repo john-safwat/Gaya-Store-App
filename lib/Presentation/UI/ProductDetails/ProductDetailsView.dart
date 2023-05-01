@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsNavigator.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsViewModel.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/BrandAndRatingWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/ButtonsWidget.dart';
@@ -29,12 +31,24 @@ class ProductDetailsScreen extends StatefulWidget {
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements ProductDetailsNavigator{
   ProductDetailsViewModel viewModel = ProductDetailsViewModel(
     GetProductDetailsUseCase(injectProductRepository()),
     AddToWishListUseCase(injectProductRepository()),
     DeleteFromWishListUseCase(injectProductRepository())
   );
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel.navigator = this;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    viewModel.navigator = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,5 +230,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void hideDialog() {
+    MyDialogUtils.hideDialog(context: context);
+  }
+
+  @override
+  void showLoading() {
+    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
+  }
+
+  @override
+  void showSuccessMessage(String message) {
+    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }

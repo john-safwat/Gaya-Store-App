@@ -28,7 +28,8 @@ class SQLdb{
         `category` text UNSIGNED NOT NULL,
         `price` double(10,3) NOT NULL,
         `mainImage` text DEFAULT NULL,
-        `brand` text UNSIGNED NOT NULL
+        `brand` text UNSIGNED NOT NULL,
+        `rating` double(4,2) NOT NULL
       )
     ''');
     print('data base created');
@@ -42,13 +43,13 @@ class SQLdb{
 
   Future<String>deleteData(String sql) async{
     Database? myDb = _db;
-    var response =  await myDb!.rawInsert(sql);
+    var response =  await myDb!.rawDelete(sql);
     return "Product Delete From Wish List";
   }
 
   readData(String sql) async{
     Database? myDb = _db;
-    var response =  await myDb!.rawInsert(sql);
+    var response =  await myDb!.rawQuery(sql);
     return response;
   }
 }

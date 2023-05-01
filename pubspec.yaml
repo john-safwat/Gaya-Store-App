@@ -54,6 +54,7 @@ dependencies:
   dcdg: ^4.1.0
   scroll_app_bar: ^2.0.0
   sqflite: ^2.2.8
+  flutter_slidable: ^3.0.0
 
 dev_dependencies:
   flutter_test:

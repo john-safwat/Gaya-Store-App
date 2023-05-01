@@ -39,7 +39,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Product> readData() async{
+  Future<List<Product>?> readData() async{
     var response = await localDataSource.readData();
     return response;
   }

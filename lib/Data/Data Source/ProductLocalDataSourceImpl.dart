@@ -8,8 +8,8 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
   ProductLocalDataSourceImpl(this.sqLdb);
   @override
   Future<String> insertData(Product product) async{
-    var response = await sqLdb.insertData('''INSERT INTO `products` (`id`,`name`,`category`,`price`,`mainImage`,`brand`)
-        VALUES ('${product.id}','${product.name}','${product.category}','${product.price}','${product.mainImage}','${product.brand}')''');
+    var response = await sqLdb.insertData('''INSERT INTO `products` (`id`,`name`,`category`,`price`,`mainImage`,`brand` , `rating`)
+        VALUES ("${product.id}","${product.name}","${product.category}","${product.price}","${product.mainImage}","${product.brand}","${product.rating}")''');
     return response;
   }
 
@@ -20,10 +20,20 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
   }
 
   @override
-  Future<Product> readData() async{
-    var response = await sqLdb.readData("select * from `products`");
-    ProductsDTO productsDTO = ProductsDTO.fromJson(response);
-    return productsDTO.toDomain();
+  Future<List<Product>?> readData() async{
+    var response = await sqLdb.readData('SELECT * FROM products;');
+
+    if (response != null){
+      List<Product> products = [];
+
+      response.forEach((v) {
+        products.add(ProductsDTO.fromJson(v).toDomain());
+      });
+
+      return products;
+    }else {
+      return null;
+    }
   }
 
 }

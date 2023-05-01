@@ -46,11 +46,15 @@ class ProductsListViewModel extends ChangeNotifier {
 
   void onFavoritePress(Product product) async {
     if (!product.isInWishList!) {
+      navigator!.showLoading();
       var response = await addToWishListUseCase.invoke(product);
-      print(response);
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
     }else {
+      navigator!.showLoading();
       var response = await deleteFromWishListUseCase.invoke(int.parse(product.id!.toString()));
-      print(response);
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
     }
   }
 }
