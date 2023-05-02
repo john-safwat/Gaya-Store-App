@@ -6,6 +6,7 @@ abstract class ProductRemoteDataSource{
   Future<ProductsResponse> getNewAddedProduct();
   Future<ProductsResponse> getProductsByCategory(double categoryId);
   Future<ProductDetailsResponse> getProductDetails(String productId , String token);
+  Future<ProductsResponse> search(String query);
 }
 
 abstract class ProductRepository{
@@ -15,7 +16,7 @@ abstract class ProductRepository{
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
   Future<List<Product>?> readData();
-
+  Future<ProductsResponse> search(String query);
 }
 
 abstract class ProductLocalDataSource {

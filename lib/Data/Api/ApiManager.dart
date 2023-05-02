@@ -30,6 +30,8 @@ class ApiManager {
       '/Gaya-Store/public/api/home/product/getProductsByCategory';
   String getProductDetailsRoute =
       '/Gaya-Store/public/api/home/product/productDetails';
+  String getSearchedProductsRoute =
+      '/Gaya-Store/public/api/home/product/productSearch';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -114,5 +116,18 @@ class ApiManager {
       );
     var response = await http.get(url);
     return ProductDetailsResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  //function to get the products we search for
+  Future<ProductsResponseDTO> getSearchedProducts(String query) async {
+    Uri url = Uri.http(
+        baseUrl,
+        getSearchedProductsRoute,
+        {
+          'query_term': query,
+        }
+    );
+    var response = await http.get(url);
+    return ProductsResponseDTO.fromJson(jsonDecode(response.body));
   }
 }

@@ -100,7 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
                       // price
                       PriceWidget(value.product!.price!.toString()),
                       // the buttons
-                      ButtonsWidget(product.isInWishList! , value.onFavoritePress),
+                      ButtonsWidget(product.isInWishList! ),
                       // description Image
                       DescriptionImageWidget(value.product!.descriptionImage!),
                       // feedBacks

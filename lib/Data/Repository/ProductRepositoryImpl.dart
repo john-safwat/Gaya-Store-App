@@ -44,4 +44,10 @@ class ProductRepositoryImpl implements ProductRepository {
     return response;
   }
 
+  @override
+  Future<ProductsResponse> search(String query) async{
+    var response = await remoteDataSource.search(query);
+    return response;
+  }
+
 }

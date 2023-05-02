@@ -25,4 +25,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     return response.toDomain();
   }
 
+  @override
+  Future<ProductsResponse> search(String query) async{
+    var response = await apiManager.getSearchedProducts(query);
+    return response.toDomain();
+  }
+
 }

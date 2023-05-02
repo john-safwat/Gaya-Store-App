@@ -51,18 +51,4 @@ class ProductDetailsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onFavoritePress() async{
-    if (!abstractProduct!.isInWishList!) {
-      navigator!.showLoading();
-      var response = await addToWishListUseCase.invoke(abstractProduct!);
-      navigator!.hideDialog();
-      navigator!.showSuccessMessage(response);
-    }else {
-      navigator!.showLoading();
-      var response = await deleteFromWishListUseCase.invoke(int.parse(abstractProduct!.id!.toString()));
-      navigator!.hideDialog();
-      navigator!.showSuccessMessage(response);
-    }
-    abstractProduct!.isInWishList = !abstractProduct!.isInWishList!;
-  }
 }

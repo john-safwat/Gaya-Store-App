@@ -8,7 +8,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class ProductShowWidget extends StatelessWidget {
   Product product;
   Function onViewNowPress;
-  ProductShowWidget(this.product , this.onViewNowPress);
+  Function onDeletePress;
+  ProductShowWidget(this.product , this.onViewNowPress , this.onDeletePress);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,6 +34,7 @@ class ProductShowWidget extends StatelessWidget {
                 label: "Delete",
                 icon: Icons.delete,
                 onPressed: (context) {
+                  onDeletePress(product);
                 },
               ),
             ],

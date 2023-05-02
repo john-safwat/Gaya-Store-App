@@ -13,6 +13,7 @@ class MyTheme {
     scaffoldBackgroundColor: backGround ,
     primaryColor: darkBlue,
     canvasColor: darkBlue,
+
     textTheme: const TextTheme(
       headline1: TextStyle(
         color: darkBlue,
