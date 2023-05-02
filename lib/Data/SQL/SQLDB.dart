@@ -16,7 +16,7 @@ class SQLdb{
   initiateDB() async {
     String dataBasePath = await getDatabasesPath() ;
     String path = join( dataBasePath , 'Gaya Store.db') ;
-    Database myDb = await openDatabase(path , onCreate: _onCreate , version: 1 ) ;
+    Database myDb = await openDatabase(path , onCreate: _onCreate , version: 2 ) ;
     return myDb ;
   }
 

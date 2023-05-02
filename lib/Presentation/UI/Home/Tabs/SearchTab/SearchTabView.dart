@@ -45,7 +45,7 @@ class _SearchTabViewState extends State<SearchTabView> implements SearchTabNavig
               child: ScrollAppBar(
                 controller: controller,
                 backgroundColor: Colors.transparent,
-                toolbarHeight: 100,
+                toolbarHeight: 80,
                 title: TextFormField(
                   style: const TextStyle(
                     color: MyTheme.darkBlue,
@@ -63,13 +63,14 @@ class _SearchTabViewState extends State<SearchTabView> implements SearchTabNavig
                       color: MyTheme.darkBlue,
                       fontSize: 18,
                     ),
+                    contentPadding:const EdgeInsets.symmetric(vertical: 10 , horizontal: 20),
                     focusedBorder: OutlineInputBorder(
                       borderSide:const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     errorBorder:  OutlineInputBorder(
                       borderSide:const BorderSide(width: 2, color: Colors.red),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     disabledBorder:  OutlineInputBorder(
                       borderSide:const BorderSide(width: 2, color: MyTheme.lightBlue),
@@ -77,11 +78,11 @@ class _SearchTabViewState extends State<SearchTabView> implements SearchTabNavig
                     ),
                     enabledBorder:  OutlineInputBorder(
                       borderSide:const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     focusedErrorBorder:  OutlineInputBorder(
                       borderSide:const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
@@ -109,6 +110,7 @@ class _SearchTabViewState extends State<SearchTabView> implements SearchTabNavig
                           itemBuilder: (context, index) => ProductShowWidget(value.products![index], value.onViewNowPress, value.onDeletePress),
                           itemCount: value.products!.length,
                           controller: controller,
+                          physics:const AlwaysScrollableScrollPhysics(),
                         )
 
                   );

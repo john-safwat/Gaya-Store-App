@@ -7,6 +7,11 @@ class GetWishListProductsUseCase {
 
   Future<List<Product>?> invoke()async{
     var response = await repository.readData();
+    if (response != null){
+      for(int i =0 ; i< response.length;i++){
+        response[i].isInWishList =  true;
+      }
+    }
     return response;
   }
 }

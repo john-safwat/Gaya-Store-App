@@ -8,8 +8,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class ProductShowWidget extends StatelessWidget {
   Product product;
   Function onViewNowPress;
-  Function onDeletePress;
-  ProductShowWidget(this.product , this.onViewNowPress , this.onDeletePress);
+  Function onSlidablePress;
+  ProductShowWidget(this.product , this.onViewNowPress , this.onSlidablePress);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,15 +26,14 @@ class ProductShowWidget extends StatelessWidget {
             motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                backgroundColor: Colors.red,
-                foregroundColor: MyTheme.backGround,
+                backgroundColor:product.isInWishList! ? Colors.red : MyTheme.blue,
                 borderRadius: const BorderRadius.only(topRight: Radius.circular(20) ,bottomRight: Radius.circular(20)),
                 flex: 2,
                 autoClose: true,
-                label: "Delete",
-                icon: Icons.delete,
+                label: product.isInWishList!?"Delete" : "Add",
+                icon: product.isInWishList!?Icons.delete :Icons.add,
                 onPressed: (context) {
-                  onDeletePress(product);
+                  onSlidablePress(product);
                 },
               ),
             ],

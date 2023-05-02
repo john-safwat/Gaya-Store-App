@@ -6,6 +6,16 @@ class GetProductsByCategoryIdUseCase {
   GetProductsByCategoryIdUseCase(this.repository);
   Future<ProductsResponse> invoke(double categoryId) async{
     var response = await repository.getProductsByCategory(categoryId);
+    var wishList = await repository.readData();
+    if (wishList != null) {
+      for(int i = 0 ; i < response.products!.length ; i++){
+        for(int j = 0 ; j< wishList.length ; j++){
+          if(response.products![i].id == wishList[j].id){
+            response.products![i].isInWishList = true;
+          }
+        }
+      }
+    }
     return response;
   }
 }

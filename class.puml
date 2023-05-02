@@ -36,6 +36,7 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +String getAllNewAddedProductsRoute
   +String getProductsByCategoryRoute
   +String getProductDetailsRoute
+  +String getSearchedProductsRoute
   {static} +ApiManager getApiManager()
   +Future<CreateUserResponseDTO> addNewUser()
   +Future<String> uploadUserImage()
@@ -44,6 +45,7 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +Future<ProductsResponseDTO> getAllNewAddedProducts()
   +Future<ProductsResponseDTO> getProductsByCategory()
   +Future<ProductDetailsResponseDTO> getProductDetails()
+  +Future<ProductsResponseDTO> getSearchedProducts()
 }
 
 "ecommerce::Data::Api::ApiManager.dart::ApiManager" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
@@ -70,6 +72,7 @@ class "ecommerce::Data::Data%20Source::ProductLocalDataSourceImpl.dart::ProductL
   +SQLdb sqLdb
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<List<Product>?> readData()
 }
 
 "ecommerce::Data::Data%20Source::ProductLocalDataSourceImpl.dart::ProductLocalDataSourceImpl" o-- "ecommerce::Data::SQL::SQLDB.dart::SQLdb"
@@ -80,6 +83,7 @@ class "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::Product
   +Future<ProductsResponse> getNewAddedProduct()
   +Future<ProductsResponse> getProductsByCategory()
   +Future<ProductDetailsResponse> getProductDetails()
+  +Future<ProductsResponse> search()
 }
 
 "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
@@ -214,6 +218,8 @@ class "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositor
   +Future<ProductDetailsResponse> getProductDetails()
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<List<Product>?> readData()
+  +Future<ProductsResponse> search()
 }
 
 "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource"
@@ -227,6 +233,7 @@ class "ecommerce::Data::SQL::SQLDB.dart::SQLdb" {
   -void _onCreate()
   +Future<String> insertData()
   +Future<String> deleteData()
+  +dynamic readData()
 }
 
 "ecommerce::Data::SQL::SQLDB.dart::SQLdb" o-- "sqflite_common::sqlite_api.dart::Database"
@@ -328,6 +335,7 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
   +Future<ProductsResponse> getNewAddedProduct()
   +Future<ProductsResponse> getProductsByCategory()
   +Future<ProductDetailsResponse> getProductDetails()
+  +Future<ProductsResponse> search()
 }
 
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository" {
@@ -336,11 +344,14 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
   +Future<ProductDetailsResponse> getProductDetails()
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<List<Product>?> readData()
+  +Future<ProductsResponse> search()
 }
 
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductLocalDataSource" {
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<List<Product>?> readData()
 }
 
 class "ecommerce::Domain::UseCase::AddToWishListUseCase.dart::AddToWishListUseCase" {
@@ -406,6 +417,20 @@ class "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProdu
 
 "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
+class "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase" {
+  +ProductRepository repository
+  +Future<List<Product>?> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase" {
+  +ProductRepository repository
+  +Future<List<Product>?> invoke()
+}
+
+"ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
 class "ecommerce::main.dart::MyApp" {
   +String token
   +Widget build()
@@ -420,6 +445,16 @@ class "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWid
 }
 
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWidget"
+
+class "ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget" {
+  +Product product
+  +Function onViewNowPress
+  +Function onDeletePress
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget"
 
 class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" {
   +Product product
@@ -461,6 +496,9 @@ class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartT
 abstract class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabNavigator.dart::HomeTabNavigator" {
   +void goToProductListScreen()
   +void goToProductDetailsScreen()
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
 }
 
 class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::HomeTabView" {
@@ -476,6 +514,9 @@ class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_Home
   +Widget build()
   +void goToProductListScreen()
   +void goToProductDetailsScreen()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabView.dart::_HomeTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabViewModel.dart::HomeTabViewModel"
@@ -567,17 +608,88 @@ class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart:
 
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView"
 
-class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView" {
-  +Widget build()
+abstract class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator" {
+  +void goToDetailsScreen()
 }
 
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView"
+class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView" {
+  +State<SearchTabView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState" {
+  +SearchTabViewModel viewModel
+  +ScrollController controller
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void goToDetailsScreen()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel"
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState"
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" {
+  +SearchForProductUseCase useCase
+  +String? errorMessage
+  +List<Product>? products
+  +SearchTabNavigator? navigator
+  +void getProducts()
+  +void onViewNowPress()
+  +void onDeletePress()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel"
+
+abstract class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabNavigator.dart::WishListTabNavigator" {
+  +void goToProductDetailsScreen()
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
+}
 
 class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::WishListTabView" {
-  +Widget build()
+  +State<WishListTabView> createState()
 }
 
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::WishListTabView"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::WishListTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::_WishListTabViewState" {
+  +WishListTabViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void goToProductDetailsScreen()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::_WishListTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::_WishListTabViewState"
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabNavigator.dart::WishListTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dart::_WishListTabViewState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" {
+  +GetWishListProductsUseCase getWishListProductsUseCase
+  +DeleteFromWishListUseCase deleteFromWishListUseCase
+  +WishListTabNavigator? navigator
+  +List<Product>? products
+  +String? errorMessage
+  +void getProducts()
+  +void onTryAgainPress()
+  +void onViewNowPress()
+  +void onDeletePress()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWishListUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabNavigator.dart::WishListTabNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel"
 
 abstract class "ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator" {
   +dynamic goToCreateAccountScreen()
@@ -683,6 +795,9 @@ class "ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::Pi
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::PickImage::PickImageScreenViewModel.dart::PickImageScreenViewModel"
 
 abstract class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsNavigator.dart::ProductDetailsNavigator" {
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
 }
 
 class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::ProductDetailsScreen" {
@@ -694,11 +809,17 @@ class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::Pro
 
 class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::_ProductDetailsScreenState" {
   +ProductDetailsViewModel viewModel
+  +void initState()
+  +void dispose()
   +Widget build()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
 }
 
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::_ProductDetailsScreenState" o-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel"
 "flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::_ProductDetailsScreenState"
+"ecommerce::Presentation::UI::ProductDetails::ProductDetailsNavigator.dart::ProductDetailsNavigator" <|-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsView.dart::_ProductDetailsScreenState"
 
 class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" {
   +GetProductDetailsUseCase getProductDetailsUseCase
@@ -710,10 +831,10 @@ class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart
   +String? id
   +Product? abstractProduct
   +String image
+  +ProductDetailsNavigator? navigator
   +void getProductDetails()
   +void onTryAgainPress()
   +void onImagePress()
-  +void onFavoritePress()
 }
 
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::UseCase::GetProductDetailsUseCase.dart::GetProductDetailsUseCase"
@@ -722,6 +843,7 @@ class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::ProductDetails.dart::ProductDetails"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsNavigator.dart::ProductDetailsNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel"
 
 class "ecommerce::Presentation::UI::ProductDetails::Widgets::BrandAndRatingWidget.dart::BrandAndRatingWidget" {
@@ -734,7 +856,6 @@ class "ecommerce::Presentation::UI::ProductDetails::Widgets::BrandAndRatingWidge
 
 class "ecommerce::Presentation::UI::ProductDetails::Widgets::ButtonsWidget.dart::ButtonsWidget" {
   +bool isInWishList
-  +Function onFavoritePress
   +State<ButtonsWidget> createState()
 }
 
@@ -806,6 +927,9 @@ class "ecommerce::Presentation::UI::ProductDetails::Widgets::UserRatingWidget.da
 
 abstract class "ecommerce::Presentation::UI::ProductsList::ProductsListNavigator.dart::ProductsListNavigator" {
   +void goToProductDetailsScreen()
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
 }
 
 class "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::ProductsListScreen" {
@@ -821,6 +945,9 @@ class "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::_Produc
   +void dispose()
   +Widget build()
   +void goToProductDetailsScreen()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
 }
 
 "ecommerce::Presentation::UI::ProductsList::ProductsListView.dart::_ProductsListScreenState" o-- "ecommerce::Presentation::UI::ProductsList::ProductsListViewModel.dart::ProductsListViewModel"

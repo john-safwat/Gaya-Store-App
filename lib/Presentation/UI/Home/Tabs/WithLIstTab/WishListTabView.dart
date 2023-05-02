@@ -44,7 +44,7 @@ class _WishListTabViewState extends State<WishListTabView>
         builder: (context, value, child) {
           if (value.errorMessage != null) {
             return errorWidget(value.errorMessage!, value.onTryAgainPress);
-          } else if (value.products == null) {
+          } else if (value.products == null || value.products!.isEmpty) {
             return Center(
               child: Image.asset(
                 'assets/images/empty-box.png',

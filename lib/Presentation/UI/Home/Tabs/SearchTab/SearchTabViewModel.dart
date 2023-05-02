@@ -22,6 +22,10 @@ class SearchTabViewModel extends ChangeNotifier {
       errorMessage = e.toString();
       notifyListeners();
     }
+    if(query.isEmpty){
+      products = null;
+      notifyListeners();
+    }
   }
 
   void onViewNowPress(Product product){
