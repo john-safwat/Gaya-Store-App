@@ -1,13 +1,15 @@
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/CartProduct.dart';
 import 'package:ecommerce/Domain/Models/CartProducts.dart';
+import 'package:ecommerce/Domain/UseCase/DeleteProductFromCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCartItemsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabNavigator.dart';
 import 'package:flutter/material.dart';
 
 class CartTabViewModel extends ChangeNotifier{
-  GetCartItemsUseCase useCase ;
-  CartTabViewModel(this.useCase);
+  GetCartItemsUseCase getCartItemsUseCase;
+  DeleteProductFromCartUseCase deleteProductFormCartUseCase;
+  CartTabViewModel(this.getCartItemsUseCase , this.deleteProductFormCartUseCase);
 
   CartTabNavigator? navigator;
 
@@ -20,7 +22,7 @@ class CartTabViewModel extends ChangeNotifier{
     products = null;
     this.provider = provider;
     try{
-      var response = await useCase.invoke(provider.token);
+      var response = await getCartItemsUseCase.invoke(provider.token);
       products = response;
       notifyListeners();
     }catch (e){
@@ -48,7 +50,7 @@ class CartTabViewModel extends ChangeNotifier{
     return orderQuantityCount;
   }
 
-  double calcTotla(){
+  double calcTotal(){
     double total = 0 ;
     for(int i = 0 ;i <products!.length;i++){
       total += (products![i].cartProduct!.orderedQuantity! * double.parse(products![i].cartProduct!.price!.toString() ) );
@@ -56,7 +58,11 @@ class CartTabViewModel extends ChangeNotifier{
     return total;
   }
 
-  void onSlidablePress(CartProduct product){
-
+  void onSlidablePress(String productId) async{
+    navigator!.showLoading();
+    var response = await deleteProductFormCartUseCase.invoke(productId, provider!.token);
+    navigator!.hideDialog();
+    navigator!.showSuccessMessage(response!);
+    getCartItems(provider!);
   }
 }

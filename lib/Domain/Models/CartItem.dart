@@ -5,7 +5,7 @@ class CartItem {
       this.id,});
 
   int? userId;
-  int? productId;
+  String? productId;
   int? id;
 
 

@@ -2,7 +2,7 @@ import 'package:ecommerce/Domain/Models/CartItem.dart';
 
 class CartItemDTO {
   CartItemDTO({
-      this.userId, 
+      this.userId,
       this.productId, 
       this.id,});
 
@@ -12,7 +12,7 @@ class CartItemDTO {
     id = json['id'];
   }
   int? userId;
-  int? productId;
+  String? productId;
   int? id;
 
   Map<String, dynamic> toJson() {

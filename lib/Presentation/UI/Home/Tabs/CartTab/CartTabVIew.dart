@@ -1,6 +1,7 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Domain/UseCase/DeleteProductFromCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCartItemsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabNavigator.dart';
@@ -8,6 +9,8 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabViewModel.dar
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/Widgets/CartItemWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../Core/Utils/Dialog_Utils.dart';
 
 class CartTabView extends StatefulWidget {
   const CartTabView({Key? key}) : super(key: key);
@@ -18,7 +21,9 @@ class CartTabView extends StatefulWidget {
 
 class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
   CartTabViewModel viewModel =
-      CartTabViewModel(GetCartItemsUseCase(injectProductRepository()));
+      CartTabViewModel(GetCartItemsUseCase(injectProductRepository()),
+      DeleteProductFromCartUseCase(injectProductRepository())
+  );
   @override
   void initState() {
     super.initState();
@@ -71,7 +76,7 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Total",style: TextStyle(fontSize: 18 , color: MyTheme.darkBlue),),
-                      Text("${value.calcTotla()} EGP",style:const  TextStyle(
+                      Text("${value.calcTotal()} EGP",style:const  TextStyle(
                         fontSize: 18 ,
                         color: MyTheme.darkBlue,
                         fontWeight: FontWeight.bold
@@ -123,5 +128,20 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
         },
       ),
     );
+  }
+
+  @override
+  void hideDialog() {
+    MyDialogUtils.hideDialog(context: context);
+  }
+
+  @override
+  void showLoading() {
+    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
+  }
+
+  @override
+  void showSuccessMessage(String message) {
+    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }
