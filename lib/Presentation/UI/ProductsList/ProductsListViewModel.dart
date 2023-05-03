@@ -25,7 +25,7 @@ class ProductsListViewModel extends ChangeNotifier {
     this.categoryId = categoryId;
     try {
       var response = await getProductsByCategoryIdUseCase.invoke(categoryId);
-      products = response.products;
+      products = response;
       notifyListeners();
     } on IOException catch (e) {
       errorMessage = "Check Your Internet Connection";

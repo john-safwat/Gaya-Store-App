@@ -1,6 +1,7 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetWishListProductsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/PoductShowWidget.dart';
@@ -22,7 +23,9 @@ class _WishListTabViewState extends State<WishListTabView>
     implements WishListTabNavigator {
   WishListTabViewModel viewModel = WishListTabViewModel(
       GetWishListProductsUseCase(injectProductRepository()),
-      DeleteFromWishListUseCase(injectProductRepository()));
+      DeleteFromWishListUseCase(injectProductRepository()),
+      AddToWishListUseCase(injectProductRepository()),
+  );
   @override
   void initState() {
     super.initState();
@@ -61,7 +64,7 @@ class _WishListTabViewState extends State<WishListTabView>
                     itemBuilder: (context, index) => ProductShowWidget(
                       value.products![index],
                       value.onViewNowPress,
-                      value.onDeletePress
+                      value.onSlidablePress
                     ),
                   ),
                 )

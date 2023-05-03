@@ -1,6 +1,6 @@
+import 'package:ecommerce/Domain/Models/CartProducts.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
-import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
-import 'package:ecommerce/Domain/Models/ProductsResponse.dart';
+import 'package:ecommerce/Domain/Models/ProductDetails.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
@@ -9,21 +9,21 @@ class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl(this.remoteDataSource , this.localDataSource);
 
   @override
-  Future<ProductsResponse> getNewAddedProduct() {
-    var response = remoteDataSource.getNewAddedProduct();
-    return response;
+  Future<List<Product>?> getNewAddedProduct()async {
+    var response =await remoteDataSource.getNewAddedProduct();
+    return response.products;
   }
 
   @override
-  Future<ProductsResponse> getProductsByCategory(double categoryId)async {
+  Future<List<Product>?> getProductsByCategory(double categoryId)async {
     var response = await remoteDataSource.getProductsByCategory(categoryId);
-    return response;
+    return response.products;
   }
 
   @override
-  Future<ProductDetailsResponse> getProductDetails(String productId, String token)async {
+  Future<ProductDetails?> getProductDetails(String productId, String token)async {
     var response = await remoteDataSource.getProductDetails(productId, token);
-    return response;
+    return response.product;
   }
 
   @override
@@ -45,9 +45,15 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductsResponse> search(String query) async{
+  Future<List<Product>?> search(String query) async{
     var response = await remoteDataSource.search(query);
-    return response;
+    return response.products;
+  }
+
+  @override
+  Future<List<CartProducts>?> getCartData(String token) async{
+    var response = await remoteDataSource.getCartData(token);
+    return response.cartProducts;
   }
 
 }

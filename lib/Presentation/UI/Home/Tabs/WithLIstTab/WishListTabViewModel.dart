@@ -1,4 +1,5 @@
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetWishListProductsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/WithLIstTab/WishListTabNavigator.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 class WishListTabViewModel extends ChangeNotifier{
   GetWishListProductsUseCase getWishListProductsUseCase ;
   DeleteFromWishListUseCase deleteFromWishListUseCase;
-  WishListTabViewModel(this.getWishListProductsUseCase , this.deleteFromWishListUseCase);
+  AddToWishListUseCase addToWishListUseCase;
+  WishListTabViewModel(this.getWishListProductsUseCase , this.deleteFromWishListUseCase , this.addToWishListUseCase);
   WishListTabNavigator? navigator;
   List<Product>? products ;
   String? errorMessage ;
@@ -33,11 +35,20 @@ class WishListTabViewModel extends ChangeNotifier{
     navigator!.goToProductDetailsScreen(product);
   }
 
-  void onDeletePress(Product product)async{
-    navigator!.showLoading();
-    var response = await deleteFromWishListUseCase.invoke(int.parse(product.id!.toString()));
-    navigator!.hideDialog();
-    navigator!.showSuccessMessage(response);
-    getProducts();
+  void onSlidablePress(Product product)async{
+    if(product.isInWishList!){
+      navigator!.showLoading();
+      var response = await deleteFromWishListUseCase.invoke(int.parse(product.id!.toString()));
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
+      getProducts();
+    }else {
+      navigator!.showLoading();
+      var response = await addToWishListUseCase.invoke(product);
+      navigator!.hideDialog();
+      navigator!.showSuccessMessage(response);
+      getProducts();
+    }
+
   }
 }

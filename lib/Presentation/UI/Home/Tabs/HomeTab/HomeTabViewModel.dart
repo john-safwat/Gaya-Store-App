@@ -47,7 +47,7 @@ class HomeTabViewModel extends ChangeNotifier {
     products = null;
     try {
       var response = await newAddedProductsUseCase.invoke();
-      products = response.products;
+      products = response;
       notifyListeners();
     } on IOException catch (e) {
       errorMessage = "Check Your Internet Connection";

@@ -7,7 +7,7 @@ import 'package:ecommerce/Data/Models/ProductDetailsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/ProductsResponseDTO.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
-
+import '../Models/CartItemsResponseDTO.dart';
 import '../Models/CategoriesResponseDTO.dart';
 
 class ApiManager {
@@ -24,14 +24,11 @@ class ApiManager {
   String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
   String loginRoute = '/Gaya-Store/public/api/users/login';
   String getCategoriesRoute = '/Gaya-Store/public/api/home/category/categories';
-  String getAllNewAddedProductsRoute =
-      '/Gaya-Store/public/api/home/product/allNewAddedProducts';
-  String getProductsByCategoryRoute =
-      '/Gaya-Store/public/api/home/product/getProductsByCategory';
-  String getProductDetailsRoute =
-      '/Gaya-Store/public/api/home/product/productDetails';
-  String getSearchedProductsRoute =
-      '/Gaya-Store/public/api/home/product/productSearch';
+  String getAllNewAddedProductsRoute = '/Gaya-Store/public/api/home/product/allNewAddedProducts';
+  String getProductsByCategoryRoute = '/Gaya-Store/public/api/home/product/getProductsByCategory';
+  String getProductDetailsRoute = '/Gaya-Store/public/api/home/product/productDetails';
+  String getSearchedProductsRoute = '/Gaya-Store/public/api/home/product/productSearch';
+  String getCartProductsRoute = '/Gaya-Store/public/api/home/product/cart';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -129,5 +126,18 @@ class ApiManager {
     );
     var response = await http.get(url);
     return ProductsResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  // get cart products
+  Future<CartItemsResponseDTO> getCartItems(String token)async{
+    Uri url = Uri.http(
+      baseUrl,
+      getCartProductsRoute,
+      {
+        'token' : token
+      }
+    );
+    var response = await http.get(url);
+    return CartItemsResponseDTO.fromJson(jsonDecode(response.body));
   }
 }

@@ -1,4 +1,7 @@
+import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
+import 'package:ecommerce/Domain/Models/CartProducts.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/ProductDetails.dart';
 import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
 import 'package:ecommerce/Domain/Models/ProductsResponse.dart';
 
@@ -7,16 +10,18 @@ abstract class ProductRemoteDataSource{
   Future<ProductsResponse> getProductsByCategory(double categoryId);
   Future<ProductDetailsResponse> getProductDetails(String productId , String token);
   Future<ProductsResponse> search(String query);
+  Future<CartItemsResponse> getCartData(String token);
 }
 
 abstract class ProductRepository{
-  Future<ProductsResponse> getNewAddedProduct();
-  Future<ProductsResponse> getProductsByCategory(double categoryId);
-  Future<ProductDetailsResponse> getProductDetails(String productId , String token);
+  Future<List<Product>?> getNewAddedProduct();
+  Future<List<Product>?> getProductsByCategory(double categoryId);
+  Future<ProductDetails?> getProductDetails(String productId , String token);
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
   Future<List<Product>?> readData();
-  Future<ProductsResponse> search(String query);
+  Future<List<Product>?> search(String query);
+  Future<List<CartProducts>?> getCartData(String token);
 }
 
 abstract class ProductLocalDataSource {

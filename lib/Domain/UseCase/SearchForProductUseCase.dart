@@ -10,14 +10,14 @@ class SearchForProductUseCase {
     var response = await repository.search(query);
     var wishList = await repository.readData();
     if (wishList != null) {
-      for(int i = 0 ; i < response.products!.length ; i++){
+      for(int i = 0 ; i < response!.length ; i++){
         for(int j = 0 ; j< wishList.length ; j++){
-          if(response.products![i].id == wishList[j].id){
-            response.products![i].isInWishList = true;
+          if(response[i].id == wishList[j].id){
+            response[i].isInWishList = true;
           }
         }
       }
     }
-    return response.products;
+    return response;
   }
 }

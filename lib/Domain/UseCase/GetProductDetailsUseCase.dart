@@ -6,9 +6,9 @@ class GetProductDetailsUseCase{
   ProductRepository repository ;
   GetProductDetailsUseCase(this.repository);
 
-  Future<ProductDetails> invoke(String productId , String token)async{
+  Future<ProductDetails?> invoke(String productId , String token)async{
     var response = await repository.getProductDetails(productId, token);
-    return response.product!;
+    return response;
   }
 
 }

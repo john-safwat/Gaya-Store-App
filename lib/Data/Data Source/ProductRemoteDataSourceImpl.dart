@@ -1,4 +1,5 @@
 import 'package:ecommerce/Data/Api/ApiManager.dart';
+import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
 import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
 import 'package:ecommerce/Domain/Models/ProductsResponse.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
@@ -28,6 +29,12 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<ProductsResponse> search(String query) async{
     var response = await apiManager.getSearchedProducts(query);
+    return response.toDomain();
+  }
+
+  @override
+  Future<CartItemsResponse> getCartData(String token) async{
+    var response = await apiManager.getCartItems(token);
     return response.toDomain();
   }
 

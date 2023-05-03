@@ -34,6 +34,7 @@ class ProductShowWidget extends StatelessWidget {
                 icon: product.isInWishList!?Icons.delete :Icons.add,
                 onPressed: (context) {
                   onSlidablePress(product);
+                  product.isInWishList = !product.isInWishList!;
                 },
               ),
             ],
@@ -57,7 +58,7 @@ class ProductShowWidget extends StatelessWidget {
                   )
               ),
               Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
