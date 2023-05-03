@@ -1,5 +1,6 @@
 import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
 import 'package:ecommerce/Domain/Models/CartProducts.dart';
+import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/Models/ProductDetails.dart';
 import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
@@ -11,6 +12,8 @@ abstract class ProductRemoteDataSource{
   Future<ProductDetailsResponse> getProductDetails(String productId , String token);
   Future<ProductsResponse> search(String query);
   Future<CartItemsResponse> getCartData(String token);
+  Future<CartUpdateResponse> addToCart(String productId , String token );
+  Future<CartUpdateResponse> deleteFromCart(String productId , String token );
 }
 
 abstract class ProductRepository{
@@ -22,6 +25,8 @@ abstract class ProductRepository{
   Future<List<Product>?> readData();
   Future<List<Product>?> search(String query);
   Future<List<CartProducts>?> getCartData(String token);
+  Future<String?> addToCart(String productId , String token );
+  Future<String?> deleteFromCart(String productId , String token );
 }
 
 abstract class ProductLocalDataSource {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
 import 'package:ecommerce/Domain/Models/ProductDetails.dart';
+import 'package:ecommerce/Domain/UseCase/AddProductToCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
@@ -13,8 +14,9 @@ class ProductDetailsViewModel extends ChangeNotifier {
   GetProductDetailsUseCase getProductDetailsUseCase;
   AddToWishListUseCase addToWishListUseCase;
   DeleteFromWishListUseCase deleteFromWishListUseCase;
+  AddProductToCartUseCase addProductTOCartUseCase;
   ProductDetailsViewModel(this.getProductDetailsUseCase,
-      this.addToWishListUseCase, this.deleteFromWishListUseCase);
+      this.addToWishListUseCase, this.deleteFromWishListUseCase, this.addProductTOCartUseCase);
 
   ProductDetails? product;
   String? errorMessage;
@@ -49,6 +51,13 @@ class ProductDetailsViewModel extends ChangeNotifier {
   void onImagePress(int index) {
     image = product!.images![index];
     notifyListeners();
+  }
+
+  void onAddToCartPress(String token) async{
+    navigator!.showLoading();
+    var response = await addProductTOCartUseCase.invoke(product!.id!.toString(), token);
+    navigator!.hideDialog();
+    navigator!.showSuccessMessage(response ?? "data not found");
   }
 
 }

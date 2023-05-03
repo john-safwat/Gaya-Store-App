@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/UseCase/AddProductToCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
@@ -21,7 +21,6 @@ import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/DescriptionWIdg
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/PriceWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/UserRatingWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -35,7 +34,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
   ProductDetailsViewModel viewModel = ProductDetailsViewModel(
     GetProductDetailsUseCase(injectProductRepository()),
     AddToWishListUseCase(injectProductRepository()),
-    DeleteFromWishListUseCase(injectProductRepository())
+    DeleteFromWishListUseCase(injectProductRepository()),
+    AddProductToCartUseCase(injectProductRepository()),
   );
 
   @override
@@ -100,7 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
                       // price
                       PriceWidget(value.product!.price!.toString()),
                       // the buttons
-                      ButtonsWidget(product.isInWishList! ),
+                      ButtonsWidget(value.onAddToCartPress),
                       // description Image
                       DescriptionImageWidget(value.product!.descriptionImage!),
                       // feedBacks

@@ -1,9 +1,11 @@
+import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ButtonsWidget extends StatefulWidget {
-  bool isInWishList ;
-  ButtonsWidget(this.isInWishList);
+  Function onAddToCartPress;
+  ButtonsWidget(this.onAddToCartPress);
 
   @override
   State<ButtonsWidget> createState() => _ButtonsWidgetState();
@@ -12,11 +14,14 @@ class ButtonsWidget extends StatefulWidget {
 class _ButtonsWidgetState extends State<ButtonsWidget> {
   @override
   Widget build(BuildContext context) {
+    AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
     return Row(
       children: [
         Expanded(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                widget.onAddToCartPress(provider.token);
+              },
               style: ButtonStyle(
                   backgroundColor:
                   MaterialStateProperty.all(MyTheme.darkBlue),

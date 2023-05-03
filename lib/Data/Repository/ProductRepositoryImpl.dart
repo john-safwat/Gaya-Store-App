@@ -56,4 +56,16 @@ class ProductRepositoryImpl implements ProductRepository {
     return response.cartProducts;
   }
 
+  @override
+  Future<String?> addToCart(String productId, String token) async{
+    var response = await remoteDataSource.addToCart(productId, token);
+    return response.message;
+  }
+
+  @override
+  Future<String?> deleteFromCart(String productId, String token) async{
+    var response = await remoteDataSource.deleteFromCart(productId, token);
+    return response.message;
+  }
+
 }

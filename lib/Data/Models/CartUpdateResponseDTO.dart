@@ -1,3 +1,5 @@
+import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
+
 import 'CartItemDTO.dart';
 
 class CartUpdateResponseDTO {
@@ -23,6 +25,14 @@ class CartUpdateResponseDTO {
       map['cartItem'] = cartItem?.toJson();
     }
     return map;
+  }
+
+  CartUpdateResponse toDomain(){
+    return CartUpdateResponse(
+      code: code ,
+      message: message,
+      cartItem: cartItem?.toDomain(),
+    );
   }
 
 }

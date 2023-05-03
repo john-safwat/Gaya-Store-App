@@ -146,7 +146,7 @@ class ApiManager {
   }
 
   // add product to cart
-  Future<CartUpdateResponseDTO> addProductToCart(int productId , String token)async{
+  Future<CartUpdateResponseDTO> addProductToCart(String productId , String token)async{
     Uri url = Uri.http(baseUrl , addProductToCartRoute);
     var response = await http.post(url , body: {
       'token' : token,
@@ -157,7 +157,7 @@ class ApiManager {
   }
 
   // delete product from cart
-  Future<CartUpdateResponseDTO> deleteProductFromCart(int productId , String token)async{
+  Future<CartUpdateResponseDTO> deleteProductFromCart(String productId , String token)async{
     Uri url = Uri.http(baseUrl , deleteProductFromCartRoute);
     var response = await http.post(url , body: {
       'token' : token,
