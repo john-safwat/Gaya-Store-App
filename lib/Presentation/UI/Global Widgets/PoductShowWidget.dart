@@ -18,7 +18,7 @@ class ProductShowWidget extends StatelessWidget {
             color: MyTheme.lightBlue,
             borderRadius: BorderRadius.circular(15)
         ),
-        height: 200,
+        height: 170,
         child: Slidable(
           key: const ValueKey(1),
           endActionPane: ActionPane(
@@ -42,7 +42,7 @@ class ProductShowWidget extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: CachedNetworkImage(
                     imageUrl: product.mainImage!,
                     imageBuilder: (context, imageProvider) => ClipRRect(
@@ -58,7 +58,7 @@ class ProductShowWidget extends StatelessWidget {
                   )
               ),
               Expanded(
-                  flex: 4,
+                  flex: 5,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(

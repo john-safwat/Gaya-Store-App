@@ -7,7 +7,7 @@ class CartProduct {
       this.mainImage, 
       this.brand, 
       this.quantity, 
-      this.rating,});
+      this.rating,this.orderedQuantity = 1});
 
   num? id;
   String? name;
@@ -17,5 +17,6 @@ class CartProduct {
   num? brand;
   num? quantity;
   num? rating;
+  int? orderedQuantity;
 
 }

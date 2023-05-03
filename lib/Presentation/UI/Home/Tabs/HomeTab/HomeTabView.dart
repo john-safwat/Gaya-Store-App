@@ -69,6 +69,7 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
               child: Column(
                 children: [
                   Row(),
+                  const SizedBox(height: 10,),
                   const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
@@ -83,19 +84,10 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
                         fontWeight: FontWeight.bold,
                         color: MyTheme.darkBlue),
                   ),
-                  CategoriesList(value.categories!),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "You May Like",
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 30,),
                   BannerSlideShow(),
+                  const SizedBox(height: 20,),
+                  CategoriesList(value.categories!),
                   Row(
                     children: [
                       Padding(

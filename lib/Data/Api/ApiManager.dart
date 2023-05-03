@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
+import 'package:ecommerce/Data/Models/CartUpdateResponseDTO.dart';
 import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
 import 'package:ecommerce/Data/Models/LoginResponseDTO.dart';
 import 'package:ecommerce/Data/Models/ProductDetailsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/ProductsResponseDTO.dart';
+import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 import '../Models/CartItemsResponseDTO.dart';
@@ -29,6 +31,8 @@ class ApiManager {
   String getProductDetailsRoute = '/Gaya-Store/public/api/home/product/productDetails';
   String getSearchedProductsRoute = '/Gaya-Store/public/api/home/product/productSearch';
   String getCartProductsRoute = '/Gaya-Store/public/api/home/product/cart';
+  String addProductToCartRoute = '/Gaya-Store/public/api/home/product/addToCart';
+  String deleteProductFromCartRoute = '/Gaya-Store/public/api/home/product/deleteFromCart';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -139,5 +143,27 @@ class ApiManager {
     );
     var response = await http.get(url);
     return CartItemsResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  // add product to cart
+  Future<CartUpdateResponseDTO> addProductToCart(int productId , String token)async{
+    Uri url = Uri.http(baseUrl , addProductToCartRoute);
+    var response = await http.post(url , body: {
+      'token' : token,
+      'productId' : productId,
+    });
+
+    return CartUpdateResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  // delete product from cart
+  Future<CartUpdateResponseDTO> deleteProductFromCart(int productId , String token)async{
+    Uri url = Uri.http(baseUrl , deleteProductFromCartRoute);
+    var response = await http.post(url , body: {
+      'token' : token,
+      'productId' : productId,
+    });
+
+    return CartUpdateResponseDTO.fromJson(jsonDecode(response.body));
   }
 }
