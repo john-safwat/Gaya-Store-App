@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:ecommerce/Data/Api/ApiManager.dart';
-import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
-import 'package:ecommerce/Domain/Models/LoginResponse.dart';
+import 'package:ecommerce/Domain/Models/User/CreateUserResponse.dart';
+import 'package:ecommerce/Domain/Models/User/LoginResponse.dart';
 import 'package:flutter/material.dart';
 
 import '../../Domain/Repository/Auth_Ropository_Contract.dart';

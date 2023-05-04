@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Domain/Models/CartProduct.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartProduct.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

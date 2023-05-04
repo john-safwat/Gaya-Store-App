@@ -1,4 +1,5 @@
-import 'package:ecommerce/Domain/Models/ProductDetails.dart';
+
+import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
 
 import 'FeedBackDTO.dart';
 

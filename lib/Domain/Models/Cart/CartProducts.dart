@@ -1,4 +1,4 @@
-import 'CartProduct.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartProduct.dart';
 
 class CartProducts {
   CartProducts({

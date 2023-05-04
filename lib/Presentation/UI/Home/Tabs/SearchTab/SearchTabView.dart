@@ -1,12 +1,11 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/SearchForProductUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/PoductShowWidget.dart';
-import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/SearchTab/SearchTabNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/SearchTab/SearchTabViewModel.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';

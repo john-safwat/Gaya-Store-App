@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/LoginResponse.dart';
+import 'package:ecommerce/Domain/Models/User/LoginResponse.dart';
 import 'package:ecommerce/Domain/Repository/Auth_Ropository_Contract.dart';
 class AuthLoginUserCase {
   AuthRepository repository ;

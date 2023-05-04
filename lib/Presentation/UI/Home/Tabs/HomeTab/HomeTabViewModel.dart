@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:ecommerce/Data/SQL/SQLDB.dart';
-import 'package:ecommerce/Domain/Models/Categories.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';

@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
-import 'package:ecommerce/Data/Models/CartUpdateResponseDTO.dart';
-import 'package:ecommerce/Data/Models/CreateUserResponseDTO.dart';
-import 'package:ecommerce/Data/Models/LoginResponseDTO.dart';
-import 'package:ecommerce/Data/Models/ProductDetailsResponseDTO.dart';
-import 'package:ecommerce/Data/Models/ProductsResponseDTO.dart';
-import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
+import 'package:ecommerce/Data/Models/Cart/CartUpdateResponseDTO.dart';
+import 'package:ecommerce/Data/Models/Products/ProductDetailsResponseDTO.dart';
+import 'package:ecommerce/Data/Models/Products/ProductsResponseDTO.dart';
+import 'package:ecommerce/Data/Models/User/CreateUserResponseDTO.dart';
+import 'package:ecommerce/Data/Models/User/LoginResponseDTO.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
-import '../Models/CartItemsResponseDTO.dart';
-import '../Models/CategoriesResponseDTO.dart';
+import '../Models/Cart/CartItemsResponseDTO.dart';
+import '../Models/Categories/CategoriesResponseDTO.dart';
 
 class ApiManager {
   ApiManager._();
@@ -21,7 +20,7 @@ class ApiManager {
     return _instance!;
   }
 
-  String baseUrl = '192.168.0.110';
+  String baseUrl = '192.168.1.9';
   String addUserRoute = '/Gaya-Store/public/api/users/create';
   String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
   String loginRoute = '/Gaya-Store/public/api/users/login';

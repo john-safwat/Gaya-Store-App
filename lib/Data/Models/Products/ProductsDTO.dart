@@ -1,33 +1,31 @@
-import 'package:ecommerce/Domain/Models/CartProduct.dart';
 
-class CartProductDTO {
-  CartProductDTO({
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
+
+class ProductsDTO {
+  ProductsDTO({
       this.id, 
       this.name, 
       this.category, 
       this.price, 
       this.mainImage, 
       this.brand, 
-      this.quantity, 
       this.rating,});
 
-  CartProductDTO.fromJson(dynamic json) {
+  ProductsDTO.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
     category = json['category'];
     price = json['price'];
     mainImage = json['mainImage'];
     brand = json['brand'];
-    quantity = json['quantity'];
     rating = json['rating'];
   }
   num? id;
   String? name;
-  num? category;
+  String? category;
   num? price;
   String? mainImage;
-  num? brand;
-  num? quantity;
+  String? brand;
   num? rating;
 
   Map<String, dynamic> toJson() {
@@ -38,21 +36,20 @@ class CartProductDTO {
     map['price'] = price;
     map['mainImage'] = mainImage;
     map['brand'] = brand;
-    map['quantity'] = quantity;
     map['rating'] = rating;
     return map;
   }
 
-  CartProduct toDomain(){
-    return CartProduct(
-      id: id,
-      quantity: quantity,
+  Product toDomain(){
+    return Product(
       rating: rating,
       price: price,
       mainImage: mainImage,
       category: category,
       brand: brand,
-      name: name
+      name: name,
+      id: id
     );
   }
+
 }

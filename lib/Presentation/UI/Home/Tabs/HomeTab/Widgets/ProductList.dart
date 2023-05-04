@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/ProductWidget.dart';
 import 'package:flutter/material.dart';
 

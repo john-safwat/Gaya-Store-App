@@ -1,6 +1,6 @@
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
-import 'package:ecommerce/Domain/Models/CartProduct.dart';
-import 'package:ecommerce/Domain/Models/CartProducts.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
+import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteProductFromCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCartItemsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabNavigator.dart';
@@ -64,5 +64,17 @@ class CartTabViewModel extends ChangeNotifier{
     navigator!.hideDialog();
     navigator!.showSuccessMessage(response!);
     getCartItems(provider!);
+  }
+
+  void onGoToPaymentPress(){
+    List<OrderProducts> orderProducts = [];
+    for(int i =0 ; i< products!.length; i++){
+      orderProducts.add(OrderProducts(
+        id: int.parse(products![i].cartProduct!.id!.toString()),
+        quantity: products![i].cartProduct!.orderedQuantity,
+        orderTotal: (products![i].cartProduct!.orderedQuantity! * double.parse(products![i].cartProduct!.price!.toString())),
+      ));
+    }
+    navigator!.goToPaymentScreen(orderProducts);
   }
 }

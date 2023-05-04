@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/FeedBack.dart';
+import 'package:ecommerce/Domain/Models/Products/FeedBack.dart';
 
 class FeedBackDTO {
   FeedBackDTO({

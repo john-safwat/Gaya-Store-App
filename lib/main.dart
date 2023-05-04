@@ -3,6 +3,7 @@ import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
+import 'package:ecommerce/Presentation/UI/Payment/PaymentView.dart';
 import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenView.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (_) => HomeScreen(),
         ProductsListScreen.routeName:(_)=> ProductsListScreen(),
         ProductDetailsScreen.routeName:(_) =>ProductDetailsScreen(),
+        PaymentScreen.routeName :(_) => PaymentScreen(),
       },
 
       home: AnimatedSplashScreen(

@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 
 abstract class ProductsListNavigator{
   void goToProductDetailsScreen(Product product);

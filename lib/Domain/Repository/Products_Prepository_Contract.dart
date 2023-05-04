@@ -1,10 +1,10 @@
-import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
-import 'package:ecommerce/Domain/Models/CartProducts.dart';
-import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
-import 'package:ecommerce/Domain/Models/ProductDetails.dart';
-import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
-import 'package:ecommerce/Domain/Models/ProductsResponse.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartItemsResponse.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartUpdateResponse.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetailsResponse.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductsResponse.dart';
 
 abstract class ProductRemoteDataSource{
   Future<ProductsResponse> getNewAddedProduct();

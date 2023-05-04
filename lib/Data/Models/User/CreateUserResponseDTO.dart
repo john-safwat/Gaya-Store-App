@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
+import 'package:ecommerce/Domain/Models/User/CreateUserResponse.dart';
 
 import 'UserDTO.dart';
 

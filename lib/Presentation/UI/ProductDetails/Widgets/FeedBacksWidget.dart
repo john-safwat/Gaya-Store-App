@@ -1,5 +1,5 @@
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Domain/Models/FeedBack.dart';
+import 'package:ecommerce/Domain/Models/Products/FeedBack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 

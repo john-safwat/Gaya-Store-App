@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
-import 'package:ecommerce/Domain/Models/ProductDetails.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
 import 'package:ecommerce/Domain/UseCase/AddProductToCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';

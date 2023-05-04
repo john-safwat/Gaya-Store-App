@@ -1,6 +1,6 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetWishListProductsUseCase.dart';

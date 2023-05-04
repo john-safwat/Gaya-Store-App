@@ -1,4 +1,6 @@
-import 'CartProducts.dart';
+
+
+import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
 
 class CartItemsResponse {
   CartItemsResponse({

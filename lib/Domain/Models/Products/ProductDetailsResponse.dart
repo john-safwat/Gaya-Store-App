@@ -1,4 +1,4 @@
-import 'ProductDetails.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
 
 class ProductDetailsResponse {
   ProductDetailsResponse({

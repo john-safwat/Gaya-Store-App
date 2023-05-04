@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/CartProducts.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
 
 class GetCartItemsUseCase {

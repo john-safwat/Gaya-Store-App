@@ -1,12 +1,14 @@
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteProductFromCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCartItemsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabViewModel.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/Widgets/CartItemWidget.dart';
+import 'package:ecommerce/Presentation/UI/Payment/PaymentView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -100,10 +102,7 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
                       backgroundColor: MaterialStateProperty.all(MyTheme.darkBlue)
                     ),
                     onPressed: (){
-                      for(int i = 0 ; i<value.products!.length ; i++){
-                        print(value.products![i].cartProduct!.orderedQuantity!);
-                        print('');
-                      }
+                      value.onGoToPaymentPress();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -143,5 +142,10 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
   @override
   void showSuccessMessage(String message) {
     MyDialogUtils.showSuccessDialog(context: context, message: message);
+  }
+
+  @override
+  void goToPaymentScreen(List<OrderProducts> orderProducts) {
+    Navigator.pushNamed(context, PaymentScreen.routeName , arguments: orderProducts);
   }
 }

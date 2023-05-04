@@ -1,6 +1,6 @@
-import 'package:ecommerce/Data/Models/ProductsDTO.dart';
+import 'package:ecommerce/Data/Models/Products/ProductsDTO.dart';
 import 'package:ecommerce/Data/SQL/SQLDB.dart';
-import 'package:ecommerce/Domain/Models/Prdouct.dart';
+import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {

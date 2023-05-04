@@ -1,5 +1,4 @@
-import 'package:ecommerce/Domain/Models/ProductDetails.dart';
-import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
 
 class GetProductDetailsUseCase{

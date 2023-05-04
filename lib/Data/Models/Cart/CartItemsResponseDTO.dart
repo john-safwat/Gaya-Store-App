@@ -1,6 +1,6 @@
-import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
+import 'package:ecommerce/Data/Models/Cart/CartProductsDTO.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartItemsResponse.dart';
 
-import 'CartProductsDTO.dart';
 
 class CartItemsResponseDTO {
   CartItemsResponseDTO({

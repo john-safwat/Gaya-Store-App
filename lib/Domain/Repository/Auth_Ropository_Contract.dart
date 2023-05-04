@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ecommerce/Domain/Models/CreateUserResponse.dart';
-import 'package:ecommerce/Domain/Models/LoginResponse.dart';
+import 'package:ecommerce/Domain/Models/User/CreateUserResponse.dart';
+import 'package:ecommerce/Domain/Models/User/LoginResponse.dart';
 
 abstract class AuthRemoteDataSource {
   Future<CreateUserResponse?> addNewUser({

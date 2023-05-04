@@ -1,5 +1,5 @@
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Domain/Models/Categories.dart';
+import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/BannerWiget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';

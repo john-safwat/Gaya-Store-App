@@ -1,8 +1,8 @@
 import 'package:ecommerce/Data/Api/ApiManager.dart';
-import 'package:ecommerce/Domain/Models/CartItemsResponse.dart';
-import 'package:ecommerce/Domain/Models/CartUpdateResponse.dart';
-import 'package:ecommerce/Domain/Models/ProductDetailsResponse.dart';
-import 'package:ecommerce/Domain/Models/ProductsResponse.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartItemsResponse.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartUpdateResponse.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductDetailsResponse.dart';
+import 'package:ecommerce/Domain/Models/Products/ProductsResponse.dart';
 import 'package:ecommerce/Domain/Repository/Products_Prepository_Contract.dart';
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {

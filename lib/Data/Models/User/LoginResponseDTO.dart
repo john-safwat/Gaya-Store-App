@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/LoginResponse.dart';
+import 'package:ecommerce/Domain/Models/User/LoginResponse.dart';
 
 class LoginResponseDTO {
   LoginResponseDTO({

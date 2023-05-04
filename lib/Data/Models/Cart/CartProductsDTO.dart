@@ -1,4 +1,5 @@
-import 'package:ecommerce/Domain/Models/CartProducts.dart';
+
+import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
 
 import 'CartProductDTO.dart';
 

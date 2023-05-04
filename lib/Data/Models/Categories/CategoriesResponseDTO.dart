@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/CategoriesResponse.dart';
+import 'package:ecommerce/Domain/Models/Categories/CategoriesResponse.dart';
 
 import 'CategoriesDTO.dart';
 

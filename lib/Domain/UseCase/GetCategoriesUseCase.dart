@@ -1,6 +1,6 @@
 import 'package:ecommerce/Domain/Repository/Categories_Repository_Contract.dart';
 
-import '../Models/CategoriesResponse.dart';
+import '../Models/Categories/CategoriesResponse.dart';
 
 class GetCategoriesUseCase {
   CategoriesRepository categoriesRepository ;

@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/Categories.dart';
+import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 
 class CategoriesDTO {
   CategoriesDTO({

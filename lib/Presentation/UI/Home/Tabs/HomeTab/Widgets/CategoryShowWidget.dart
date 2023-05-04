@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/Categories.dart';
+import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

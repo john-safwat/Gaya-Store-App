@@ -1,4 +1,4 @@
-import 'package:ecommerce/Domain/Models/CartItem.dart';
+import 'package:ecommerce/Domain/Models/Cart/CartItem.dart';
 
 class CartItemDTO {
   CartItemDTO({
