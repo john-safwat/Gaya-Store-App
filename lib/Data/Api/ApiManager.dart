@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/Cart/CartUpdateResponseDTO.dart';
+import 'package:ecommerce/Data/Models/Order/OrderDTO.dart';
+import 'package:ecommerce/Data/Models/Order/OrderResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Products/ProductDetailsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Products/ProductsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/CreateUserResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/LoginResponseDTO.dart';
+import 'package:ecommerce/Domain/Models/Order/Order.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 import '../Models/Cart/CartItemsResponseDTO.dart';
@@ -25,13 +28,20 @@ class ApiManager {
   String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
   String loginRoute = '/Gaya-Store/public/api/users/login';
   String getCategoriesRoute = '/Gaya-Store/public/api/home/category/categories';
-  String getAllNewAddedProductsRoute = '/Gaya-Store/public/api/home/product/allNewAddedProducts';
-  String getProductsByCategoryRoute = '/Gaya-Store/public/api/home/product/getProductsByCategory';
-  String getProductDetailsRoute = '/Gaya-Store/public/api/home/product/productDetails';
-  String getSearchedProductsRoute = '/Gaya-Store/public/api/home/product/productSearch';
+  String getAllNewAddedProductsRoute =
+      '/Gaya-Store/public/api/home/product/allNewAddedProducts';
+  String getProductsByCategoryRoute =
+      '/Gaya-Store/public/api/home/product/getProductsByCategory';
+  String getProductDetailsRoute =
+      '/Gaya-Store/public/api/home/product/productDetails';
+  String getSearchedProductsRoute =
+      '/Gaya-Store/public/api/home/product/productSearch';
   String getCartProductsRoute = '/Gaya-Store/public/api/home/product/cart';
-  String addProductToCartRoute = '/Gaya-Store/public/api/home/product/addToCart';
-  String deleteProductFromCartRoute = '/Gaya-Store/public/api/home/product/deleteFromCart';
+  String addProductToCartRoute =
+      '/Gaya-Store/public/api/home/product/addToCart';
+  String deleteProductFromCartRoute =
+      '/Gaya-Store/public/api/home/product/deleteFromCart';
+  String addOrderRoute = '/Gaya-Store/public/api/home/order/addOrder';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -105,63 +115,75 @@ class ApiManager {
   }
 
   // function to get product Details
-  Future<ProductDetailsResponseDTO> getProductDetails(String productId , String token) async {
-    Uri url = Uri.http(
-        baseUrl,
-        getProductDetailsRoute,
-        {
-          'product_id': productId,
-          'token' : token,
-        }
-      );
+  Future<ProductDetailsResponseDTO> getProductDetails(
+      String productId, String token) async {
+    Uri url = Uri.http(baseUrl, getProductDetailsRoute, {
+      'product_id': productId,
+      'token': token,
+    });
     var response = await http.get(url);
     return ProductDetailsResponseDTO.fromJson(jsonDecode(response.body));
   }
 
   //function to get the products we search for
   Future<ProductsResponseDTO> getSearchedProducts(String query) async {
-    Uri url = Uri.http(
-        baseUrl,
-        getSearchedProductsRoute,
-        {
-          'query_term': query,
-        }
-    );
+    Uri url = Uri.http(baseUrl, getSearchedProductsRoute, {
+      'query_term': query,
+    });
     var response = await http.get(url);
     return ProductsResponseDTO.fromJson(jsonDecode(response.body));
   }
 
   // get cart products
-  Future<CartItemsResponseDTO> getCartItems(String token)async{
-    Uri url = Uri.http(
-      baseUrl,
-      getCartProductsRoute,
-      {
-        'token' : token
-      }
-    );
+  Future<CartItemsResponseDTO> getCartItems(String token) async {
+    Uri url = Uri.http(baseUrl, getCartProductsRoute, {'token': token});
     var response = await http.get(url);
     return CartItemsResponseDTO.fromJson(jsonDecode(response.body));
   }
 
   // add product to cart
-  Future<CartUpdateResponseDTO> addProductToCart(String productId , String token)async{
-    Uri url = Uri.http(baseUrl , addProductToCartRoute);
-    var response = await http.post(url , body: {
-      'token' : token,
-      'productId' : productId,
+  Future<CartUpdateResponseDTO> addProductToCart(
+      String productId, String token) async {
+    Uri url = Uri.http(baseUrl, addProductToCartRoute);
+    var response = await http.post(url, body: {
+      'token': token,
+      'productId': productId,
     });
 
     return CartUpdateResponseDTO.fromJson(jsonDecode(response.body));
   }
 
   // delete product from cart
-  Future<CartUpdateResponseDTO> deleteProductFromCart(String productId , String token)async{
-    Uri url = Uri.http(baseUrl , deleteProductFromCartRoute);
-    var response = await http.post(url , body: {
-      'token' : token,
-      'productId' : productId,
+  Future<CartUpdateResponseDTO> deleteProductFromCart(
+      String productId, String token) async {
+    Uri url = Uri.http(baseUrl, deleteProductFromCartRoute);
+    var response = await http.post(url, body: {
+      'token': token,
+      'productId': productId,
     });
     return CartUpdateResponseDTO.fromJson(jsonDecode(response.body));
   }
+
+  // place order
+  Future<OrderResponseDTO?> placeOrder(Order order) async {
+    Uri url = Uri.http(baseUrl, addOrderRoute);
+    var response = await http.post(url, headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(order.toData().toJson()).toString());
+    return OrderResponseDTO.fromJson(jsonDecode(response.body));
+  }
 }
+
+// {
+// "token":order.token.toString(),
+// "name":order.name.toString(),
+// "phoneNumber":order.phoneNumber.toString(),
+// "address":order.address.toString(),
+// "cardNumber":order.cardNumber.toString(),
+// "shippingState":order.shippingState.toString(),
+// "shippingPrice":order.shippingPrice.toString(),
+// "postalCode":order.postalCode.toString(),
+// "total":order.total.toString(),
+// "products": [].toString()
+// }

@@ -32,13 +32,13 @@ class OrderDTO {
   }
   String? token;
   String? name;
-  int? phoneNumber;
+  String? phoneNumber;
   String? address;
   String? cardNumber;
   String? shippingState;
-  int? shippingPrice;
-  int? postalCode;
-  int? total;
+  double? shippingPrice;
+  String? postalCode;
+  double? total;
   List<OrderProductsDTO>? products;
 
   Map<String, dynamic> toJson() {

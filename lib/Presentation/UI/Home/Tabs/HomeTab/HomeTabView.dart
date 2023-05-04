@@ -87,6 +87,17 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
                   const SizedBox(height: 30,),
                   BannerSlideShow(),
                   const SizedBox(height: 20,),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0 ,horizontal: 15),
+                        child: Text(
+                          "Categories",
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      ),
+                    ],
+                  ),
                   CategoriesList(value.categories!),
                   Row(
                     children: [

@@ -55,6 +55,9 @@ dependencies:
   scroll_app_bar: ^2.0.0
   sqflite: ^2.2.8
   flutter_slidable: ^3.0.0
+  flutter_credit_card: ^3.0.6
+  credit_card_type_detector: ^3.0.0
+  awesome_card: ^1.1.7
 
 dev_dependencies:
   flutter_test:
