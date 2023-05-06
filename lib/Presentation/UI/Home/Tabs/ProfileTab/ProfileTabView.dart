@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Domain/UseCase/DeleteWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetUserDataUseCase.dart';
 import 'package:ecommerce/Presentation/UI/EditUserInfo/EditUserInfoView.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
@@ -10,7 +11,6 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabNavigat
 import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabViewModel.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
 import 'package:ecommerce/Presentation/UI/OrderHistory/OrderHistoryView.dart';
-import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +25,7 @@ class ProfileTabView extends StatefulWidget {
 
 class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNavigator{
   ProfileTabViewModel viewModel =
-      ProfileTabViewModel(GetUserDataUseCase(injectUserRepository()));
+      ProfileTabViewModel(GetUserDataUseCase(injectUserRepository()), DeleteWishListUseCase(injectProductRepository()));
 
   @override
   void initState() {
@@ -313,5 +313,10 @@ class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNa
   @override
   void goToLoginScreen() {
     Navigator.popAndPushNamed(context, LoginScreen.routeName);
+  }
+
+  @override
+  void showDialog(String message, Function onConfirmationPress) {
+    MyDialogUtils.showConfirmationDialog(context: context, message: message , action: onConfirmationPress);
   }
 }

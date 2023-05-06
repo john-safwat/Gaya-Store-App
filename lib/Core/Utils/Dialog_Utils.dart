@@ -34,6 +34,27 @@ class MyDialogUtils{
       }
     );
   }
+
+  static showConfirmationDialog({required BuildContext context , required String message , Function? action}){
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      text: 'Do you want to logout',
+      confirmBtnText: 'Yes',
+      onConfirmBtnTap: () {
+        if (action != null){
+          action();
+        }else{
+          Navigator.pop(context);
+        }
+      },
+      cancelBtnText: 'No',
+      onCancelBtnTap: () {
+        Navigator.pop(context);
+      },
+      confirmBtnColor: Colors.green,
+    );
+  }
   static hideDialog({required BuildContext context}){
     Navigator.pop(context);
   }

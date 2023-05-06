@@ -68,4 +68,10 @@ class ProductRepositoryImpl implements ProductRepository {
     return response.message;
   }
 
+  @override
+  Future<String> deleteWishList() async{
+    var response = await localDataSource.deleteWishList();
+    return response;
+  }
+
 }

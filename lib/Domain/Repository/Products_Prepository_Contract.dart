@@ -22,6 +22,7 @@ abstract class ProductRepository{
   Future<ProductDetails?> getProductDetails(String productId , String token);
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
+  Future<String> deleteWishList();
   Future<List<Product>?> readData();
   Future<List<Product>?> search(String query);
   Future<List<CartProducts>?> getCartData(String token);
@@ -32,5 +33,6 @@ abstract class ProductRepository{
 abstract class ProductLocalDataSource {
   Future<String> insertData(Product product);
   Future<String> deleteData(int id);
+  Future<String> deleteWishList();
   Future<List<Product>?> readData();
 }

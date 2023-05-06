@@ -1,5 +1,6 @@
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
+import 'package:ecommerce/Domain/UseCase/DeleteWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetUserDataUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabNavigator.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTabViewModel extends ChangeNotifier {
   GetUserDataUseCase useCase ;
-  ProfileTabViewModel(this.useCase);
+  DeleteWishListUseCase deleteWishListUseCase;
+  ProfileTabViewModel(this.useCase , this.deleteWishListUseCase);
 
   AppConfigProvider? provider;
   String? errorMessage ;
@@ -40,11 +42,17 @@ class ProfileTabViewModel extends ChangeNotifier {
     navigator!.goToEditUserInfo();
   }
 
-  void onLogoutPress()async{
+  void onLogoutPress(){
+    navigator!.showDialog("Are You Sure", onConfirmationPress);
+  }
+  void onConfirmationPress()async{
+    navigator!.hideDialog();
     navigator!.showLoading("Logging You Out");
+    var response = await deleteWishListUseCase.invoke();
     final pref = await SharedPreferences.getInstance();
     await pref.setString("token", '');
     navigator!.hideDialog();
     navigator!.goToLoginScreen();
   }
+
 }

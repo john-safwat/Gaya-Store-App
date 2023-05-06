@@ -41,6 +41,9 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +String addProductToCartRoute
   +String deleteProductFromCartRoute
   +String addOrderRoute
+  +String getUserDataRoute
+  +String getOrderHistoryRoute
+  +String updateUserDataRoute
   {static} +ApiManager getApiManager()
   +Future<CreateUserResponseDTO> addNewUser()
   +Future<String> uploadUserImage()
@@ -54,6 +57,9 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +Future<CartUpdateResponseDTO> addProductToCart()
   +Future<CartUpdateResponseDTO> deleteProductFromCart()
   +Future<OrderResponseDTO?> placeOrder()
+  +Future<UserDataResponseDTO> getUserData()
+  +Future<OrderHistoryResponseDTO> getOrderHistory()
+  +Future<UserDataResponseDTO> updateUserData()
 }
 
 "ecommerce::Data::Api::ApiManager.dart::ApiManager" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
@@ -79,6 +85,7 @@ class "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::Categori
 class "ecommerce::Data::Data%20Source::OrdersRemoteDataSourceImpl.dart::OrdersRemoteDataSourceImpl" {
   +ApiManager apiManager
   +Future<OrderResponse> placeOrder()
+  +Future<OrderHistoryResponse> getOrderHistory()
 }
 
 "ecommerce::Data::Data%20Source::OrdersRemoteDataSourceImpl.dart::OrdersRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
@@ -107,6 +114,15 @@ class "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::Product
 
 "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
 "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl"
+
+class "ecommerce::Data::Data%20Source::UserRemoteDataSourceImpl.dart::UserRemoteDataSourceImpl" {
+  +ApiManager apiManager
+  +Future<UserData> getUserData()
+  +Future<UserDataResponse> updateUserData()
+}
+
+"ecommerce::Data::Data%20Source::UserRemoteDataSourceImpl.dart::UserRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+"ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::UserRemoteDataSourceImpl.dart::UserRemoteDataSourceImpl"
 
 class "ecommerce::Data::Models::Cart::CartItemDTO.dart::CartItemDTO" {
   +int? userId
@@ -188,6 +204,27 @@ class "ecommerce::Data::Models::Order::OrderDTO.dart::OrderDTO" {
   +Map<String, dynamic> toJson()
 }
 
+class "ecommerce::Data::Models::Order::OrderHistoryProductDTO.dart::OrderHistoryProductDTO" {
+  +num? id
+  +num? orderId
+  +num? productId
+  +num? quantity
+  +num? orderTotal
+  +String? createdAt
+  +String? updatedAt
+  +String? productName
+  +Map<String, dynamic> toJson()
+  +OrderHistoryProduct toDomain()
+}
+
+class "ecommerce::Data::Models::Order::OrderHistoryResponseDTO.dart::OrderHistoryResponseDTO" {
+  +num? statusCode
+  +String? message
+  +List<OrdersHistoryDTO>? orders
+  +Map<String, dynamic> toJson()
+  +OrderHistoryResponse toDomain()
+}
+
 class "ecommerce::Data::Models::Order::OrderProductsDTO.dart::OrderProductsDTO" {
   +int? id
   +int? quantity
@@ -204,6 +241,24 @@ class "ecommerce::Data::Models::Order::OrderResponseDTO.dart::OrderResponseDTO" 
   +int? shippingCharge
   +Map<String, dynamic> toJson()
   +OrderResponse toDomain()
+}
+
+class "ecommerce::Data::Models::Order::OrdersHistoryDTO.dart::OrdersHistoryDTO" {
+  +num? id
+  +num? userId
+  +String? name
+  +String? phoneNumber
+  +String? address
+  +String? cardNumber
+  +String? shippingState
+  +num? shippingPrice
+  +String? postalCode
+  +num? total
+  +String? createdAt
+  +String? updatedAt
+  +List<OrderHistoryProductDTO>? products
+  +Map<String, dynamic> toJson()
+  +OrdersHistory toDomain()
 }
 
 class "ecommerce::Data::Models::Products::FeedBackDTO.dart::FeedBackDTO" {
@@ -283,6 +338,30 @@ class "ecommerce::Data::Models::User::LoginResponseDTO.dart::LoginResponseDTO" {
   +LoginResponse toDomain()
 }
 
+class "ecommerce::Data::Models::User::UserDataDTO.dart::UserDataDTO" {
+  +int? id
+  +String? name
+  +String? email
+  +String? phone
+  +String? image
+  +String? birthDate
+  +String? token
+  +String? createdAt
+  +String? updatedAt
+  +Map<String, dynamic> toJson()
+  +UserData toDomain()
+}
+
+class "ecommerce::Data::Models::User::UserDataResponseDTO.dart::UserDataResponseDTO" {
+  +int? statusCode
+  +String? message
+  +UserDataDTO? user
+  +Map<String, dynamic> toJson()
+  +UserDataResponse toDomain()
+}
+
+"ecommerce::Data::Models::User::UserDataResponseDTO.dart::UserDataResponseDTO" o-- "ecommerce::Data::Models::User::UserDataDTO.dart::UserDataDTO"
+
 class "ecommerce::Data::Models::User::UserDTO.dart::UserDTO" {
   +String? name
   +String? email
@@ -314,6 +393,7 @@ class "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesReposit
 class "ecommerce::Data::Repository::OrdersRepositoryImpl.dart::OrdersRepositoryImpl" {
   +OrdersRemoteDataSource remoteDataSource
   +Future<OrderResponse> placeOrder()
+  +Future<List<OrdersHistory>?> getOrderHistory()
 }
 
 "ecommerce::Data::Repository::OrdersRepositoryImpl.dart::OrdersRepositoryImpl" o-- "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRemoteDataSource"
@@ -337,6 +417,15 @@ class "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositor
 "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource"
 "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductLocalDataSource"
 "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository" <|-- "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl"
+
+class "ecommerce::Data::Repository::UserRepositoryImpl.dart::UserRepositoryImpl" {
+  +UserRemoteDataSource remoteDataSource
+  +Future<UserData> getUserData()
+  +Future<String?> updateUserData()
+}
+
+"ecommerce::Data::Repository::UserRepositoryImpl.dart::UserRepositoryImpl" o-- "ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRemoteDataSource"
+"ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRepository" <|-- "ecommerce::Data::Repository::UserRepositoryImpl.dart::UserRepositoryImpl"
 
 class "ecommerce::Data::SQL::SQLDB.dart::SQLdb" {
   {static} -Database? _db
@@ -417,6 +506,19 @@ class "ecommerce::Domain::Models::Order::Order.dart::Order" {
   +OrderDTO toData()
 }
 
+class "ecommerce::Domain::Models::Order::OrderHistoryProduct.dart::OrderHistoryProduct" {
+  +num? id
+  +num? quantity
+  +num? orderTotal
+  +String? productName
+}
+
+class "ecommerce::Domain::Models::Order::OrderHistoryResponse.dart::OrderHistoryResponse" {
+  +num? statusCode
+  +String? message
+  +List<OrdersHistory>? orders
+}
+
 class "ecommerce::Domain::Models::Order::OrderProducts.dart::OrderProducts" {
   +int? id
   +int? quantity
@@ -431,6 +533,14 @@ class "ecommerce::Domain::Models::Order::OrderResponse.dart::OrderResponse" {
   +String? userName
   +int? total
   +int? shippingCharge
+}
+
+class "ecommerce::Domain::Models::Order::OrdersHistory.dart::OrdersHistory" {
+  +num? id
+  +String? shippingState
+  +num? total
+  +String? createdAt
+  +List<OrderHistoryProduct>? products
 }
 
 class "ecommerce::Domain::Models::Products::FeedBack.dart::FeedBack" {
@@ -494,6 +604,26 @@ class "ecommerce::Domain::Models::User::LoginResponse.dart::LoginResponse" {
   +String? token
 }
 
+class "ecommerce::Domain::Models::User::UserData.dart::UserData" {
+  +int? id
+  +String? name
+  +String? email
+  +String? phone
+  +String? image
+  +String? birthDate
+  +String? token
+  +String? createdAt
+  +String? updatedAt
+}
+
+class "ecommerce::Domain::Models::User::UserDataResponse.dart::UserDataResponse" {
+  +int? statusCode
+  +String? message
+  +UserData? user
+}
+
+"ecommerce::Domain::Models::User::UserDataResponse.dart::UserDataResponse" o-- "ecommerce::Domain::Models::User::UserData.dart::UserData"
+
 abstract class "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRemoteDataSource" {
   +Future<CreateUserResponse?> addNewUser()
   +Future<String> uploadUserImage()
@@ -516,10 +646,12 @@ abstract class "ecommerce::Domain::Repository::Categories_Repository_Contract.da
 
 abstract class "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRemoteDataSource" {
   +Future<OrderResponse> placeOrder()
+  +Future<OrderHistoryResponse> getOrderHistory()
 }
 
 abstract class "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRepository" {
   +Future<OrderResponse> placeOrder()
+  +Future<List<OrdersHistory>?> getOrderHistory()
 }
 
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" {
@@ -549,6 +681,16 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
   +Future<String> insertData()
   +Future<String> deleteData()
   +Future<List<Product>?> readData()
+}
+
+abstract class "ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRemoteDataSource" {
+  +Future<UserData> getUserData()
+  +Future<UserDataResponse> updateUserData()
+}
+
+abstract class "ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRepository" {
+  +Future<UserData> getUserData()
+  +Future<String?> updateUserData()
 }
 
 class "ecommerce::Domain::UseCase::AddProductToCartUseCase.dart::AddProductToCartUseCase" {
@@ -621,6 +763,13 @@ class "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedPr
 
 "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
+class "ecommerce::Domain::UseCase::GetOrdersHistoryUseCase.dart::GetOrdersHistoryUseCase" {
+  +OrdersRepository repository
+  +Future<List<OrdersHistory>?> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetOrdersHistoryUseCase.dart::GetOrdersHistoryUseCase" o-- "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRepository"
+
 class "ecommerce::Domain::UseCase::GetProductDetailsUseCase.dart::GetProductDetailsUseCase" {
   +ProductRepository repository
   +Future<ProductDetails?> invoke()
@@ -634,6 +783,13 @@ class "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProdu
 }
 
 "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::GetUserDataUseCase.dart::GetUserDataUseCase" {
+  +UserRepository repository
+  +Future<UserData> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetUserDataUseCase.dart::GetUserDataUseCase" o-- "ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRepository"
 
 class "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase" {
   +ProductRepository repository
@@ -656,12 +812,80 @@ class "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProduc
 
 "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
+class "ecommerce::Domain::UseCase::UpdateUserDataUseCase.dart::UpdateUserDataUseCase" {
+  +UserRepository repository
+  +Future<String?> invoke()
+}
+
+"ecommerce::Domain::UseCase::UpdateUserDataUseCase.dart::UpdateUserDataUseCase" o-- "ecommerce::Domain::Repository::User_Repository_Contract.dart::UserRepository"
+
 class "ecommerce::main.dart::MyApp" {
   +String token
   +Widget build()
 }
 
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::main.dart::MyApp"
+
+abstract class "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoNavigator.dart::EditUserInfoNavigator" {
+  +dynamic showErrorMessage()
+  +dynamic showSuccessMessage()
+  +dynamic showLoading()
+  +dynamic hideDialog()
+}
+
+class "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::EditUserInfoScreen" {
+  {static} +String routeName
+  +State<EditUserInfoScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::EditUserInfoScreen"
+
+class "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::_EditUserInfoScreenState" {
+  +EditUserInfoViewModel viewModel
+  +bool isVisible
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void showMyDatePicker()
+  +Widget dataFormField()
+  +Widget passwordFormField()
+  +dynamic showErrorMessage()
+  +dynamic hideDialog()
+  +dynamic showLoading()
+  +dynamic showSuccessMessage()
+}
+
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::_EditUserInfoScreenState" o-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::_EditUserInfoScreenState"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoNavigator.dart::EditUserInfoNavigator" <|-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoView.dart::_EditUserInfoScreenState"
+
+class "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" {
+  +UserData? userData
+  +UpdateUserDataUseCase useCase
+  +DateTime date
+  +AppConfigProvider? provider
+  +EditUserInfoNavigator? navigator
+  +GlobalKey<FormState> formKey
+  +TextEditingController nameController
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController rePasswordController
+  +TextEditingController phoneController
+  +void updateControllers()
+  +String? nameValidation()
+  +String? emailValidation()
+  +String? passwordValidation()
+  +String? phoneValidation()
+  +void onUpdateButtonPress()
+}
+
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "ecommerce::Domain::Models::User::UserData.dart::UserData"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "ecommerce::Domain::UseCase::UpdateUserDataUseCase.dart::UpdateUserDataUseCase"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoNavigator.dart::EditUserInfoNavigator"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::EditUserInfo::EditUserInfoViewModel.dart::EditUserInfoViewModel"
 
 class "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWidget" {
   +String errorMessage
@@ -887,11 +1111,54 @@ class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.da
 
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList"
 
-class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView" {
-  +Widget build()
+abstract class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabNavigator.dart::ProfileTabNavigator" {
+  +void goToOrderHistory()
+  +void goToEditUserInfo()
+  +void showLoading()
+  +void hideDialog()
+  +void goToLoginScreen()
 }
 
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView"
+class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView" {
+  +State<ProfileTabView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::_ProfileTabViewState" {
+  +ProfileTabViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void goToOrderHistory()
+  +void goToEditUserInfo()
+  +void hideDialog()
+  +void showLoading()
+  +void goToLoginScreen()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::_ProfileTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::_ProfileTabViewState"
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabNavigator.dart::ProfileTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::_ProfileTabViewState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" {
+  +GetUserDataUseCase useCase
+  +AppConfigProvider? provider
+  +String? errorMessage
+  +UserData? userData
+  +ProfileTabNavigator? navigator
+  +void getData()
+  +void onTryAgainPress()
+  +void onOrderHistoryPress()
+  +void onPersonalDetailsPress()
+  +void onLogoutPress()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Domain::UseCase::GetUserDataUseCase.dart::GetUserDataUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Domain::Models::User::UserData.dart::UserData"
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabNavigator.dart::ProfileTabNavigator"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel"
 
 abstract class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator" {
   +void goToDetailsScreen()
@@ -1043,8 +1310,45 @@ class "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScree
 "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" o-- "ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel"
 
+class "ecommerce::Presentation::UI::OrderHistory::OrderHistoryView.dart::OrderHistoryScreen" {
+  {static} +String routeName
+  +State<OrderHistoryScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::OrderHistory::OrderHistoryView.dart::OrderHistoryScreen"
+
+class "ecommerce::Presentation::UI::OrderHistory::OrderHistoryView.dart::_OrderHistoryScreenState" {
+  +OrderHistoryViewModel viewModel
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::OrderHistory::OrderHistoryView.dart::_OrderHistoryScreenState" o-- "ecommerce::Presentation::UI::OrderHistory::OrderHistoryViewModel.dart::OrderHistoryViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::OrderHistory::OrderHistoryView.dart::_OrderHistoryScreenState"
+
+class "ecommerce::Presentation::UI::OrderHistory::OrderHistoryViewModel.dart::OrderHistoryViewModel" {
+  +GetOrdersHistoryUseCase useCase
+  +List<OrdersHistory>? orders
+  +String? errorMessage
+  +AppConfigProvider? provider
+  +void getData()
+  +void onTryAgainPress()
+}
+
+"ecommerce::Presentation::UI::OrderHistory::OrderHistoryViewModel.dart::OrderHistoryViewModel" o-- "ecommerce::Domain::UseCase::GetOrdersHistoryUseCase.dart::GetOrdersHistoryUseCase"
+"ecommerce::Presentation::UI::OrderHistory::OrderHistoryViewModel.dart::OrderHistoryViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::OrderHistory::OrderHistoryViewModel.dart::OrderHistoryViewModel"
+
+class "ecommerce::Presentation::UI::OrderHistory::Widgets::OrdersCardWidget.dart::OrderCardWidget" {
+  +OrdersHistory ordersHistory
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::OrderHistory::Widgets::OrdersCardWidget.dart::OrderCardWidget" o-- "ecommerce::Domain::Models::Order::OrdersHistory.dart::OrdersHistory"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::OrderHistory::Widgets::OrdersCardWidget.dart::OrderCardWidget"
+
 abstract class "ecommerce::Presentation::UI::Payment::PaymentNavigator.dart::PaymentNavigator" {
-  +void goToHomeScreen()
+  +void goToHomeScreenCartTab()
+  +void goToHomeScreenHomeTab()
   +void showErrorMessage()
   +void showSuccessMessage()
   +void showLoading()
@@ -1065,11 +1369,12 @@ class "ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenSta
   +void initState()
   +void dispose()
   +Widget build()
-  +void goToHomeScreen()
+  +void goToHomeScreenCartTab()
   +void hideDialog()
   +void showErrorMessage()
   +void showLoading()
   +void showSuccessMessage()
+  +void goToHomeScreenHomeTab()
 }
 
 "ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenState" o-- "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel"
@@ -1104,6 +1409,7 @@ class "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewM
   +String? cardValidation()
   +void onCompletePaymentPress()
   +void changeCardData()
+  +void onContinueShoppingPress()
 }
 
 "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "ecommerce::Domain::UseCase::PlaceOrderUseCase.dart::PlaceOrderUseCase"
@@ -1128,6 +1434,7 @@ class "ecommerce::Presentation::UI::Payment::Tabs::CridetCardTab.dart::_CreditCa
 
 class "ecommerce::Presentation::UI::Payment::Tabs::ReceiptTab.dart::ReceiptTab" {
   +Widget build()
+  +Widget contentRow()
 }
 
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Payment::Tabs::ReceiptTab.dart::ReceiptTab"
@@ -1387,9 +1694,9 @@ abstract class "ecommerce::Presentation::UI::Registration::RegistrationScreenNav
   +dynamic showErrorMessage()
   +dynamic showSuccessMessage()
   +dynamic showLoading()
+  +dynamic hideDialog()
   +dynamic goToPickImageScreen()
   +dynamic updateToken()
-  +dynamic hideDialog()
 }
 
 class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::RegistrationScreen" {
@@ -1402,13 +1709,6 @@ class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::R
 class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" {
   +bool isVisible
   +RegistrationScreenViewModel viewModel
-  +DateTime date
-  +GlobalKey<FormState> formKey
-  +TextEditingController nameController
-  +TextEditingController emailController
-  +TextEditingController passwordController
-  +TextEditingController rePasswordController
-  +TextEditingController phoneController
   +void initState()
   +void dispose()
   +Widget build()
@@ -1425,15 +1725,22 @@ class "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_
 }
 
 "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel"
-"ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
-"ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
 "flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState"
 "ecommerce::Presentation::UI::Registration::RegistrationScreenNavigator.dart::RegistrationScreenNavigator" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenView.dart::_RegistrationScreenState"
 
 class "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" {
   +RegistrationScreenNavigator? navigator
   +AuthRegistrationUseCase useCase
+  +DateTime date
+  +GlobalKey<FormState> formKey
+  +TextEditingController nameController
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController rePasswordController
+  +TextEditingController phoneController
   +String? nameValidation()
+  +String? emailValidation()
+  +String? passwordValidation()
   +String? phoneValidation()
   +void register()
   +void goToHome()
@@ -1441,6 +1748,8 @@ class "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.da
 
 "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "ecommerce::Presentation::UI::Registration::RegistrationScreenNavigator.dart::RegistrationScreenNavigator"
 "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "ecommerce::Domain::UseCase::AuthRegistrationUseCase.dart::AuthRegistrationUseCase"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.dart::RegistrationScreenViewModel"
 
 

@@ -36,4 +36,10 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     }
   }
 
+  @override
+  Future<String> deleteWishList() async{
+    var response = await sqLdb.deleteData('DELETE FROM `products`');
+    return response;
+  }
+
 }
