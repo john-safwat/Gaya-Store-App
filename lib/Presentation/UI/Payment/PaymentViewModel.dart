@@ -1,6 +1,6 @@
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
-import 'package:ecommerce/Domain/Models/Order/Order.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
+import 'package:ecommerce/Domain/Models/Order/OrderResponse.dart';
 import 'package:ecommerce/Domain/UseCase/PlaceOrderUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Payment/PaymentNavigator.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +28,17 @@ class PaymentViewModel extends ChangeNotifier{
   TextEditingController cvvCode = TextEditingController();
   TextEditingController expiryDate = TextEditingController();
 
+  OrderResponse orderResponse = OrderResponse();
+
 
 
   void onBackPress(){
-    if (selectedIndex == 0 || selectedIndex == 2){
-      navigator!.goToHomeScreen();
+    if (selectedIndex == 0){
+      navigator!.goToHomeScreenCartTab();
     }else if(selectedIndex == 1){
       selectedIndex = 0;
+    }else if (selectedIndex == 2){
+      navigator!.goToHomeScreenHomeTab();
     }
     notifyListeners();
   }
@@ -93,17 +97,26 @@ class PaymentViewModel extends ChangeNotifier{
 
   void onCompletePaymentPress()async{
     if(cardFormKey.currentState!.validate()){
-      var response = await useCase.invoke(
-          provider!.token,
-          nameController.text,
-          phoneController.text,
-          addressController.text,
-          numberOnCard.text,
-          "Not Completed",
-          postalCodeController.text,
-          calcTotal(), products);
-
-      print(response.message!);
+      navigator!.showLoading();
+      try{
+        var response = await useCase.invoke(
+            provider!.token,
+            nameController.text,
+            phoneController.text,
+            addressController.text,
+            numberOnCard.text,
+            "Not Completed",
+            postalCodeController.text,
+            calcTotal(), products);
+        navigator!.hideDialog();
+        navigator!.showSuccessMessage(response.message!);
+        orderResponse = response;
+        selectedIndex = 2;
+        notifyListeners();
+      }catch (e){
+        navigator!.hideDialog();
+        navigator!.showErrorMessage(e.toString());
+      }
     }
   }
 
@@ -113,5 +126,9 @@ class PaymentViewModel extends ChangeNotifier{
     nameOnCard.text = creditCardModel.cardHolderName;
     cvvCode.text = creditCardModel.cvvCode;
     notifyListeners();
+  }
+
+  void onContinueShoppingPress(){
+    navigator!.goToHomeScreenHomeTab();
   }
 }

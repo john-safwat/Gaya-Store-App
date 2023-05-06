@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/Cart/CartUpdateResponseDTO.dart';
-import 'package:ecommerce/Data/Models/Order/OrderDTO.dart';
+import 'package:ecommerce/Data/Models/Order/OrderHistoryResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Order/OrderResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Products/ProductDetailsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Products/ProductsResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/CreateUserResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/LoginResponseDTO.dart';
+import 'package:ecommerce/Data/Models/User/UserDataResponseDTO.dart';
 import 'package:ecommerce/Domain/Models/Order/Order.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
@@ -28,20 +29,16 @@ class ApiManager {
   String addUserImageRoute = '/Gaya-Store/public/api/users/uploadImage';
   String loginRoute = '/Gaya-Store/public/api/users/login';
   String getCategoriesRoute = '/Gaya-Store/public/api/home/category/categories';
-  String getAllNewAddedProductsRoute =
-      '/Gaya-Store/public/api/home/product/allNewAddedProducts';
-  String getProductsByCategoryRoute =
-      '/Gaya-Store/public/api/home/product/getProductsByCategory';
-  String getProductDetailsRoute =
-      '/Gaya-Store/public/api/home/product/productDetails';
-  String getSearchedProductsRoute =
-      '/Gaya-Store/public/api/home/product/productSearch';
+  String getAllNewAddedProductsRoute = '/Gaya-Store/public/api/home/product/allNewAddedProducts';
+  String getProductsByCategoryRoute = '/Gaya-Store/public/api/home/product/getProductsByCategory';
+  String getProductDetailsRoute = '/Gaya-Store/public/api/home/product/productDetails';
+  String getSearchedProductsRoute = '/Gaya-Store/public/api/home/product/productSearch';
   String getCartProductsRoute = '/Gaya-Store/public/api/home/product/cart';
-  String addProductToCartRoute =
-      '/Gaya-Store/public/api/home/product/addToCart';
-  String deleteProductFromCartRoute =
-      '/Gaya-Store/public/api/home/product/deleteFromCart';
+  String addProductToCartRoute = '/Gaya-Store/public/api/home/product/addToCart';
+  String deleteProductFromCartRoute = '/Gaya-Store/public/api/home/product/deleteFromCart';
   String addOrderRoute = '/Gaya-Store/public/api/home/order/addOrder';
+  String getUserDataRoute = '/Gaya-Store/public/api/users/userData';
+  String getOrderHistoryRoute = '/Gaya-Store/public/api/users/getOrdersHistory';
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -173,17 +170,18 @@ class ApiManager {
         body: jsonEncode(order.toData().toJson()).toString());
     return OrderResponseDTO.fromJson(jsonDecode(response.body));
   }
-}
 
-// {
-// "token":order.token.toString(),
-// "name":order.name.toString(),
-// "phoneNumber":order.phoneNumber.toString(),
-// "address":order.address.toString(),
-// "cardNumber":order.cardNumber.toString(),
-// "shippingState":order.shippingState.toString(),
-// "shippingPrice":order.shippingPrice.toString(),
-// "postalCode":order.postalCode.toString(),
-// "total":order.total.toString(),
-// "products": [].toString()
-// }
+  // get user data from database
+  Future<UserDataResponseDTO> getUserData(String token)async{
+    Uri url = Uri.http(baseUrl , getUserDataRoute , {'token' : token});
+    var response = await http.get(url);
+    return UserDataResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+  Future<OrderHistoryResponseDTO> getOrderHistory(String token) async{
+    Uri url = Uri.http(baseUrl , getOrderHistoryRoute , {'token' : token});
+    var response =  await http.get(url);
+    return OrderHistoryResponseDTO.fromJson(jsonDecode(response.body));
+  }
+
+}

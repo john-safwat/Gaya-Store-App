@@ -25,12 +25,9 @@ class ProductDetailsViewModel extends ChangeNotifier {
   String image = '';
   ProductDetailsNavigator? navigator;
 
-  void getProductDetails(String id, AppConfigProvider provider , Product abstractProduct) async {
-    this.id = id;
-    this.provider = provider;
-    this.abstractProduct = abstractProduct;
+  void getProductDetails() async {
     try {
-      var response = await getProductDetailsUseCase.invoke(id, provider.token);
+      var response = await getProductDetailsUseCase.invoke(id!, provider!.token);
       product = response;
       image = product!.images![0];
       notifyListeners();
@@ -44,7 +41,7 @@ class ProductDetailsViewModel extends ChangeNotifier {
   }
 
   void onTryAgainPress() {
-    getProductDetails(id!, provider!, abstractProduct!);
+    getProductDetails();
   }
 
   void onImagePress(int index) {

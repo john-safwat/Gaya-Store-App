@@ -43,7 +43,8 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
   Widget build(BuildContext context) {
     if (viewModel.provider == null) {
       AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
-      viewModel.getCartItems(provider);
+      viewModel.provider = provider;
+      viewModel.getCartItems();
     }
     return ChangeNotifierProvider(
       create: (context) => viewModel,

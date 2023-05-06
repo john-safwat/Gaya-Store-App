@@ -37,6 +37,10 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +String getProductsByCategoryRoute
   +String getProductDetailsRoute
   +String getSearchedProductsRoute
+  +String getCartProductsRoute
+  +String addProductToCartRoute
+  +String deleteProductFromCartRoute
+  +String addOrderRoute
   {static} +ApiManager getApiManager()
   +Future<CreateUserResponseDTO> addNewUser()
   +Future<String> uploadUserImage()
@@ -46,6 +50,10 @@ class "ecommerce::Data::Api::ApiManager.dart::ApiManager" {
   +Future<ProductsResponseDTO> getProductsByCategory()
   +Future<ProductDetailsResponseDTO> getProductDetails()
   +Future<ProductsResponseDTO> getSearchedProducts()
+  +Future<CartItemsResponseDTO> getCartItems()
+  +Future<CartUpdateResponseDTO> addProductToCart()
+  +Future<CartUpdateResponseDTO> deleteProductFromCart()
+  +Future<OrderResponseDTO?> placeOrder()
 }
 
 "ecommerce::Data::Api::ApiManager.dart::ApiManager" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
@@ -68,6 +76,14 @@ class "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::Categori
 "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::CategoriesRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
 "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::CategoriesRemoteDataSource.dart::CategoriesRemoteDataSourceImpl"
 
+class "ecommerce::Data::Data%20Source::OrdersRemoteDataSourceImpl.dart::OrdersRemoteDataSourceImpl" {
+  +ApiManager apiManager
+  +Future<OrderResponse> placeOrder()
+}
+
+"ecommerce::Data::Data%20Source::OrdersRemoteDataSourceImpl.dart::OrdersRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
+"ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::OrdersRemoteDataSourceImpl.dart::OrdersRemoteDataSourceImpl"
+
 class "ecommerce::Data::Data%20Source::ProductLocalDataSourceImpl.dart::ProductLocalDataSourceImpl" {
   +SQLdb sqLdb
   +Future<String> insertData()
@@ -84,12 +100,65 @@ class "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::Product
   +Future<ProductsResponse> getProductsByCategory()
   +Future<ProductDetailsResponse> getProductDetails()
   +Future<ProductsResponse> search()
+  +Future<CartItemsResponse> getCartData()
+  +Future<CartUpdateResponse> addToCart()
+  +Future<CartUpdateResponse> deleteFromCart()
 }
 
 "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl" o-- "ecommerce::Data::Api::ApiManager.dart::ApiManager"
 "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" <|-- "ecommerce::Data::Data%20Source::ProductRemoteDataSourceImpl.dart::ProductRemoteDataSourceImpl"
 
-class "ecommerce::Data::Models::CategoriesDTO.dart::CategoriesDTO" {
+class "ecommerce::Data::Models::Cart::CartItemDTO.dart::CartItemDTO" {
+  +int? userId
+  +String? productId
+  +int? id
+  +Map<String, dynamic> toJson()
+  +CartItem toDomain()
+}
+
+class "ecommerce::Data::Models::Cart::CartItemsResponseDTO.dart::CartItemsResponseDTO" {
+  +String? status
+  +String? message
+  +List<CartProductsDTO>? cartProducts
+  +Map<String, dynamic> toJson()
+  +CartItemsResponse toDomain()
+}
+
+class "ecommerce::Data::Models::Cart::CartProductDTO.dart::CartProductDTO" {
+  +num? id
+  +String? name
+  +num? category
+  +num? price
+  +String? mainImage
+  +num? brand
+  +num? quantity
+  +num? rating
+  +Map<String, dynamic> toJson()
+  +CartProduct toDomain()
+}
+
+class "ecommerce::Data::Models::Cart::CartProductsDTO.dart::CartProductsDTO" {
+  +num? id
+  +num? productId
+  +num? userId
+  +CartProductDTO? cartProduct
+  +Map<String, dynamic> toJson()
+  +CartProducts toDomain()
+}
+
+"ecommerce::Data::Models::Cart::CartProductsDTO.dart::CartProductsDTO" o-- "ecommerce::Data::Models::Cart::CartProductDTO.dart::CartProductDTO"
+
+class "ecommerce::Data::Models::Cart::CartUpdateResponseDTO.dart::CartUpdateResponseDTO" {
+  +int? code
+  +String? message
+  +CartItemDTO? cartItem
+  +Map<String, dynamic> toJson()
+  +CartUpdateResponse toDomain()
+}
+
+"ecommerce::Data::Models::Cart::CartUpdateResponseDTO.dart::CartUpdateResponseDTO" o-- "ecommerce::Data::Models::Cart::CartItemDTO.dart::CartItemDTO"
+
+class "ecommerce::Data::Models::Categories::CategoriesDTO.dart::CategoriesDTO" {
   +num? id
   +String? name
   +String? image
@@ -97,7 +166,7 @@ class "ecommerce::Data::Models::CategoriesDTO.dart::CategoriesDTO" {
   +Categories toDomain()
 }
 
-class "ecommerce::Data::Models::CategoriesResponseDTO.dart::CategoriesResponseDTO" {
+class "ecommerce::Data::Models::Categories::CategoriesResponseDTO.dart::CategoriesResponseDTO" {
   +String? statusCode
   +String? message
   +List<CategoriesDTO>? categories
@@ -105,17 +174,39 @@ class "ecommerce::Data::Models::CategoriesResponseDTO.dart::CategoriesResponseDT
   +CategoriesResponse toDomain()
 }
 
-class "ecommerce::Data::Models::CreateUserResponseDTO.dart::CreateUserResponseDTO" {
-  +String? statusCode
-  +String? message
-  +UserDTO? user
+class "ecommerce::Data::Models::Order::OrderDTO.dart::OrderDTO" {
+  +String? token
+  +String? name
+  +String? phoneNumber
+  +String? address
+  +String? cardNumber
+  +String? shippingState
+  +double? shippingPrice
+  +String? postalCode
+  +double? total
+  +List<OrderProductsDTO>? products
   +Map<String, dynamic> toJson()
-  +CreateUserResponse toDomain()
 }
 
-"ecommerce::Data::Models::CreateUserResponseDTO.dart::CreateUserResponseDTO" o-- "ecommerce::Data::Models::UserDTO.dart::UserDTO"
+class "ecommerce::Data::Models::Order::OrderProductsDTO.dart::OrderProductsDTO" {
+  +int? id
+  +int? quantity
+  +double? orderTotal
+  +Map<String, dynamic> toJson()
+}
 
-class "ecommerce::Data::Models::FeedBackDTO.dart::FeedBackDTO" {
+class "ecommerce::Data::Models::Order::OrderResponseDTO.dart::OrderResponseDTO" {
+  +int? statusCode
+  +String? message
+  +int? orderNumber
+  +String? userName
+  +int? total
+  +int? shippingCharge
+  +Map<String, dynamic> toJson()
+  +OrderResponse toDomain()
+}
+
+class "ecommerce::Data::Models::Products::FeedBackDTO.dart::FeedBackDTO" {
   +String? user
   +num? rate
   +String? comment
@@ -124,15 +215,7 @@ class "ecommerce::Data::Models::FeedBackDTO.dart::FeedBackDTO" {
   +FeedBack toDomain()
 }
 
-class "ecommerce::Data::Models::LoginResponseDTO.dart::LoginResponseDTO" {
-  +String? statusCode
-  +String? message
-  +String? token
-  +Map<String, dynamic> toJson()
-  +LoginResponse toDomain()
-}
-
-class "ecommerce::Data::Models::ProductDetailsDTO.dart::ProductDetailsDTO" {
+class "ecommerce::Data::Models::Products::ProductDetailsDTO.dart::ProductDetailsDTO" {
   +num? id
   +String? name
   +String? category
@@ -151,7 +234,7 @@ class "ecommerce::Data::Models::ProductDetailsDTO.dart::ProductDetailsDTO" {
   +ProductDetails toDomain()
 }
 
-class "ecommerce::Data::Models::ProductDetailsResponseDTO.dart::ProductDetailsResponseDTO" {
+class "ecommerce::Data::Models::Products::ProductDetailsResponseDTO.dart::ProductDetailsResponseDTO" {
   +String? status
   +String? message
   +ProductDetailsDTO? product
@@ -159,9 +242,9 @@ class "ecommerce::Data::Models::ProductDetailsResponseDTO.dart::ProductDetailsRe
   +ProductDetailsResponse toDomain()
 }
 
-"ecommerce::Data::Models::ProductDetailsResponseDTO.dart::ProductDetailsResponseDTO" o-- "ecommerce::Data::Models::ProductDetailsDTO.dart::ProductDetailsDTO"
+"ecommerce::Data::Models::Products::ProductDetailsResponseDTO.dart::ProductDetailsResponseDTO" o-- "ecommerce::Data::Models::Products::ProductDetailsDTO.dart::ProductDetailsDTO"
 
-class "ecommerce::Data::Models::ProductsDTO.dart::ProductsDTO" {
+class "ecommerce::Data::Models::Products::ProductsDTO.dart::ProductsDTO" {
   +num? id
   +String? name
   +String? category
@@ -173,7 +256,7 @@ class "ecommerce::Data::Models::ProductsDTO.dart::ProductsDTO" {
   +Product toDomain()
 }
 
-class "ecommerce::Data::Models::ProductsResponseDTO.dart::ProductsResponseDTO" {
+class "ecommerce::Data::Models::Products::ProductsResponseDTO.dart::ProductsResponseDTO" {
   +String? status
   +String? message
   +num? page
@@ -182,7 +265,25 @@ class "ecommerce::Data::Models::ProductsResponseDTO.dart::ProductsResponseDTO" {
   +ProductsResponse toDomain()
 }
 
-class "ecommerce::Data::Models::UserDTO.dart::UserDTO" {
+class "ecommerce::Data::Models::User::CreateUserResponseDTO.dart::CreateUserResponseDTO" {
+  +String? statusCode
+  +String? message
+  +UserDTO? user
+  +Map<String, dynamic> toJson()
+  +CreateUserResponse toDomain()
+}
+
+"ecommerce::Data::Models::User::CreateUserResponseDTO.dart::CreateUserResponseDTO" o-- "ecommerce::Data::Models::User::UserDTO.dart::UserDTO"
+
+class "ecommerce::Data::Models::User::LoginResponseDTO.dart::LoginResponseDTO" {
+  +String? statusCode
+  +String? message
+  +String? token
+  +Map<String, dynamic> toJson()
+  +LoginResponse toDomain()
+}
+
+class "ecommerce::Data::Models::User::UserDTO.dart::UserDTO" {
   +String? name
   +String? email
   +String? password
@@ -210,16 +311,27 @@ class "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesReposit
 "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesRepositoryImpl" o-- "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRemoteDataSource"
 "ecommerce::Domain::Repository::Categories_Repository_Contract.dart::CategoriesRepository" <|-- "ecommerce::Data::Repository::CategoriesRepository.dart::CategoriesRepositoryImpl"
 
+class "ecommerce::Data::Repository::OrdersRepositoryImpl.dart::OrdersRepositoryImpl" {
+  +OrdersRemoteDataSource remoteDataSource
+  +Future<OrderResponse> placeOrder()
+}
+
+"ecommerce::Data::Repository::OrdersRepositoryImpl.dart::OrdersRepositoryImpl" o-- "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRemoteDataSource"
+"ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRepository" <|-- "ecommerce::Data::Repository::OrdersRepositoryImpl.dart::OrdersRepositoryImpl"
+
 class "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" {
   +ProductRemoteDataSource remoteDataSource
   +ProductLocalDataSource localDataSource
-  +Future<ProductsResponse> getNewAddedProduct()
-  +Future<ProductsResponse> getProductsByCategory()
-  +Future<ProductDetailsResponse> getProductDetails()
+  +Future<List<Product>?> getNewAddedProduct()
+  +Future<List<Product>?> getProductsByCategory()
+  +Future<ProductDetails?> getProductDetails()
   +Future<String> insertData()
   +Future<String> deleteData()
   +Future<List<Product>?> readData()
-  +Future<ProductsResponse> search()
+  +Future<List<Product>?> search()
+  +Future<List<CartProducts>?> getCartData()
+  +Future<String?> addToCart()
+  +Future<String?> deleteFromCart()
 }
 
 "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource"
@@ -238,38 +350,97 @@ class "ecommerce::Data::SQL::SQLDB.dart::SQLdb" {
 
 "ecommerce::Data::SQL::SQLDB.dart::SQLdb" o-- "sqflite_common::sqlite_api.dart::Database"
 
-class "ecommerce::Domain::Models::Categories.dart::Categories" {
+class "ecommerce::Domain::Models::Cart::CartItem.dart::CartItem" {
+  +int? userId
+  +String? productId
+  +int? id
+}
+
+class "ecommerce::Domain::Models::Cart::CartItemsResponse.dart::CartItemsResponse" {
+  +String? status
+  +String? message
+  +List<CartProducts>? cartProducts
+}
+
+class "ecommerce::Domain::Models::Cart::CartProduct.dart::CartProduct" {
+  +num? id
+  +String? name
+  +num? category
+  +num? price
+  +String? mainImage
+  +num? brand
+  +num? quantity
+  +num? rating
+  +int? orderedQuantity
+}
+
+class "ecommerce::Domain::Models::Cart::CartProducts.dart::CartProducts" {
+  +num? id
+  +num? productId
+  +num? userId
+  +CartProduct? cartProduct
+}
+
+"ecommerce::Domain::Models::Cart::CartProducts.dart::CartProducts" o-- "ecommerce::Domain::Models::Cart::CartProduct.dart::CartProduct"
+
+class "ecommerce::Domain::Models::Cart::CartUpdateResponse.dart::CartUpdateResponse" {
+  +int? code
+  +String? message
+  +CartItem? cartItem
+}
+
+"ecommerce::Domain::Models::Cart::CartUpdateResponse.dart::CartUpdateResponse" o-- "ecommerce::Domain::Models::Cart::CartItem.dart::CartItem"
+
+class "ecommerce::Domain::Models::Categories::Categories.dart::Categories" {
   +num? id
   +String? name
   +String? image
 }
 
-class "ecommerce::Domain::Models::CategoriesResponse.dart::CategoriesResponse" {
+class "ecommerce::Domain::Models::Categories::CategoriesResponse.dart::CategoriesResponse" {
   +String? statusCode
   +String? message
   +List<Categories>? categories
 }
 
-class "ecommerce::Domain::Models::CreateUserResponse.dart::CreateUserResponse" {
-  +String? statusCode
-  +String? message
+class "ecommerce::Domain::Models::Order::Order.dart::Order" {
   +String? token
+  +String? name
+  +String? phoneNumber
+  +String? address
+  +String? cardNumber
+  +String? shippingState
+  +double? shippingPrice
+  +String? postalCode
+  +double? total
+  +List<OrderProducts>? products
+  +OrderDTO toData()
 }
 
-class "ecommerce::Domain::Models::FeedBack.dart::FeedBack" {
+class "ecommerce::Domain::Models::Order::OrderProducts.dart::OrderProducts" {
+  +int? id
+  +int? quantity
+  +double? orderTotal
+  +OrderProductsDTO toData()
+}
+
+class "ecommerce::Domain::Models::Order::OrderResponse.dart::OrderResponse" {
+  +int? statusCode
+  +String? message
+  +int? orderNumber
+  +String? userName
+  +int? total
+  +int? shippingCharge
+}
+
+class "ecommerce::Domain::Models::Products::FeedBack.dart::FeedBack" {
   +String? user
   +num? rate
   +String? comment
   +String? userImage
 }
 
-class "ecommerce::Domain::Models::LoginResponse.dart::LoginResponse" {
-  +String? statusCode
-  +String? message
-  +String? token
-}
-
-class "ecommerce::Domain::Models::Prdouct.dart::Product" {
+class "ecommerce::Domain::Models::Products::Prdouct.dart::Product" {
   +num? id
   +String? name
   +String? category
@@ -280,7 +451,7 @@ class "ecommerce::Domain::Models::Prdouct.dart::Product" {
   +bool? isInWishList
 }
 
-class "ecommerce::Domain::Models::ProductDetails.dart::ProductDetails" {
+class "ecommerce::Domain::Models::Products::ProductDetails.dart::ProductDetails" {
   +num? id
   +String? name
   +String? category
@@ -297,18 +468,30 @@ class "ecommerce::Domain::Models::ProductDetails.dart::ProductDetails" {
   +List<String>? images
 }
 
-class "ecommerce::Domain::Models::ProductDetailsResponse.dart::ProductDetailsResponse" {
+class "ecommerce::Domain::Models::Products::ProductDetailsResponse.dart::ProductDetailsResponse" {
   +String? status
   +String? message
   +ProductDetails? product
 }
 
-"ecommerce::Domain::Models::ProductDetailsResponse.dart::ProductDetailsResponse" o-- "ecommerce::Domain::Models::ProductDetails.dart::ProductDetails"
+"ecommerce::Domain::Models::Products::ProductDetailsResponse.dart::ProductDetailsResponse" o-- "ecommerce::Domain::Models::Products::ProductDetails.dart::ProductDetails"
 
-class "ecommerce::Domain::Models::ProductsResponse.dart::ProductsResponse" {
+class "ecommerce::Domain::Models::Products::ProductsResponse.dart::ProductsResponse" {
   +String? status
   +String? message
   +List<Product>? products
+}
+
+class "ecommerce::Domain::Models::User::CreateUserResponse.dart::CreateUserResponse" {
+  +String? statusCode
+  +String? message
+  +String? token
+}
+
+class "ecommerce::Domain::Models::User::LoginResponse.dart::LoginResponse" {
+  +String? statusCode
+  +String? message
+  +String? token
 }
 
 abstract class "ecommerce::Domain::Repository::Auth_Ropository_Contract.dart::AuthRemoteDataSource" {
@@ -331,21 +514,35 @@ abstract class "ecommerce::Domain::Repository::Categories_Repository_Contract.da
   +Future<CategoriesResponse> getCategories()
 }
 
+abstract class "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRemoteDataSource" {
+  +Future<OrderResponse> placeOrder()
+}
+
+abstract class "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRepository" {
+  +Future<OrderResponse> placeOrder()
+}
+
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource" {
   +Future<ProductsResponse> getNewAddedProduct()
   +Future<ProductsResponse> getProductsByCategory()
   +Future<ProductDetailsResponse> getProductDetails()
   +Future<ProductsResponse> search()
+  +Future<CartItemsResponse> getCartData()
+  +Future<CartUpdateResponse> addToCart()
+  +Future<CartUpdateResponse> deleteFromCart()
 }
 
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository" {
-  +Future<ProductsResponse> getNewAddedProduct()
-  +Future<ProductsResponse> getProductsByCategory()
-  +Future<ProductDetailsResponse> getProductDetails()
+  +Future<List<Product>?> getNewAddedProduct()
+  +Future<List<Product>?> getProductsByCategory()
+  +Future<ProductDetails?> getProductDetails()
   +Future<String> insertData()
   +Future<String> deleteData()
   +Future<List<Product>?> readData()
-  +Future<ProductsResponse> search()
+  +Future<List<Product>?> search()
+  +Future<List<CartProducts>?> getCartData()
+  +Future<String?> addToCart()
+  +Future<String?> deleteFromCart()
 }
 
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductLocalDataSource" {
@@ -353,6 +550,13 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
   +Future<String> deleteData()
   +Future<List<Product>?> readData()
 }
+
+class "ecommerce::Domain::UseCase::AddProductToCartUseCase.dart::AddProductToCartUseCase" {
+  +ProductRepository repository
+  +Future<String?> invoke()
+}
+
+"ecommerce::Domain::UseCase::AddProductToCartUseCase.dart::AddProductToCartUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
 class "ecommerce::Domain::UseCase::AddToWishListUseCase.dart::AddToWishListUseCase" {
   +ProductRepository repository
@@ -389,6 +593,20 @@ class "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWis
 
 "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWishListUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
+class "ecommerce::Domain::UseCase::DeleteProductFromCartUseCase.dart::DeleteProductFromCartUseCase" {
+  +ProductRepository repository
+  +Future<String?> invoke()
+}
+
+"ecommerce::Domain::UseCase::DeleteProductFromCartUseCase.dart::DeleteProductFromCartUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::GetCartItemsUseCase.dart::GetCartItemsUseCase" {
+  +ProductRepository repository
+  +Future<List<CartProducts>?> invoke()
+}
+
+"ecommerce::Domain::UseCase::GetCartItemsUseCase.dart::GetCartItemsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
 class "ecommerce::Domain::UseCase::GetCategoriesUseCase.dart::GetCategoriesUseCase" {
   +CategoriesRepository categoriesRepository
   +Future<CategoriesResponse> invoke()
@@ -398,21 +616,21 @@ class "ecommerce::Domain::UseCase::GetCategoriesUseCase.dart::GetCategoriesUseCa
 
 class "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase" {
   +ProductRepository repository
-  +Future<ProductsResponse> invoke()
+  +Future<List<Product>?> invoke()
 }
 
 "ecommerce::Domain::UseCase::GetNewAddedProductUseCase.dart::GetNewAddedProductsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
 class "ecommerce::Domain::UseCase::GetProductDetailsUseCase.dart::GetProductDetailsUseCase" {
   +ProductRepository repository
-  +Future<ProductDetails> invoke()
+  +Future<ProductDetails?> invoke()
 }
 
 "ecommerce::Domain::UseCase::GetProductDetailsUseCase.dart::GetProductDetailsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
 class "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" {
   +ProductRepository repository
-  +Future<ProductsResponse> invoke()
+  +Future<List<Product>?> invoke()
 }
 
 "ecommerce::Domain::UseCase::GetProductsByCategoryIdUseCase.dart::GetProductsByCategoryIdUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
@@ -423,6 +641,13 @@ class "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListP
 }
 
 "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::PlaceOrderUseCase.dart::PlaceOrderUseCase" {
+  +OrdersRepository repository
+  +Future<OrderResponse> invoke()
+}
+
+"ecommerce::Domain::UseCase::PlaceOrderUseCase.dart::PlaceOrderUseCase" o-- "ecommerce::Domain::Repository::Orders_Repository_Contract.dart::OrdersRepository"
 
 class "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase" {
   +ProductRepository repository
@@ -449,11 +674,11 @@ class "ecommerce::Presentation::UI::Global%20Widgets::errorWidget.dart::errorWid
 class "ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget" {
   +Product product
   +Function onViewNowPress
-  +Function onDeletePress
+  +Function onSlidablePress
   +Widget build()
 }
 
-"ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget" o-- "ecommerce::Domain::Models::Products::Prdouct.dart::Product"
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::PoductShowWidget.dart::ProductShowWidget"
 
 class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" {
@@ -463,7 +688,7 @@ class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::Produc
   +State<ProductWidget> createState()
 }
 
-"ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget" o-- "ecommerce::Domain::Models::Products::Prdouct.dart::Product"
 "flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::ProductWidget"
 
 class "ecommerce::Presentation::UI::Global%20Widgets::ProductWidget.dart::_ProductWidgetState" {
@@ -487,11 +712,71 @@ class "ecommerce::Presentation::UI::Home::HomeScreenView.dart::_HomeScreenState"
 
 "flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::HomeScreenView.dart::_HomeScreenState"
 
+abstract class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabNavigator.dart::CartTabNavigator" {
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
+  +void goToPaymentScreen()
+}
+
 class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartTabView" {
+  +State<CartTabView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartTabView"
+
+class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::_CartTabViewState" {
+  +CartTabViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
+  +void goToPaymentScreen()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::_CartTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::_CartTabViewState"
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabNavigator.dart::CartTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::_CartTabViewState"
+
+class "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel" {
+  +GetCartItemsUseCase getCartItemsUseCase
+  +DeleteProductFromCartUseCase deleteProductFormCartUseCase
+  +CartTabNavigator? navigator
+  +String? errorMessage
+  +List<CartProducts>? products
+  +AppConfigProvider? provider
+  +void getCartItems()
+  +void onTryAgainPress()
+  +int onPlusButtonPress()
+  +int onMinusButtonPress()
+  +double calcTotal()
+  +void onSlidablePress()
+  +void onGoToPaymentPress()
+}
+
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel" o-- "ecommerce::Domain::UseCase::GetCartItemsUseCase.dart::GetCartItemsUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel" o-- "ecommerce::Domain::UseCase::DeleteProductFromCartUseCase.dart::DeleteProductFromCartUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabNavigator.dart::CartTabNavigator"
+"ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabViewModel.dart::CartTabViewModel"
+
+class "ecommerce::Presentation::UI::Home::Tabs::CartTab::Widgets::CartItemWidget.dart::CartItemWidget" {
+  +int productIndex
+  +Function onSlibablePress
+  +Function onPlusButtonPress
+  +Function onMinusButtonPress
+  +State<CartItemWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::Widgets::CartItemWidget.dart::CartItemWidget"
+
+class "ecommerce::Presentation::UI::Home::Tabs::CartTab::Widgets::CartItemWidget.dart::_CartItemWidgetState" {
   +Widget build()
 }
 
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::CartTabVIew.dart::CartTabView"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Home::Tabs::CartTab::Widgets::CartItemWidget.dart::_CartItemWidgetState"
 
 abstract class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::HomeTabNavigator.dart::HomeTabNavigator" {
   +void goToProductListScreen()
@@ -568,7 +853,7 @@ class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideSho
 
 "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "flutter::src::painting::alignment.dart::AlignmentGeometry"
 "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "dart::ui::Color"
-"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "ecommerce::Domain::Models::Categories.dart::Categories"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerSlideShow.dart::BannerData" o-- "ecommerce::Domain::Models::Categories::Categories.dart::Categories"
 
 class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::BannerWiget.dart::BannerWidget" {
   +BannerData bannerData
@@ -590,7 +875,7 @@ class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWi
   +Widget build()
 }
 
-"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget" o-- "ecommerce::Domain::Models::Categories.dart::Categories"
+"ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget" o-- "ecommerce::Domain::Models::Categories::Categories.dart::Categories"
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget"
 
 class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList" {
@@ -610,6 +895,9 @@ class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart:
 
 abstract class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator" {
   +void goToDetailsScreen()
+  +void showLoading()
+  +void hideDialog()
+  +void showSuccessMessage()
 }
 
 class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::SearchTabView" {
@@ -625,6 +913,9 @@ class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_
   +void dispose()
   +Widget build()
   +void goToDetailsScreen()
+  +void hideDialog()
+  +void showLoading()
+  +void showSuccessMessage()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel"
@@ -633,16 +924,20 @@ class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_
 "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabView.dart::_SearchTabViewState"
 
 class "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" {
-  +SearchForProductUseCase useCase
+  +SearchForProductUseCase searchForProductUseCase
+  +AddToWishListUseCase addToWishListUseCase
+  +DeleteFromWishListUseCase deleteFromWishListUseCase
   +String? errorMessage
   +List<Product>? products
   +SearchTabNavigator? navigator
   +void getProducts()
   +void onViewNowPress()
-  +void onDeletePress()
+  +void onSlidablePress()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Domain::UseCase::SearchForProductUseCase.dart::SearchForProductUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Domain::UseCase::AddToWishListUseCase.dart::AddToWishListUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWishListUseCase"
 "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabNavigator.dart::SearchTabNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::SearchTab::SearchTabViewModel.dart::SearchTabViewModel"
 
@@ -677,17 +972,19 @@ class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabView.dar
 class "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" {
   +GetWishListProductsUseCase getWishListProductsUseCase
   +DeleteFromWishListUseCase deleteFromWishListUseCase
+  +AddToWishListUseCase addToWishListUseCase
   +WishListTabNavigator? navigator
   +List<Product>? products
   +String? errorMessage
   +void getProducts()
   +void onTryAgainPress()
   +void onViewNowPress()
-  +void onDeletePress()
+  +void onSlidablePress()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Domain::UseCase::GetWishListProductsUseCase.dart::GetWishListProductsUseCase"
 "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWishListUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Domain::UseCase::AddToWishListUseCase.dart::AddToWishListUseCase"
 "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabNavigator.dart::WishListTabNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Home::Tabs::WithLIstTab::WishListTabViewModel.dart::WishListTabViewModel"
 
@@ -745,6 +1042,115 @@ class "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScree
 "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" o-- "ecommerce::Domain::UseCase::AuthLoginUserCase.dart::AuthLoginUserCase"
 "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel" o-- "ecommerce::Presentation::UI::Login::LoginScreenNavigator.dart::LoginScreenNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Login::LoginScreenViewModel.dart::LoginScreenViweModel"
+
+abstract class "ecommerce::Presentation::UI::Payment::PaymentNavigator.dart::PaymentNavigator" {
+  +void goToHomeScreen()
+  +void showErrorMessage()
+  +void showSuccessMessage()
+  +void showLoading()
+  +void hideDialog()
+}
+
+class "ecommerce::Presentation::UI::Payment::PaymentView.dart::PaymentScreen" {
+  {static} +String routeName
+  +State<PaymentScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Payment::PaymentView.dart::PaymentScreen"
+
+class "ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenState" {
+  +List<Widget> tabs
+  +List<String> titles
+  +PaymentViewModel viewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void goToHomeScreen()
+  +void hideDialog()
+  +void showErrorMessage()
+  +void showLoading()
+  +void showSuccessMessage()
+}
+
+"ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenState" o-- "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenState"
+"ecommerce::Presentation::UI::Payment::PaymentNavigator.dart::PaymentNavigator" <|-- "ecommerce::Presentation::UI::Payment::PaymentView.dart::_PaymentScreenState"
+
+class "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" {
+  +PlaceOrderUseCase useCase
+  +int selectedIndex
+  +PaymentNavigator? navigator
+  +List<OrderProducts>? products
+  +GlobalKey<FormState> formKey
+  +GlobalKey<FormState> cardFormKey
+  +bool showBackSide
+  +AppConfigProvider? provider
+  +TextEditingController nameController
+  +TextEditingController addressController
+  +TextEditingController phoneController
+  +TextEditingController postalCodeController
+  +TextEditingController nameOnCard
+  +TextEditingController numberOnCard
+  +TextEditingController cvvCode
+  +TextEditingController expiryDate
+  +OrderResponse orderResponse
+  +void onBackPress()
+  +double calcTotal()
+  +String? nameValidation()
+  +String? addressValidation()
+  +String? phoneValidation()
+  +String? postalCodeValidation()
+  +void onContinueToPaymentPress()
+  +String? cardValidation()
+  +void onCompletePaymentPress()
+  +void changeCardData()
+}
+
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "ecommerce::Domain::UseCase::PlaceOrderUseCase.dart::PlaceOrderUseCase"
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "ecommerce::Presentation::UI::Payment::PaymentNavigator.dart::PaymentNavigator"
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel" o-- "ecommerce::Domain::Models::Order::OrderResponse.dart::OrderResponse"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::Payment::PaymentViewModel.dart::PaymentViewModel"
+
+class "ecommerce::Presentation::UI::Payment::Tabs::CridetCardTab.dart::CreditCardTab" {
+  +State<CreditCardTab> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "ecommerce::Presentation::UI::Payment::Tabs::CridetCardTab.dart::CreditCardTab"
+
+class "ecommerce::Presentation::UI::Payment::Tabs::CridetCardTab.dart::_CreditCardTabState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "ecommerce::Presentation::UI::Payment::Tabs::CridetCardTab.dart::_CreditCardTabState"
+
+class "ecommerce::Presentation::UI::Payment::Tabs::ReceiptTab.dart::ReceiptTab" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Payment::Tabs::ReceiptTab.dart::ReceiptTab"
+
+class "ecommerce::Presentation::UI::Payment::Tabs::UserInfoTab.dart::UserInfoTab" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Payment::Tabs::UserInfoTab.dart::UserInfoTab"
+
+class "ecommerce::Presentation::UI::Payment::Widgets::MyTextField.dart::MyTextField" {
+  +String hintText
+  +TextEditingController controller
+  +IconData prefix
+  +TextInputType keyboard
+  +Function validation
+  +Widget build()
+}
+
+"ecommerce::Presentation::UI::Payment::Widgets::MyTextField.dart::MyTextField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"ecommerce::Presentation::UI::Payment::Widgets::MyTextField.dart::MyTextField" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"ecommerce::Presentation::UI::Payment::Widgets::MyTextField.dart::MyTextField" o-- "flutter::src::services::text_input.dart::TextInputType"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Payment::Widgets::MyTextField.dart::MyTextField"
 
 abstract class "ecommerce::Presentation::UI::PickImage::PickImageScreenNavidator.dart::PickImageScreenNavigator" {
   +dynamic showErrorMessage()
@@ -825,6 +1231,7 @@ class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart
   +GetProductDetailsUseCase getProductDetailsUseCase
   +AddToWishListUseCase addToWishListUseCase
   +DeleteFromWishListUseCase deleteFromWishListUseCase
+  +AddProductToCartUseCase addProductTOCartUseCase
   +ProductDetails? product
   +String? errorMessage
   +AppConfigProvider? provider
@@ -835,14 +1242,16 @@ class "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart
   +void getProductDetails()
   +void onTryAgainPress()
   +void onImagePress()
+  +void onAddToCartPress()
 }
 
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::UseCase::GetProductDetailsUseCase.dart::GetProductDetailsUseCase"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::UseCase::AddToWishListUseCase.dart::AddToWishListUseCase"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::UseCase::DeleteFromWishListUseCase.dart::DeleteFromWishListUseCase"
-"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::ProductDetails.dart::ProductDetails"
+"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::UseCase::AddProductToCartUseCase.dart::AddProductToCartUseCase"
+"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::Products::ProductDetails.dart::ProductDetails"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
-"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::Prdouct.dart::Product"
+"ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Domain::Models::Products::Prdouct.dart::Product"
 "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel" o-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsNavigator.dart::ProductDetailsNavigator"
 "flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "ecommerce::Presentation::UI::ProductDetails::ProductDetailsViewModel.dart::ProductDetailsViewModel"
 
@@ -855,7 +1264,7 @@ class "ecommerce::Presentation::UI::ProductDetails::Widgets::BrandAndRatingWidge
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::ProductDetails::Widgets::BrandAndRatingWidget.dart::BrandAndRatingWidget"
 
 class "ecommerce::Presentation::UI::ProductDetails::Widgets::ButtonsWidget.dart::ButtonsWidget" {
-  +bool isInWishList
+  +Function onAddToCartPress
   +State<ButtonsWidget> createState()
 }
 
@@ -1025,8 +1434,6 @@ class "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.da
   +RegistrationScreenNavigator? navigator
   +AuthRegistrationUseCase useCase
   +String? nameValidation()
-  +String? emailValidation()
-  +String? passwordValidation()
   +String? phoneValidation()
   +void register()
   +void goToHome()

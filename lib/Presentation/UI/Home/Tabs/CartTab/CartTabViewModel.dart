@@ -17,12 +17,11 @@ class CartTabViewModel extends ChangeNotifier{
   List<CartProducts>? products ;
   AppConfigProvider? provider;
 
-  void getCartItems(AppConfigProvider provider)async{
+  void getCartItems()async{
     errorMessage =  null ;
     products = null;
-    this.provider = provider;
     try{
-      var response = await getCartItemsUseCase.invoke(provider.token);
+      var response = await getCartItemsUseCase.invoke(provider!.token);
       products = response;
       notifyListeners();
     }catch (e){
@@ -63,7 +62,7 @@ class CartTabViewModel extends ChangeNotifier{
     var response = await deleteProductFormCartUseCase.invoke(productId, provider!.token);
     navigator!.hideDialog();
     navigator!.showSuccessMessage(response!);
-    getCartItems(provider!);
+    getCartItems();
   }
 
   void onGoToPaymentPress(){

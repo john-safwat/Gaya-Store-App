@@ -171,6 +171,7 @@ class _PickImageScreenState extends State<PickImageScreen> implements PickImageS
 
   @override
   goToHomeScreen() {
+    Navigator.pop(context);
     Navigator.popAndPushNamed(context, HomeScreen.routeName);
   }
 }

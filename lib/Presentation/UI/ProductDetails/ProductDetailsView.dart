@@ -52,17 +52,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
 
   @override
   Widget build(BuildContext context) {
-    Product product = ModalRoute.of(context)?.settings.arguments as Product;
-    AppConfigProvider provider =
-        Provider.of<AppConfigProvider>(context, listen: false);
     if (viewModel.id == null) {
-      viewModel.getProductDetails(product.id!.toString(), provider, product);
+      Product product = ModalRoute.of(context)?.settings.arguments as Product;
+      AppConfigProvider provider = Provider.of<AppConfigProvider>(context, listen: false);
+      viewModel.id = product.id!.toString() ;
+      viewModel.provider = provider;
+      viewModel.abstractProduct = product;
+      viewModel.getProductDetails();
     }
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(product.name!),
+          title: Text(viewModel.abstractProduct!.name!),
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
