@@ -5,9 +5,9 @@ class OrderHistoryProduct {
       this.orderTotal,
       this.productName,});
 
-  int? id;
-  int? quantity;
-  double? orderTotal;
+  num? id;
+  num? quantity;
+  num? orderTotal;
   String? productName;
 
 }

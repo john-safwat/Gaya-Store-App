@@ -18,19 +18,9 @@ class RegistrationScreen extends StatefulWidget {
   State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen>
-    implements RegistrationScreenNavigator {
+class _RegistrationScreenState extends State<RegistrationScreen> implements RegistrationScreenNavigator {
   bool isVisible = false;
-  RegistrationScreenViewModel viewModel = RegistrationScreenViewModel(
-      AuthRegistrationUseCase(injectAuthRepository()));
-  DateTime date = DateTime.now();
-
-  final formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController rePasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  RegistrationScreenViewModel viewModel = RegistrationScreenViewModel(AuthRegistrationUseCase(injectAuthRepository()));
 
   @override
   void initState() {
@@ -83,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                   ),
                   // the text field
                   Form(
-                      key: formKey,
+                      key: viewModel.formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -93,7 +83,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             titleText: "Enter Your Name",
                             icon: const Icon(Icons.badge_outlined),
                             keyboardType: TextInputType.text,
-                            inputController: nameController,
+                            inputController: viewModel.nameController,
                             validation: viewModel.nameValidation,
                           ),
                           // the Email data field
@@ -102,21 +92,21 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             titleText: "Enter Your Email",
                             icon: const Icon(Icons.email_outlined),
                             keyboardType: TextInputType.text,
-                            inputController: emailController,
+                            inputController: viewModel.emailController,
                             validation: viewModel.emailValidation,
                           ),
                           passwordFormField(
                             hintText: "Password",
                             titleText: "Enter Password",
                             keyboardType: TextInputType.text,
-                            inputController: passwordController,
+                            inputController: viewModel.passwordController,
                             validation: viewModel.passwordValidation,
                           ),
                           passwordFormField(
                             hintText: "Re-Password",
                             titleText: "Confirm Password",
                             keyboardType: TextInputType.text,
-                            inputController: rePasswordController,
+                            inputController:viewModel.rePasswordController,
                             validation: viewModel.passwordValidation,
                           ),
                           // the Phone data field
@@ -125,7 +115,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             titleText: "Enter Your Phone Number",
                             icon: const Icon(Icons.phone),
                             keyboardType: TextInputType.number,
-                            inputController: phoneController,
+                            inputController: viewModel.phoneController,
                             validation: viewModel.phoneValidation,
                           ),
                           const SizedBox(
@@ -144,7 +134,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                                   showMyDatePicker();
                                 },
                                 child: Text(
-                                  DateFormat.yMMMd().format(date),
+                                  DateFormat.yMMMd().format(viewModel.date),
                                   style: const TextStyle(color: MyTheme.blue, fontSize: 20),
                                 ),
                               )
@@ -193,7 +183,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   void showMyDatePicker() async {
     DateTime? newDateTime = await showRoundedDatePicker(
       context: context,
-      initialDate: date,
+      initialDate: viewModel.date,
       firstDate: DateTime(DateTime.now().year - 100),
       lastDate: DateTime(DateTime.now().year + 1),
       borderRadius: 16,
@@ -210,7 +200,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
       ),
     );
     setState(() {
-      date = newDateTime!;
+      viewModel.date = newDateTime!;
     });
   }
 
@@ -354,15 +344,8 @@ class _RegistrationScreenState extends State<RegistrationScreen>
 
   // call the function register from the viewModel
   void register() {
-    if (formKey.currentState!.validate()) {
-      viewModel.register(
-        name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-        rePassword: rePasswordController.text,
-        phone: phoneController.text,
-        date: date,
-      );
+    if (viewModel.formKey.currentState!.validate()) {
+      viewModel.register();
     }
   }
 

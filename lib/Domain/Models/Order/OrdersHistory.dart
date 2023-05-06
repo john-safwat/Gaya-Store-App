@@ -8,9 +8,9 @@ class OrdersHistory {
       this.createdAt,
       this.products,});
 
-  int? id;
+  num? id;
   String? shippingState;
-  double? total;
+  num? total;
   String? createdAt;
   List<OrderHistoryProduct>? products;
 

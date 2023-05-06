@@ -1,8 +1,10 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
+import 'package:ecommerce/Presentation/UI/EditUserInfo/EditUserInfoView.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
+import 'package:ecommerce/Presentation/UI/OrderHistory/OrderHistoryView.dart';
 import 'package:ecommerce/Presentation/UI/Payment/PaymentView.dart';
 import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenView.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         ProductsListScreen.routeName:(_)=> ProductsListScreen(),
         ProductDetailsScreen.routeName:(_) =>ProductDetailsScreen(),
         PaymentScreen.routeName :(_) => PaymentScreen(),
+        OrderHistoryScreen.routeName :(_) =>const OrderHistoryScreen(),
+        EditUserInfoScreen.routeName :(_) => EditUserInfoScreen(),
       },
 
       home: AnimatedSplashScreen(

@@ -21,11 +21,11 @@ class OrderHistoryProductDTO {
     updatedAt = json['updated_at'];
     productName = json['productName'];
   }
-  int? id;
-  int? orderId;
-  int? productId;
-  int? quantity;
-  double? orderTotal;
+  num? id;
+  num? orderId;
+  num? productId;
+  num? quantity;
+  num? orderTotal;
   String? createdAt;
   String? updatedAt;
   String? productName;

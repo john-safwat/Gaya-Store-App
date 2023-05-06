@@ -10,6 +10,17 @@ class RegistrationScreenViewModel extends ChangeNotifier {
   RegistrationScreenNavigator? navigator ;
   AuthRegistrationUseCase useCase;
   RegistrationScreenViewModel(this.useCase);
+
+  DateTime date = DateTime.now();
+
+  final formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+
   // validate if the name don't contain any special character
   String? nameValidation(String input) {
     if (input.isEmpty) {
@@ -56,24 +67,21 @@ class RegistrationScreenViewModel extends ChangeNotifier {
     return null;
   }
 
+
   // signup method
-  void register(
-      {required String name,
-      required String email,
-      required String password,
-      required String rePassword,
-      required String phone,
-      required DateTime date,
-        //required AppConfigProvider provider
-      })async {
-    if (password != rePassword){
+  void register()async {
+    if (passwordController.text != rePasswordController.text){
       navigator!.showErrorMessage("Not The Same Password");
       return;
     }
     String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     try{
       navigator!.showLoading("Creating Your Account");
-      var response = await useCase.invoke(name: name, email: email, password: password, phone: phone, dateTime: datetime);
+      var response = await useCase.invoke(name: nameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                          phone: phoneController.text,
+                          dateTime: datetime);
       navigator!.hideDialog();
       if (response.statusCode == "409"){
         navigator!.showErrorMessage(response.message!);

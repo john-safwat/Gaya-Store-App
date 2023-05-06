@@ -1,7 +1,9 @@
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/GetUserDataUseCase.dart';
+import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabNavigator.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTabViewModel extends ChangeNotifier {
   GetUserDataUseCase useCase ;
@@ -10,6 +12,8 @@ class ProfileTabViewModel extends ChangeNotifier {
   AppConfigProvider? provider;
   String? errorMessage ;
   UserData? userData ;
+  ProfileTabNavigator? navigator ;
+
 
   void getData() async {
     errorMessage = null;
@@ -28,4 +32,19 @@ class ProfileTabViewModel extends ChangeNotifier {
     getData();
   }
 
+  void onOrderHistoryPress(){
+    navigator!.goToOrderHistory();
+  }
+
+  void onPersonalDetailsPress(){
+    navigator!.goToEditUserInfo();
+  }
+
+  void onLogoutPress()async{
+    navigator!.showLoading("Logging You Out");
+    final pref = await SharedPreferences.getInstance();
+    await pref.setString("token", '');
+    navigator!.hideDialog();
+    navigator!.goToLoginScreen();
+  }
 }

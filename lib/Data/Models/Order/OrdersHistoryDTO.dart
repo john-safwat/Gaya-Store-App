@@ -38,16 +38,16 @@ class OrdersHistoryDTO {
       });
     }
   }
-  int? id;
-  int? userId;
+  num? id;
+  num? userId;
   String? name;
   String? phoneNumber;
   String? address;
   String? cardNumber;
   String? shippingState;
-  double? shippingPrice;
+  num? shippingPrice;
   String? postalCode;
-  double? total;
+  num? total;
   String? createdAt;
   String? updatedAt;
   List<OrderHistoryProductDTO>? products;

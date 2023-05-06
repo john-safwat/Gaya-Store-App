@@ -18,7 +18,7 @@ class OrderHistoryResponseDTO {
       });
     }
   }
-  int? statusCode;
+  num? statusCode;
   String? message;
   List<OrdersHistoryDTO>? orders;
 

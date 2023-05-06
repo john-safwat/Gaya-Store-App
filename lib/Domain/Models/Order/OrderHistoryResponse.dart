@@ -6,7 +6,7 @@ class OrderHistoryResponse {
       this.message, 
       this.orders,});
 
-  int? statusCode;
+  num? statusCode;
   String? message;
   List<OrdersHistory>? orders;
 

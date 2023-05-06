@@ -1,3 +1,5 @@
+import 'package:ecommerce/Domain/Models/User/UserDataResponse.dart';
+
 import 'UserDataDTO.dart';
 
 class UserDataResponseDTO {
@@ -25,6 +27,12 @@ class UserDataResponseDTO {
     return map;
   }
 
-
+  UserDataResponse toDomain(){
+    return UserDataResponse(
+      message: message,
+      statusCode: statusCode,
+      user: user?.toDomain(),
+    );
+  }
 
 }

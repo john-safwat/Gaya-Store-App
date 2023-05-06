@@ -38,7 +38,8 @@ class ApiManager {
   String deleteProductFromCartRoute = '/Gaya-Store/public/api/home/product/deleteFromCart';
   String addOrderRoute = '/Gaya-Store/public/api/home/order/addOrder';
   String getUserDataRoute = '/Gaya-Store/public/api/users/userData';
-  String getOrderHistoryRoute = '/Gaya-Store/public/api/users/getOrdersHistory';
+  String getOrderHistoryRoute = '/Gaya-Store/public/api/home/order/getOrdersHistory';
+  String updateUserDataRoute = "/Gaya-Store/public/api/users/updateUserData";
 
   // function to call database to add user
   Future<CreateUserResponseDTO> addNewUser({
@@ -184,4 +185,25 @@ class ApiManager {
     return OrderHistoryResponseDTO.fromJson(jsonDecode(response.body));
   }
 
+  Future<UserDataResponseDTO> updateUserData(String? token , String? name , String? phone, String? birthDate , String? password ) async {
+    Uri url = Uri.http(baseUrl , updateUserDataRoute);
+    if(password != null){
+      var response = await http.post(url , body: {
+        'token' : token,
+        'name' : name ,
+        'phone' :phone,
+        'birthDate' : birthDate,
+        'password' : password
+      });
+      return UserDataResponseDTO.fromJson(jsonDecode(response.body));
+    }else{
+      var response = await http.post(url , body: {
+        'token' : token,
+        'name' : name ,
+        'phone' :phone,
+        'birthDate' : birthDate,
+      });
+      return UserDataResponseDTO.fromJson(jsonDecode(response.body));
+    }
+  }
 }
