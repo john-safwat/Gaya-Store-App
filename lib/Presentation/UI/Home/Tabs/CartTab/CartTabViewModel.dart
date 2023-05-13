@@ -12,7 +12,6 @@ class CartTabViewModel extends ChangeNotifier{
   CartTabViewModel(this.getCartItemsUseCase , this.deleteProductFormCartUseCase);
 
   CartTabNavigator? navigator;
-
   String? errorMessage;
   List<CartProducts>? products ;
   AppConfigProvider? provider;

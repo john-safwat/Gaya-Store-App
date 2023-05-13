@@ -4,10 +4,10 @@ import 'package:ecommerce/Domain/UseCase/AuthLoginUserCase.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreenViweModel extends ChangeNotifier {
+class LoginScreenViewModel extends ChangeNotifier {
   AuthLoginUserCase useCase ;
   LoginScreenNavigator? navigator ;
-  LoginScreenViweModel({required this.useCase});
+  LoginScreenViewModel({required this.useCase});
   // validate on the email form
   String? emailValidation(String input) {
     if (input.isEmpty) {

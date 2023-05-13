@@ -43,8 +43,7 @@ class _ProductsListScreenState extends State<ProductsListScreen>
 
   @override
   Widget build(BuildContext context) {
-    Categories category =
-        ModalRoute.of(context)!.settings.arguments as Categories;
+    Categories category = ModalRoute.of(context)!.settings.arguments as Categories;
     if (viewModel.categoryId == 0) {
       viewModel.getProductsByCategoryId(double.parse(category.id!.toString()));
     }

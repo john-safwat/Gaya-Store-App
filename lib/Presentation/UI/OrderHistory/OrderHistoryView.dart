@@ -20,11 +20,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>{
   OrderHistoryViewModel viewModel = OrderHistoryViewModel(GetOrdersHistoryUseCase(injectOrdersRepository()));
 
   @override
+  void initState() {
+    super.initState();
+    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
+    viewModel.getData();
+
+
+  }
+  @override
   Widget build(BuildContext context) {
-    if(viewModel.provider == null){
-      viewModel.provider = Provider.of<AppConfigProvider>(context);
-      viewModel.getData();
-    }
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Scaffold(

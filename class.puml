@@ -23,6 +23,7 @@ class "ecommerce::Core::Utils::Dialog_Utils.dart::MyDialogUtils" {
   {static} +dynamic showErrorDialog()
   {static} +dynamic showLoading()
   {static} +dynamic showSuccessDialog()
+  {static} +dynamic showConfirmationDialog()
   {static} +dynamic hideDialog()
 }
 
@@ -96,6 +97,7 @@ class "ecommerce::Data::Data%20Source::ProductLocalDataSourceImpl.dart::ProductL
   +Future<String> insertData()
   +Future<String> deleteData()
   +Future<List<Product>?> readData()
+  +Future<String> deleteWishList()
 }
 
 "ecommerce::Data::Data%20Source::ProductLocalDataSourceImpl.dart::ProductLocalDataSourceImpl" o-- "ecommerce::Data::SQL::SQLDB.dart::SQLdb"
@@ -412,6 +414,7 @@ class "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositor
   +Future<List<CartProducts>?> getCartData()
   +Future<String?> addToCart()
   +Future<String?> deleteFromCart()
+  +Future<String> deleteWishList()
 }
 
 "ecommerce::Data::Repository::ProductRepositoryImpl.dart::ProductRepositoryImpl" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRemoteDataSource"
@@ -670,6 +673,7 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
   +Future<ProductDetails?> getProductDetails()
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<String> deleteWishList()
   +Future<List<Product>?> readData()
   +Future<List<Product>?> search()
   +Future<List<CartProducts>?> getCartData()
@@ -680,6 +684,7 @@ abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dar
 abstract class "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductLocalDataSource" {
   +Future<String> insertData()
   +Future<String> deleteData()
+  +Future<String> deleteWishList()
   +Future<List<Product>?> readData()
 }
 
@@ -741,6 +746,13 @@ class "ecommerce::Domain::UseCase::DeleteProductFromCartUseCase.dart::DeleteProd
 }
 
 "ecommerce::Domain::UseCase::DeleteProductFromCartUseCase.dart::DeleteProductFromCartUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
+
+class "ecommerce::Domain::UseCase::DeleteWishListUseCase.dart::DeleteWishListUseCase" {
+  +ProductRepository repository
+  +Future<String> invoke()
+}
+
+"ecommerce::Domain::UseCase::DeleteWishListUseCase.dart::DeleteWishListUseCase" o-- "ecommerce::Domain::Repository::Products_Prepository_Contract.dart::ProductRepository"
 
 class "ecommerce::Domain::UseCase::GetCartItemsUseCase.dart::GetCartItemsUseCase" {
   +ProductRepository repository
@@ -1102,21 +1114,13 @@ class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWi
 "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget" o-- "ecommerce::Domain::Models::Categories::Categories.dart::Categories"
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::CategoryShowWidget.dart::CategoryShowWidget"
 
-class "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList" {
-  +List<Product> products
-  +Function onProductPress
-  +Function onFavoritePress
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "ecommerce::Presentation::UI::Home::Tabs::HomeTab::Widgets::ProductList.dart::HomeProductList"
-
 abstract class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabNavigator.dart::ProfileTabNavigator" {
   +void goToOrderHistory()
   +void goToEditUserInfo()
   +void showLoading()
   +void hideDialog()
   +void goToLoginScreen()
+  +void showDialog()
 }
 
 class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::ProfileTabView" {
@@ -1135,6 +1139,7 @@ class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart:
   +void hideDialog()
   +void showLoading()
   +void goToLoginScreen()
+  +void showDialog()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart::_ProfileTabViewState" o-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel"
@@ -1143,6 +1148,7 @@ class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabView.dart:
 
 class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" {
   +GetUserDataUseCase useCase
+  +DeleteWishListUseCase deleteWishListUseCase
   +AppConfigProvider? provider
   +String? errorMessage
   +UserData? userData
@@ -1152,9 +1158,11 @@ class "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.
   +void onOrderHistoryPress()
   +void onPersonalDetailsPress()
   +void onLogoutPress()
+  +void onConfirmationPress()
 }
 
 "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Domain::UseCase::GetUserDataUseCase.dart::GetUserDataUseCase"
+"ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Domain::UseCase::DeleteWishListUseCase.dart::DeleteWishListUseCase"
 "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Core::Provider::AppConfigProvider.dart::AppConfigProvider"
 "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Domain::Models::User::UserData.dart::UserData"
 "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabViewModel.dart::ProfileTabViewModel" o-- "ecommerce::Presentation::UI::Home::Tabs::ProfileTab::ProfileTabNavigator.dart::ProfileTabNavigator"
@@ -1741,8 +1749,6 @@ class "ecommerce::Presentation::UI::Registration::RegistrationScreenViewModel.da
   +String? nameValidation()
   +String? emailValidation()
   +String? passwordValidation()
-  +String? phoneValidation()
-  +void register()
   +void goToHome()
 }
 

@@ -7,11 +7,11 @@ import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
+import 'package:ecommerce/Presentation/UI/Global%20Widgets/ProductWidget.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabViewModel.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/BannerSlideShow.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/Categories.dart';
-import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/ProductList.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
@@ -110,7 +110,14 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
                       ),
                     ],
                   ),
-                  HomeProductList(value.products! , value.onWidgetPress , value.onFavoritePress),
+                  GridView.count(
+                    shrinkWrap: true,
+                    primary: false,
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.8,
+                    physics:const BouncingScrollPhysics(),
+                    children: value.products!.map((e) => ProductWidget(e , value.onWidgetPress , value.onFavoritePress)).toList(),
+                  )
                 ],
               ),
             );

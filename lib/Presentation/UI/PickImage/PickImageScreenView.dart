@@ -32,17 +32,18 @@ class _PickImageScreenState extends State<PickImageScreen> implements PickImageS
   @override
   void initState() {
     super.initState();
+    viewModel.provider = Provider.of<AppConfigProvider>(context,listen: false);
     viewModel.navigator = this;
   }
   @override
   void dispose() {
     super.dispose();
+    viewModel.provider = null;
     viewModel.navigator =  null ;
   }
 
   @override
   Widget build(BuildContext context) {
-    AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Scaffold(
@@ -118,7 +119,7 @@ class _PickImageScreenState extends State<PickImageScreen> implements PickImageS
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            viewModel.uploadImage(image, provider.token);
+                            viewModel.uploadImage(image);
                           },
                           style: ButtonStyle(
                               backgroundColor:

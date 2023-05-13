@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> implements LoginScreenNavigator{
 
 
-  LoginScreenViweModel viewModel = LoginScreenViweModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
+  LoginScreenViewModel viewModel = LoginScreenViewModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
 
 
   final formKey = GlobalKey<FormState>();

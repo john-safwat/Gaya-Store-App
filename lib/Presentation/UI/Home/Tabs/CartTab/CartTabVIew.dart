@@ -29,23 +29,21 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
   @override
   void initState() {
     super.initState();
-
     viewModel.navigator = this;
+    viewModel.provider = Provider.of<AppConfigProvider>(context,listen: false);
+    viewModel.getCartItems();
   }
 
   @override
   void dispose() {
     super.dispose();
     viewModel.navigator = null;
+    viewModel.provider = null ;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.provider == null) {
-      AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
-      viewModel.provider = provider;
-      viewModel.getCartItems();
-    }
+
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Consumer<CartTabViewModel>(

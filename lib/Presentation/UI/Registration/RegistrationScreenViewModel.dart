@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class RegistrationScreenViewModel extends ChangeNotifier {
   RegistrationScreenNavigator? navigator ;
   AuthRegistrationUseCase useCase;
   RegistrationScreenViewModel(this.useCase);
+  AppConfigProvider? provider ;
+
 
   DateTime date = DateTime.now();
 

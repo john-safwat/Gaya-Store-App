@@ -31,20 +31,19 @@ class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNa
   void initState() {
     super.initState();
     viewModel.navigator = this;
+    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
+    viewModel.getData();
+
   }
   @override
   void dispose() {
     super.dispose();
     viewModel.navigator = null;
+    viewModel.provider = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.provider == null) {
-      AppConfigProvider provider = Provider.of<AppConfigProvider>(context);
-      viewModel.provider = provider;
-      viewModel.getData();
-    }
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Consumer<ProfileTabViewModel>(

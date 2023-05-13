@@ -25,12 +25,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
   @override
   void initState() {
     super.initState();
+    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
     viewModel.navigator = this;
   }
 
   @override
   void dispose() {
     super.dispose();
+    viewModel.provider = null ;
     viewModel.navigator = null;
   }
 
@@ -372,8 +374,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
 
   @override
   updateToken(String token) {
-    var provider = Provider.of<AppConfigProvider>(context, listen: false);
-    provider.updateToken(token);
+    viewModel.provider!.updateToken(token);
   }
 
   @override

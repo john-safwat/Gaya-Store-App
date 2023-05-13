@@ -29,20 +29,20 @@ class _PaymentScreenState extends State<PaymentScreen> implements PaymentNavigat
   void initState() {
     super.initState();
     viewModel.navigator = this;
+    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
   }
   @override
   void dispose() {
     super.dispose();
     viewModel.navigator = null;
+    viewModel.provider = null;
   }
 
   @override
   Widget build(BuildContext context) {
     if (viewModel.products == null){
       var products = ModalRoute.of(context)?.settings.arguments as List<OrderProducts>;
-      var provider = Provider.of<AppConfigProvider>(context);
       viewModel.products = products;
-      viewModel.provider = provider;
     }
     return ChangeNotifierProvider(
       create: (context) => viewModel,

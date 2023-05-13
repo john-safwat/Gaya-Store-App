@@ -42,6 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
   void initState() {
     super.initState();
     viewModel.navigator = this;
+    viewModel.provider = Provider.of<AppConfigProvider>(context, listen: false);
   }
 
   @override
@@ -54,9 +55,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
   Widget build(BuildContext context) {
     if (viewModel.id == null) {
       Product product = ModalRoute.of(context)?.settings.arguments as Product;
-      AppConfigProvider provider = Provider.of<AppConfigProvider>(context, listen: false);
       viewModel.id = product.id!.toString() ;
-      viewModel.provider = provider;
       viewModel.abstractProduct = product;
       viewModel.getProductDetails();
     }
