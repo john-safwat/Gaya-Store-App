@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
@@ -9,7 +10,7 @@ import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsNavigator.dart';
 import 'package:flutter/material.dart';
 
-class ProductDetailsViewModel extends ChangeNotifier {
+class ProductDetailsViewModel extends BaseViewModel <ProductDetailsNavigator>{
   GetProductDetailsUseCase getProductDetailsUseCase;
   AddToWishListUseCase addToWishListUseCase;
   DeleteFromWishListUseCase deleteFromWishListUseCase;
@@ -23,7 +24,6 @@ class ProductDetailsViewModel extends ChangeNotifier {
   String? id;
   Product? abstractProduct;
   String image = '';
-  ProductDetailsNavigator? navigator;
 
   void getProductDetails() async {
     try {
@@ -50,10 +50,10 @@ class ProductDetailsViewModel extends ChangeNotifier {
   }
 
   void onAddToCartPress(String token) async{
-    navigator!.showLoading();
+    navigator!.showLoading("Loading ...");
     var response = await addProductTOCartUseCase.invoke(product!.id!.toString(), token);
     navigator!.hideDialog();
-    navigator!.showSuccessMessage(response ?? "data not found");
+    navigator!.showSuccessMessage(response ?? "data not found" , (){navigator!.hideDialog();});
   }
 
 }

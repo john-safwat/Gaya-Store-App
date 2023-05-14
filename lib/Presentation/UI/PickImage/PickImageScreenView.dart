@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:blur/blur.dart';
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -21,25 +22,25 @@ class PickImageScreen extends StatefulWidget {
   State<PickImageScreen> createState() => _PickImageScreenState();
 }
 
-class _PickImageScreenState extends State<PickImageScreen> implements PickImageScreenNavigator {
+class _PickImageScreenState extends BaseState<PickImageScreen , PickImageScreenViewModel> implements PickImageScreenNavigator {
   final ImagePicker picker = ImagePicker();
   XFile? images;
   File? image;
 
-  PickImageScreenViewModel viewModel = PickImageScreenViewModel(
-      AuthUploadUserImageUseCase(injectAuthRepository()));
 
+  @override
+  PickImageScreenViewModel initViewModel() {
+    return PickImageScreenViewModel(AuthUploadUserImageUseCase(injectAuthRepository()));
+  }
   @override
   void initState() {
     super.initState();
     viewModel.provider = Provider.of<AppConfigProvider>(context,listen: false);
-    viewModel.navigator = this;
   }
   @override
   void dispose() {
     super.dispose();
     viewModel.provider = null;
-    viewModel.navigator =  null ;
   }
 
   @override
@@ -147,27 +148,6 @@ class _PickImageScreenState extends State<PickImageScreen> implements PickImageS
         ),
       ),
     );
-  }
-
-  @override
-  showErrorMessage(String message) {
-    MyDialogUtils.showErrorDialog(context: context, message: message);
-  }
-
-  @override
-  hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
-  }
-
-  @override
-  showSuccessMessage(String message, Function action) {
-    MyDialogUtils.showSuccessDialog(
-        context: context, message: message, action: action);
   }
 
   @override

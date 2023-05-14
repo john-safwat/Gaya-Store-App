@@ -1,9 +1,8 @@
-abstract class LoginScreenNavigator {
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
+
+abstract class LoginScreenNavigator extends BaseNavigator{
   goToCreateAccountScreen();
   goToHomeScreen();
-  showErrorMessage(String message);
-  showSuccessMessage(String message , Function action);
-  showLoading(String message);
   updateToken(String token);
-  hideDialog();
+
 }

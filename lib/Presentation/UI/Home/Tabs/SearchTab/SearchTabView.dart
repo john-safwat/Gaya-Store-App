@@ -1,6 +1,6 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
@@ -20,23 +20,16 @@ class SearchTabView extends StatefulWidget {
   State<SearchTabView> createState() => _SearchTabViewState();
 }
 
-class _SearchTabViewState extends State<SearchTabView>
+class _SearchTabViewState extends BaseState<SearchTabView , SearchTabViewModel>
     implements SearchTabNavigator {
-  SearchTabViewModel viewModel = SearchTabViewModel(
-      SearchForProductUseCase(injectProductRepository()),
-      AddToWishListUseCase(injectProductRepository()),
-      DeleteFromWishListUseCase(injectProductRepository()));
+
   final controller = ScrollController();
   @override
-  void initState() {
-    super.initState();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
+  SearchTabViewModel initViewModel() {
+    return SearchTabViewModel(
+        SearchForProductUseCase(injectProductRepository()),
+        AddToWishListUseCase(injectProductRepository()),
+        DeleteFromWishListUseCase(injectProductRepository()));
   }
 
   @override
@@ -151,19 +144,4 @@ class _SearchTabViewState extends State<SearchTabView>
         arguments: product);
   }
 
-
-  @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading ...");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
-  }
 }

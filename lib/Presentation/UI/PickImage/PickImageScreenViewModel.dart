@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/UseCase/AuthUploadUserImageUseCase.dart';
 import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenNavidator.dart';
 import 'package:flutter/material.dart';
 
-class PickImageScreenViewModel extends ChangeNotifier{
+class PickImageScreenViewModel extends BaseViewModel<PickImageScreenNavigator>{
   AuthUploadUserImageUseCase useCase ;
   PickImageScreenViewModel(this.useCase);
-  PickImageScreenNavigator? navigator ;
   AppConfigProvider? provider ;
 
   void uploadImage (File? image)async{

@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteWishListUseCase.dart';
@@ -6,7 +7,7 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabNavigat
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileTabViewModel extends ChangeNotifier {
+class ProfileTabViewModel extends BaseViewModel<ProfileTabNavigator>{
   GetUserDataUseCase useCase ;
   DeleteWishListUseCase deleteWishListUseCase;
   ProfileTabViewModel(this.useCase , this.deleteWishListUseCase);
@@ -14,7 +15,6 @@ class ProfileTabViewModel extends ChangeNotifier {
   AppConfigProvider? provider;
   String? errorMessage ;
   UserData? userData ;
-  ProfileTabNavigator? navigator ;
 
 
   void getData() async {

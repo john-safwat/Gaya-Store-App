@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Domain/UseCase/AuthLoginUserCase.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreenViewModel extends ChangeNotifier {
+class LoginScreenViewModel extends BaseViewModel<LoginScreenNavigator> {
   AuthLoginUserCase useCase ;
-  LoginScreenNavigator? navigator ;
   LoginScreenViewModel({required this.useCase});
   // validate on the email form
   String? emailValidation(String input) {

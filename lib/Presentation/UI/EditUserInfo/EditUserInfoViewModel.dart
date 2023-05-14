@@ -1,16 +1,16 @@
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/UpdateUserDataUseCase.dart';
 import 'package:ecommerce/Presentation/UI/EditUserInfo/EditUserInfoNavigator.dart';
 import 'package:flutter/material.dart';
 
-class EditUserInfoViewModel extends ChangeNotifier {
+class EditUserInfoViewModel extends BaseViewModel<EditUserInfoNavigator> {
   UserData? userData;
   UpdateUserDataUseCase useCase ;
   EditUserInfoViewModel(this.useCase);
   DateTime date = DateTime.now();
   AppConfigProvider? provider ;
-  EditUserInfoNavigator? navigator;
 
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
@@ -82,7 +82,7 @@ class EditUserInfoViewModel extends ChangeNotifier {
         try {
           var response = await useCase.invoke(provider!.token, nameController.text, phoneController.text, date.toString(), passwordController.text);
           navigator!.hideDialog();
-          navigator!.showSuccessMessage(response!);
+          navigator!.showSuccessMessage(response! , (){navigator!.hideDialog();});
         }catch (e){
           navigator!.hideDialog();
           navigator!.showErrorMessage(e.toString());
@@ -92,7 +92,7 @@ class EditUserInfoViewModel extends ChangeNotifier {
       try {
         var response = await useCase.invoke(provider!.token, nameController.text, phoneController.text, date.toString(), null);
         navigator!.hideDialog();
-        navigator!.showSuccessMessage(response!);
+        navigator!.showSuccessMessage(response!, (){navigator!.hideDialog();});
       }catch (e){
         navigator!.hideDialog();
         navigator!.showErrorMessage(e.toString());

@@ -1,5 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -23,14 +24,16 @@ class ProfileTabView extends StatefulWidget {
   State<ProfileTabView> createState() => _ProfileTabViewState();
 }
 
-class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNavigator{
-  ProfileTabViewModel viewModel =
-      ProfileTabViewModel(GetUserDataUseCase(injectUserRepository()), DeleteWishListUseCase(injectProductRepository()));
+class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewModel> implements ProfileTabNavigator{
+
+  @override
+  ProfileTabViewModel initViewModel() {
+    return ProfileTabViewModel(GetUserDataUseCase(injectUserRepository()), DeleteWishListUseCase(injectProductRepository()));
+  }
 
   @override
   void initState() {
     super.initState();
-    viewModel.navigator = this;
     viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
     viewModel.getData();
 
@@ -38,7 +41,6 @@ class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNa
   @override
   void dispose() {
     super.dispose();
-    viewModel.navigator = null;
     viewModel.provider = null;
   }
 
@@ -298,15 +300,6 @@ class _ProfileTabViewState extends State<ProfileTabView> implements ProfileTabNa
   @override
   void goToEditUserInfo() {
     Navigator.pushNamed(context, EditUserInfoScreen.routeName , arguments: viewModel.userData!);
-  }
-  @override
-  hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
   }
 
   @override

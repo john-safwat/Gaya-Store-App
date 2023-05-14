@@ -1,8 +1,6 @@
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 
-abstract class ProductsListNavigator{
+abstract class ProductsListNavigator extends BaseNavigator{
   void goToProductDetailsScreen(Product product);
-  void showLoading();
-  void hideDialog();
-  void showSuccessMessage(String message);
 }

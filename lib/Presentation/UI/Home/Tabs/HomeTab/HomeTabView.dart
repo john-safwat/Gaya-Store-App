@@ -1,6 +1,6 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
@@ -25,25 +25,23 @@ class HomeTabView extends StatefulWidget {
   State<HomeTabView> createState() => _HomeTabViewState();
 }
 
-class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
-  HomeTabViewModel viewModel = HomeTabViewModel(
-      GetCategoriesUseCase(injectCategoriesRepository()),
-      GetNewAddedProductsUseCase(injectProductRepository()),
-      AddToWishListUseCase(injectProductRepository()) ,
-      DeleteFromWishListUseCase(injectProductRepository())
-  );
+class _HomeTabViewState extends BaseState<HomeTabView , HomeTabViewModel> implements HomeTabNavigator {
+
+  @override
+  HomeTabViewModel initViewModel() {
+    return HomeTabViewModel(
+        GetCategoriesUseCase(injectCategoriesRepository()),
+        GetNewAddedProductsUseCase(injectProductRepository()),
+        AddToWishListUseCase(injectProductRepository()) ,
+        DeleteFromWishListUseCase(injectProductRepository())
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     viewModel.getCategories();
     viewModel.getNewAddedProducts();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
   }
 
   @override
@@ -138,19 +136,4 @@ class _HomeTabViewState extends State<HomeTabView> implements HomeTabNavigator {
     Navigator.pushNamed(context, ProductDetailsScreen.routeName , arguments: product);
   }
 
-
-  @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
-  }
 }

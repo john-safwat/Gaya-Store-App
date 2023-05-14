@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -18,15 +19,17 @@ class RegistrationScreen extends StatefulWidget {
   State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> implements RegistrationScreenNavigator {
+class _RegistrationScreenState extends BaseState<RegistrationScreen , RegistrationScreenViewModel> implements RegistrationScreenNavigator{
   bool isVisible = false;
-  RegistrationScreenViewModel viewModel = RegistrationScreenViewModel(AuthRegistrationUseCase(injectAuthRepository()));
+  @override
+  RegistrationScreenViewModel initViewModel() {
+    return RegistrationScreenViewModel(AuthRegistrationUseCase(injectAuthRepository()));
+  }
 
   @override
   void initState() {
     super.initState();
     viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
-    viewModel.navigator = this;
   }
 
   @override
@@ -352,27 +355,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
   }
 
   @override
-  showErrorMessage(String message) {
-    MyDialogUtils.showErrorDialog(context: context, message: message);
-  }
-
-  @override
-  hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
-  }
-
-  @override
-  showSuccessMessage(String message, Function action) {
-    MyDialogUtils.showSuccessDialog(
-        context: context, message: message, action: action);
-  }
-
-  @override
   updateToken(String token) {
     viewModel.provider!.updateToken(token);
   }
@@ -381,5 +363,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Regi
   goToPickImageScreen() {
     Navigator.pushReplacementNamed(context, PickImageScreen.routeName);
   }
+
 
 }

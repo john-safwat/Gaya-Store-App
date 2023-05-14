@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class RegistrationScreenViewModel extends ChangeNotifier {
-  RegistrationScreenNavigator? navigator ;
+class RegistrationScreenViewModel extends BaseViewModel<RegistrationScreenNavigator>{
   AuthRegistrationUseCase useCase;
   RegistrationScreenViewModel(this.useCase);
   AppConfigProvider? provider ;

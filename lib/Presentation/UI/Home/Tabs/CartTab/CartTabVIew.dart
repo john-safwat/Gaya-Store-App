@@ -1,3 +1,5 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -21,15 +23,18 @@ class CartTabView extends StatefulWidget {
   State<CartTabView> createState() => _CartTabViewState();
 }
 
-class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
-  CartTabViewModel viewModel =
-      CartTabViewModel(GetCartItemsUseCase(injectProductRepository()),
-      DeleteProductFromCartUseCase(injectProductRepository())
-  );
+class _CartTabViewState extends BaseState<CartTabView , CartTabViewModel> implements CartTabNavigator {
+
+
+  @override
+  CartTabViewModel initViewModel() {
+    return CartTabViewModel(GetCartItemsUseCase(injectProductRepository()),
+        DeleteProductFromCartUseCase(injectProductRepository()));
+  }
+
   @override
   void initState() {
     super.initState();
-    viewModel.navigator = this;
     viewModel.provider = Provider.of<AppConfigProvider>(context,listen: false);
     viewModel.getCartItems();
   }
@@ -37,7 +42,6 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
   @override
   void dispose() {
     super.dispose();
-    viewModel.navigator = null;
     viewModel.provider = null ;
   }
 
@@ -126,21 +130,6 @@ class _CartTabViewState extends State<CartTabView> implements CartTabNavigator {
         },
       ),
     );
-  }
-
-  @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 
   @override

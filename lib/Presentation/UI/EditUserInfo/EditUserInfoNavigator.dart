@@ -1,6 +1,5 @@
-abstract class EditUserInfoNavigator{
-  showErrorMessage(String message);
-  showSuccessMessage(String message);
-  showLoading(String message);
-  hideDialog();
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
+
+abstract class EditUserInfoNavigator extends BaseNavigator{
+
 }

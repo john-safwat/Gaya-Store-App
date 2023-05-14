@@ -1,8 +1,6 @@
-abstract class PaymentNavigator {
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
+
+abstract class PaymentNavigator extends BaseNavigator{
   void goToHomeScreenCartTab();
   void goToHomeScreenHomeTab();
-  void showErrorMessage(String message);
-  void showSuccessMessage(String message);
-  void showLoading();
-  void hideDialog();
 }

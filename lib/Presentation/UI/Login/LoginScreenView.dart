@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
@@ -6,7 +7,6 @@ import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenViewModel.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Core/DI/di.dart';
@@ -19,11 +19,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> implements LoginScreenNavigator{
-
-
-  LoginScreenViewModel viewModel = LoginScreenViewModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
-
+class _LoginScreenState extends BaseState<LoginScreen , LoginScreenViewModel> implements LoginScreenNavigator{
 
   final formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -32,15 +28,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginScreenNavigat
   bool isVisible = false;
 
   @override
-  void initState() {
-    super.initState();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
+  LoginScreenViewModel initViewModel() {
+    return LoginScreenViewModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
   }
 
   @override
@@ -258,27 +247,6 @@ class _LoginScreenState extends State<LoginScreen> implements LoginScreenNavigat
     Navigator.popAndPushNamed(context, HomeScreen.routeName);
   }
 
-  @override
-  showErrorMessage(String message) {
-    MyDialogUtils.showErrorDialog(context: context, message: message);
-  }
-
-  @override
-  hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
-  }
-
-
-  @override
-  showSuccessMessage(String message, Function action) {
-    MyDialogUtils.showSuccessDialog(
-        context: context, message: message, action: action);
-  }
 
   @override
   updateToken(String token) {

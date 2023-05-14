@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -20,21 +21,22 @@ class PaymentScreen extends StatefulWidget {
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> implements PaymentNavigator {
+class _PaymentScreenState extends BaseState<PaymentScreen , PaymentViewModel> implements PaymentNavigator {
   List<Widget> tabs = [UserInfoTab() , CreditCardTab() , ReceiptTab()];
   List<String> titles = ["Shipping Information" , "Card Information" , "Receipt"];
-  PaymentViewModel viewModel = PaymentViewModel(PlaceOrderUseCase(injectOrdersRepository()));
 
+  @override
+  PaymentViewModel initViewModel() {
+    return PaymentViewModel(PlaceOrderUseCase(injectOrdersRepository()));
+  }
   @override
   void initState() {
     super.initState();
-    viewModel.navigator = this;
     viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
   }
   @override
   void dispose() {
     super.dispose();
-    viewModel.navigator = null;
     viewModel.provider = null;
   }
 
@@ -68,26 +70,6 @@ class _PaymentScreenState extends State<PaymentScreen> implements PaymentNavigat
   @override
   void goToHomeScreenCartTab() {
     Navigator.pop(context);
-  }
-
-  @override
-  void hideDialog() {
-    Navigator.pop(context);
-  }
-
-  @override
-  void showErrorMessage(String message) {
-    MyDialogUtils.showErrorDialog(context: context, message: message);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message:"Loading...");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 
   @override

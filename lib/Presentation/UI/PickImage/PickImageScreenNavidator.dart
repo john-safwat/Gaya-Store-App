@@ -1,7 +1,5 @@
-abstract class PickImageScreenNavigator {
-  showErrorMessage(String message);
-  showSuccessMessage(String message , Function action);
-  showLoading(String message);
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
+
+abstract class PickImageScreenNavigator extends BaseNavigator{
   goToHomeScreen();
-  hideDialog();
 }

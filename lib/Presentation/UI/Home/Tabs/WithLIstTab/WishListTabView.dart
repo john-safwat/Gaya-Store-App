@@ -1,5 +1,5 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
@@ -19,24 +19,21 @@ class WishListTabView extends StatefulWidget {
   State<WishListTabView> createState() => _WishListTabViewState();
 }
 
-class _WishListTabViewState extends State<WishListTabView>
+class _WishListTabViewState extends BaseState<WishListTabView , WishListTabViewModel>
     implements WishListTabNavigator {
-  WishListTabViewModel viewModel = WishListTabViewModel(
+
+  @override
+  WishListTabViewModel initViewModel() {
+    return WishListTabViewModel(
       GetWishListProductsUseCase(injectProductRepository()),
       DeleteFromWishListUseCase(injectProductRepository()),
       AddToWishListUseCase(injectProductRepository()),
-  );
+    );
+  }
   @override
   void initState() {
     super.initState();
     viewModel.getProducts();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
   }
 
   @override
@@ -80,20 +77,5 @@ class _WishListTabViewState extends State<WishListTabView>
   void goToProductDetailsScreen(Product product) {
     Navigator.pushNamed(context, ProductDetailsScreen.routeName,
         arguments: product);
-  }
-
-  @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading ...");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }

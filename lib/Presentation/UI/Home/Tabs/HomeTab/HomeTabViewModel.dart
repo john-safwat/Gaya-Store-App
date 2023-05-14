@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Data/SQL/SQLDB.dart';
 import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
@@ -9,12 +10,11 @@ import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabNavigator.dart';
 import 'package:flutter/material.dart';
 
-class HomeTabViewModel extends ChangeNotifier {
+class HomeTabViewModel extends BaseViewModel<HomeTabNavigator> {
   GetCategoriesUseCase categoriesUseCase;
   GetNewAddedProductsUseCase newAddedProductsUseCase;
   AddToWishListUseCase addToWishListUseCase;
   DeleteFromWishListUseCase deleteFromWishListUseCase;
-  HomeTabNavigator? navigator;
   String? errorMessage;
 
   HomeTabViewModel(this.categoriesUseCase, this.newAddedProductsUseCase,
@@ -73,15 +73,15 @@ class HomeTabViewModel extends ChangeNotifier {
 
   void onFavoritePress(Product product) async {
     if (!product.isInWishList!) {
-      navigator!.showLoading();
+      navigator!.showLoading("Loading...");
       var response = await addToWishListUseCase.invoke(product);
       navigator!.hideDialog();
-      navigator!.showSuccessMessage(response);
+      navigator!.showSuccessMessage(response , (){navigator!.hideDialog();});
     }else {
-      navigator!.showLoading();
+      navigator!.showLoading("Loading...");
       var response = await deleteFromWishListUseCase.invoke(int.parse(product.id!.toString()));
       navigator!.hideDialog();
-      navigator!.showSuccessMessage(response);
+      navigator!.showSuccessMessage(response , (){navigator!.hideDialog();});
     }
   }
 }

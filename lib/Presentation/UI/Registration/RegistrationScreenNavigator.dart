@@ -1,8 +1,6 @@
-abstract class RegistrationScreenNavigator{
-  showErrorMessage(String message);
-  showSuccessMessage(String message , Function action);
-  showLoading(String message);
-  hideDialog();
+import 'package:ecommerce/Core/Base/Base_Navigator.dart';
+
+abstract class RegistrationScreenNavigator extends BaseNavigator{
   goToPickImageScreen();
   updateToken(String token);
 }

@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderResponse.dart';
@@ -6,12 +7,11 @@ import 'package:ecommerce/Presentation/UI/Payment/PaymentNavigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 
-class PaymentViewModel extends ChangeNotifier{
+class PaymentViewModel extends BaseViewModel<PaymentNavigator>{
   PlaceOrderUseCase useCase ;
   PaymentViewModel(this.useCase);
 
   int selectedIndex = 0;
-  PaymentNavigator? navigator;
   List<OrderProducts>? products ;
   final formKey = GlobalKey<FormState>();
   GlobalKey<FormState> cardFormKey = GlobalKey();
@@ -97,7 +97,7 @@ class PaymentViewModel extends ChangeNotifier{
 
   void onCompletePaymentPress()async{
     if(cardFormKey.currentState!.validate()){
-      navigator!.showLoading();
+      navigator!.showLoading("Loading");
       try{
         var response = await useCase.invoke(
             provider!.token,
@@ -109,7 +109,7 @@ class PaymentViewModel extends ChangeNotifier{
             postalCodeController.text,
             calcTotal(), products);
         navigator!.hideDialog();
-        navigator!.showSuccessMessage(response.message!);
+        navigator!.showSuccessMessage(response.message! , (){navigator!.hideDialog();});
         orderResponse = response;
         selectedIndex = 2;
         notifyListeners();

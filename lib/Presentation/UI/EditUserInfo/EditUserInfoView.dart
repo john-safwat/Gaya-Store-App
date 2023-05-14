@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
@@ -20,20 +21,12 @@ class EditUserInfoScreen extends StatefulWidget {
   State<EditUserInfoScreen> createState() => _EditUserInfoScreenState();
 }
 
-class _EditUserInfoScreenState extends State<EditUserInfoScreen> implements EditUserInfoNavigator {
-  EditUserInfoViewModel viewModel  = EditUserInfoViewModel(UpdateUserDataUseCase(injectUserRepository())) ;
+class _EditUserInfoScreenState extends BaseState<EditUserInfoScreen , EditUserInfoViewModel> implements EditUserInfoNavigator {
   bool isVisible = false;
 
   @override
-  void initState() {
-    super.initState();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
+  EditUserInfoViewModel initViewModel() {
+    return EditUserInfoViewModel(UpdateUserDataUseCase(injectUserRepository())) ;
   }
 
   @override
@@ -322,25 +315,5 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> implements Edit
         ),
       ],
     );
-  }
-
-  @override
-  showErrorMessage(String message) {
-    MyDialogUtils.showErrorDialog(context: context, message: message);
-  }
-
-  @override
-  hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
-  }
-
-  @override
-  showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }

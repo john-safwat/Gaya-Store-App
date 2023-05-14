@@ -25,7 +25,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>{
     viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
     viewModel.getData();
 
-
   }
   @override
   Widget build(BuildContext context) {

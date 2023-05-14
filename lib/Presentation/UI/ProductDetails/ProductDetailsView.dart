@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -30,25 +31,27 @@ class ProductDetailsScreen extends StatefulWidget {
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements ProductDetailsNavigator{
-  ProductDetailsViewModel viewModel = ProductDetailsViewModel(
-    GetProductDetailsUseCase(injectProductRepository()),
-    AddToWishListUseCase(injectProductRepository()),
-    DeleteFromWishListUseCase(injectProductRepository()),
-    AddProductToCartUseCase(injectProductRepository()),
-  );
+class _ProductDetailsScreenState extends BaseState<ProductDetailsScreen ,ProductDetailsViewModel > implements ProductDetailsNavigator{
 
+  @override
+  ProductDetailsViewModel initViewModel() {
+    return ProductDetailsViewModel(
+      GetProductDetailsUseCase(injectProductRepository()),
+      AddToWishListUseCase(injectProductRepository()),
+      DeleteFromWishListUseCase(injectProductRepository()),
+      AddProductToCartUseCase(injectProductRepository()),
+    );
+  }
   @override
   void initState() {
     super.initState();
-    viewModel.navigator = this;
     viewModel.provider = Provider.of<AppConfigProvider>(context, listen: false);
   }
 
   @override
   void dispose() {
     super.dispose();
-    viewModel.navigator = null;
+    viewModel.provider = null;
   }
 
   @override
@@ -231,20 +234,5 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> implements 
         ),
       ),
     );
-  }
-
-  @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
-  }
-
-  @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
   }
 }

@@ -105,12 +105,20 @@ class _ProductsListScreenState extends State<ProductsListScreen>
   }
 
   @override
-  void showLoading() {
-    MyDialogUtils.showLoading(context: context, message: "Loading .... ");
+  void showLoading(String message) {
+    MyDialogUtils.showLoading(context: context, message: message);
   }
 
   @override
-  void showSuccessMessage(String message) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message);
+  void showSuccessMessage(String message , Function function) {
+    MyDialogUtils.showSuccessDialog(context: context, message: message , action: null);
+  }
+
+  @override
+  showErrorMessage(String message) {
+  }
+
+  @override
+  updateToken(String token) {
   }
 }
