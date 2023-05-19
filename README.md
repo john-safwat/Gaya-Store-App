@@ -1,4 +1,4 @@
-# ecommerce
+# Gaya Store App
 
 A new Flutter project.
 
