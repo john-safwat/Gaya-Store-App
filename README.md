@@ -105,7 +105,7 @@ Wishlist & Cart
 <div style= "display : flex ; justify-content: space-around ; margin : 20px 0px">
 <img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212216.png?alt=media&token=b8c48296-3444-48cc-88cc-4ef5d8c2d3a5" width = "100px">
 <img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212224.png?alt=media&token=6f8fa721-d2bb-4a25-8354-d24a2e6123e0" width = "100px">
-<img src = "https://storage.googleapis.com/e-commerce-5d02e.appspot.com/Screenshot_20230515_212539.png?GoogleAccessId=service-996768642569@gcp-sa-firebasestorage.iam.gserviceaccount.com&Expires=1689085059&Signature=AUx5xMXRaYPR/QwipwRoiAvU3SazUk7SAS98c/gGMhnnmOunYuB1qcZAV6mpdA1sKtZqtUe836Fv3VV3OdIw8nyOeC3rL9SisqegEx/pQ5Q7H2MB1C4AapPx166kQZIafU72yGEq%2Bzosu1tBfAGN4CpFOwx0MtDL6zO6oDM%2B0d7Yok4L/6jtDH5ooTTWkr/M53nXgn57YeckLNnvB5oHp7jJLNifdvJXHmqzCwAF2%2BYGNZ1NHFYykDJJoHvoQTR02XeSn/44%2BOmHa1mLqk%2BIBkGNpcx/nbq5Jm5eRmfT%2B9tGG4rCWqszdxaQBaeXF/oCkx2prCxRJ8csm4VEvYQAvQ%3D%3D" width = "100px">
+<img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212539.png?alt=media&token=65b54af0-b58b-47af-bc86-bce1581a9c40" width = "100px">
 </div>
 
 ````
@@ -114,7 +114,7 @@ Payment
 <div style= "display : flex ; justify-content: space-around ; margin : 20px 0px">
 <img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212638.png?alt=media&token=872ceb91-99aa-4a6b-a32f-1db7c200077c" width = "100px">
 <img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212722.png?alt=media&token=d8639a66-933d-45b2-841d-bfa0a943fde2" width = "100px">
-<img src = "https://storage.googleapis.com/e-commerce-5d02e.appspot.com/Screenshot_20230515_212744.png?GoogleAccessId=service-996768642569@gcp-sa-firebasestorage.iam.gserviceaccount.com&Expires=1689085148&Signature=H0Yl3TEQ1FV/zH0aj7dDV1J9bSlTWpKzziGLFYKyHYzA94o4LYeGnv5Rif58HI3Dhye3gbjYqmUylwDcxtWT3hqZdpxjsxeuq7q7VVPWAZKCKqsrYXRhxH349TsE8uxS2nXR3KhcVJTNVi%2BaBUKaTyyyYwR8LTTBFjkpe4sRjVdIUWIMgU82/zv3dS6xmy3fKLIVZvfdvVnaACXDNK1RKBoHegJ74M%2B7XBRkLjaogDMuvAwLORjpNeeHjhqtF%2B5zw4C7TypDv5rHc2QJl5yyqaG1O98cAvXPL9y32JfNv76Rho0kMaLmuOkEVGpeFp3cxN4ln5zgf5sG8IAO90gZpg%3D%3D" width = "100px">
+<img src = "https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/Screenshot_20230515_212728.png?alt=media&token=6f880390-06c3-46f2-9cb7-43409c4d85c5" width = "100px">
 </div>
 
 ````
