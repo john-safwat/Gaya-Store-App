@@ -16,7 +16,7 @@
 
 # Gaya Store App
 
-![all image]([https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/App_Screen_MockupsForFree.png?alt=media&token=a254f2fb-4a3e-468b-861b-1252d6376e1e](https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/gaya%20store.png?alt=media&token=5d80667d-1c9d-42c5-9911-3d10c715514c))
+![all image](https://firebasestorage.googleapis.com/v0/b/e-commerce-5d02e.appspot.com/o/gaya%20store.png?alt=media&token=5d80667d-1c9d-42c5-9911-3d10c715514c)
 ## Description
 
 A Flutter e-commerce app that allows users to browse andpurchase products from a variety of categories. The app featuresa clean and user-friendly UI, as well as a variety of features, suchas product filters, product reviews, and a shopping cart. Build todemonstrate the use of flutter and
