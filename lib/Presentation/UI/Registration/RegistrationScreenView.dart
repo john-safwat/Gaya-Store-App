@@ -196,10 +196,10 @@ class _RegistrationScreenState extends BaseState<RegistrationScreen , Registrati
       barrierDismissible: false,
       theme: ThemeData(
         primaryColor: MyTheme.darkBlue,
-        accentColor: MyTheme.darkBlue,
+        hintColor: MyTheme.darkBlue,
         dialogBackgroundColor: MyTheme.lightBlue,
         disabledColor: Colors.orange,
-        accentTextTheme: const TextTheme(
+        textTheme: const TextTheme(
           bodyText2: TextStyle(color: Colors.white),
         ),
       ),
