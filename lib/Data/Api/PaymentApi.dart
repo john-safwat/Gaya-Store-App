@@ -44,7 +44,6 @@ class PaymentApi {
   }
 
   Future<String> paymentKeyRequest(PaymentKeyRequestDTO paymentKeyRequestDTO)async{
-    print("paymentkry");
     Uri url = Uri.https(baseUrl , paymentKeyRequestURL);
     var response =  await http.post(
       url,
@@ -53,7 +52,6 @@ class PaymentApi {
       },
       body: jsonEncode(paymentKeyRequestDTO.toJson()),
     );
-    print(jsonDecode(response.body));
     return jsonDecode(response.body)['token'];
   }
 

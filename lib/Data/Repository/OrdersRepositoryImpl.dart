@@ -4,7 +4,6 @@ import 'package:ecommerce/Domain/Models/Order/OrdersHistory.dart';
 import 'package:ecommerce/Domain/Models/Payment/Request/OrderRegestration/Items.dart';
 import 'package:ecommerce/Domain/Models/Payment/Request/OrderRegestration/OrderRegestrationRequest.dart';
 import 'package:ecommerce/Domain/Models/Payment/Request/PaymentKeyRequest/PaymentKeyRequest.dart';
-import 'package:ecommerce/Domain/Models/Payment/Response/OrderRegistration/OrderRegistrationResponse.dart';
 import 'package:ecommerce/Domain/Repository/Orders_Repository_Contract.dart';
 
 import '../../Domain/Models/Payment/Request/PaymentKeyRequest/BillingData.dart';
@@ -56,26 +55,25 @@ class OrdersRepositoryImpl implements OrdersRepository{
     total = total * 100;
     var response = await paymentRemoteDataSource.paymentKeyRequest(PaymentKeyRequest(
       authToken: authToken,
-      amountCents: total.toString() ,
+      amountCents: total.toString(),
       currency:  "EGP",
       expiration: 3600,
-      integrationId:1,
-      lockOrderWhenPaid: "false",
+      integrationId:4072452,
       orderId: id,
       billingData: BillingData(
         apartment : "803",
-        email : "claudette09@exa.com",
-        floor : "42",
-        firstName : "Clifford",
-        street : "Ethan Land",
-        building : "8028",
-        phoneNumber : "+86(8)9135210487",
+        email : "johnsafwat362@gmail.com",
+        floor : "5",
+        firstName : "John",
+        street : "Ahmed ragabstreet",
+        building : "27",
+        phoneNumber : "+20 1204984211",
         shippingMethod : "PKG",
-        postalCode : "01898",
-        city : "Jaskolskiburgh",
-        country : "CR",
-        lastName : "Nicolas",
-        state : "Utah"
+        postalCode : "12334",
+        city : "Cairo",
+        country : "EG",
+        lastName : "Safwat",
+        state : "cairo"
       )
     ).toDomain());
     return response;

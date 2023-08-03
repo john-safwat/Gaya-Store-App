@@ -41,10 +41,12 @@ class PlaceOrderUseCaseDTO {
       var orderRegistrationResponse = await repository.orderRegistrationRequest(
         authToken: authResponse,
         products: products.map((e) => Items(id: e.id , orderTotal: e.orderTotal , quantity: e.quantity)).toList(),
-        total: orderResponse.shippingCharge! ~/ 10,
+        total: orderResponse.total!,
         id: orderResponse.orderNumber.toString(),
       );
-      var paymentKeyResponse = await repository.paymentKeyRequest(authToken: authResponse , id: orderRegistrationResponse ,total: orderResponse.shippingCharge! ~/ 10);
+      print(orderResponse);
+      print(orderRegistrationResponse);
+      var paymentKeyResponse = await repository.paymentKeyRequest(authToken: authResponse , id: orderRegistrationResponse ,total: orderResponse.total!);
       return orderResponse;
     }catch(e){
       throw PaymentException("Operation Error");

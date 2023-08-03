@@ -31,7 +31,6 @@ class PaymentKeyRequest {
       billingData : billingData!.toDomain(),
       currency : currency,
       integrationId : integrationId,
-      lockOrderWhenPaid : lockOrderWhenPaid,
     );
   }
 
