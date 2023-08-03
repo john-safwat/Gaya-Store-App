@@ -27,7 +27,7 @@ class _PaymentScreenState extends BaseState<PaymentScreen , PaymentViewModel> im
 
   @override
   PaymentViewModel initViewModel() {
-    return PaymentViewModel(PlaceOrderUseCase(injectOrdersRepository()));
+    return PaymentViewModel(PlaceOrderUseCaseDTO(injectOrdersRepository()));
   }
   @override
   void initState() {

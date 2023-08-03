@@ -1,7 +1,9 @@
 import 'package:ecommerce/Data/Api/ApiManager.dart';
+import 'package:ecommerce/Data/Api/PaymentApi.dart';
 import 'package:ecommerce/Data/Data%20Source/AuthRemoteDataSourceImpl.dart';
 import 'package:ecommerce/Data/Data%20Source/CategoriesRemoteDataSource.dart';
 import 'package:ecommerce/Data/Data%20Source/OrdersRemoteDataSourceImpl.dart';
+import 'package:ecommerce/Data/Data%20Source/PaymentRemoteDataSourceImpl.dart';
 import 'package:ecommerce/Data/Data%20Source/ProductLocalDataSourceImpl.dart';
 import 'package:ecommerce/Data/Data%20Source/ProductRemoteDataSourceImpl.dart';
 import 'package:ecommerce/Data/Data%20Source/UserRemoteDataSourceImpl.dart';
@@ -67,16 +69,24 @@ ProductRepository injectProductRepository(){
   return getProductRepository(getProductRemoteDataSource(getApiManger()),getProductLocalDataSource(getSQLdb()));
 }
 
+PaymentApi getPaymentApi(){
+  return PaymentApi.getPaymentApi();
+}
+
+PaymentRemoteDataSource getPaymentRemoteDataSource(PaymentApi paymentApi){
+  return PaymentRemoteDataSourceImpl(paymentApi);
+}
+
 OrdersRemoteDataSource getOrderRemoteDataSource(ApiManager apiManager){
   return OrdersRemoteDataSourceImpl(apiManager);
 }
 
-OrdersRepository getOrdersRepository(OrdersRemoteDataSource remoteDataSource){
-  return OrdersRepositoryImpl(remoteDataSource);
+OrdersRepository getOrdersRepository(OrdersRemoteDataSource remoteDataSource , PaymentRemoteDataSource paymentRemoteDataSource){
+  return OrdersRepositoryImpl(remoteDataSource , paymentRemoteDataSource);
 }
 
 OrdersRepository injectOrdersRepository(){
-  return getOrdersRepository(getOrderRemoteDataSource(getApiManger()));
+  return getOrdersRepository(getOrderRemoteDataSource(getApiManger()) , getPaymentRemoteDataSource(getPaymentApi()));
 }
 
 UserRemoteDataSource getUserRemoteDataSource(ApiManager apiManager){

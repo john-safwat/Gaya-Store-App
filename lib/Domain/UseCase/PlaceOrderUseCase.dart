@@ -1,11 +1,13 @@
+import 'package:ecommerce/Domain/Exception/PaymentException.dart';
 import 'package:ecommerce/Domain/Models/Order/Order.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderResponse.dart';
+import 'package:ecommerce/Domain/Models/Payment/Request/OrderRegestration/Items.dart';
 import 'package:ecommerce/Domain/Repository/Orders_Repository_Contract.dart';
 
-class PlaceOrderUseCase {
+class PlaceOrderUseCaseDTO {
   OrdersRepository repository;
-  PlaceOrderUseCase(this.repository);
+  PlaceOrderUseCaseDTO(this.repository);
 
   Future<OrderResponse> invoke(
       String? token,
@@ -22,21 +24,30 @@ class PlaceOrderUseCase {
     for(int i = 0 ; i< products!.length ; i++){
       shippingPriceCount += products[i].quantity!.toDouble() * 10;
     }
-
-    Order order = Order(
-      total: total,
-      token: token,
-      shippingState: shippingState,
-      postalCode: postalCode,
-      phoneNumber: phoneNumber,
-      cardNumber: cardNumber,
-      address: address,
-      products: products,
-      shippingPrice: shippingPriceCount,
-      name: name
-    );
-
-    var response = await repository.placeOrder(order);
-    return response;
+    try{
+      var orderResponse = await repository.placeOrder(Order(
+          total: total,
+          token: token,
+          shippingState: shippingState,
+          postalCode: postalCode,
+          phoneNumber: phoneNumber,
+          cardNumber: cardNumber,
+          address: address,
+          products: products,
+          shippingPrice: shippingPriceCount,
+          name: name
+      ));
+      var authResponse = await repository.authRequest();
+      var orderRegistrationResponse = await repository.orderRegistrationRequest(
+        authToken: authResponse,
+        products: products.map((e) => Items(id: e.id , orderTotal: e.orderTotal , quantity: e.quantity)).toList(),
+        total: orderResponse.shippingCharge! ~/ 10,
+        id: orderResponse.orderNumber.toString(),
+      );
+      var paymentKeyResponse = await repository.paymentKeyRequest(authToken: authResponse , id: orderRegistrationResponse ,total: orderResponse.shippingCharge! ~/ 10);
+      return orderResponse;
+    }catch(e){
+      throw PaymentException("Operation Error");
+    }
   }
 }

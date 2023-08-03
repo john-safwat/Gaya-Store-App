@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 
 class PaymentViewModel extends BaseViewModel<PaymentNavigator>{
-  PlaceOrderUseCase useCase ;
+  PlaceOrderUseCaseDTO useCase ;
   PaymentViewModel(this.useCase);
 
   int selectedIndex = 0;
