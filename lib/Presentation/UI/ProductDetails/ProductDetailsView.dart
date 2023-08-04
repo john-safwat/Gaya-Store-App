@@ -110,9 +110,9 @@ class _ProductDetailsScreenState extends BaseState<ProductDetailsScreen ,Product
                       // feedBacks
                       FeedBacksWidget(double.parse(value.product!.rating!.toString()), value.product!.feedBack),
                       // user rating
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const[
+                        children: [
                           Text("Your Rating", style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
@@ -22,13 +23,9 @@ class ProductsListScreen extends StatefulWidget {
   State<ProductsListScreen> createState() => _ProductsListScreenState();
 }
 
-class _ProductsListScreenState extends State<ProductsListScreen>
+class _ProductsListScreenState extends BaseState<ProductsListScreen , ProductsListViewModel>
     implements ProductsListNavigator {
-  ProductsListViewModel viewModel = ProductsListViewModel(
-    GetProductsByCategoryIdUseCase(injectProductRepository()),
-    AddToWishListUseCase(injectProductRepository()),
-    DeleteFromWishListUseCase(injectProductRepository())
-  );
+
   @override
   void initState() {
     super.initState();
@@ -100,25 +97,9 @@ class _ProductsListScreenState extends State<ProductsListScreen>
   }
 
   @override
-  void hideDialog() {
-    MyDialogUtils.hideDialog(context: context);
-  }
-
-  @override
-  void showLoading(String message) {
-    MyDialogUtils.showLoading(context: context, message: message);
-  }
-
-  @override
-  void showSuccessMessage(String message , Function function) {
-    MyDialogUtils.showSuccessDialog(context: context, message: message , action: null);
-  }
-
-  @override
-  showErrorMessage(String message) {
-  }
-
-  @override
-  updateToken(String token) {
+  ProductsListViewModel initViewModel() {
+    return ProductsListViewModel(GetProductsByCategoryIdUseCase(injectProductRepository()),
+        AddToWishListUseCase(injectProductRepository()),
+        DeleteFromWishListUseCase(injectProductRepository()));
   }
 }

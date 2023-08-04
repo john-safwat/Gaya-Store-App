@@ -1,3 +1,4 @@
+import 'package:ecommerce/Core/Base/Base_State.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -16,8 +17,7 @@ class OrderHistoryScreen extends StatefulWidget {
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
 }
 
-class _OrderHistoryScreenState extends State<OrderHistoryScreen>{
-  OrderHistoryViewModel viewModel = OrderHistoryViewModel(GetOrdersHistoryUseCase(injectOrdersRepository()));
+class _OrderHistoryScreenState extends BaseState<OrderHistoryScreen , OrderHistoryViewModel>{
 
   @override
   void initState() {
@@ -60,5 +60,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen>{
         ),
       ),
     );
+  }
+
+  @override
+  OrderHistoryViewModel initViewModel() {
+    return OrderHistoryViewModel(GetOrdersHistoryUseCase(injectOrdersRepository()));
   }
 }

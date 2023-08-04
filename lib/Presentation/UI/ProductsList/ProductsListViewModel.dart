@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce/Core/Base/Base_View_Model.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
@@ -6,13 +7,12 @@ import 'package:ecommerce/Domain/UseCase/GetProductsByCategoryIdUseCase.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListNavigator.dart';
 import 'package:flutter/material.dart';
 
-class ProductsListViewModel extends ChangeNotifier {
+class ProductsListViewModel extends BaseViewModel<ProductsListNavigator> {
   GetProductsByCategoryIdUseCase getProductsByCategoryIdUseCase;
   AddToWishListUseCase addToWishListUseCase;
   DeleteFromWishListUseCase deleteFromWishListUseCase;
   ProductsListViewModel(this.getProductsByCategoryIdUseCase,
       this.addToWishListUseCase, this.deleteFromWishListUseCase);
-  ProductsListNavigator? navigator;
 
   String? errorMessage;
   List<Product>? products;
