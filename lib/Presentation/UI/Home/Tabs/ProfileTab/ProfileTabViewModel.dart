@@ -1,21 +1,22 @@
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetUserDataUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabNavigator.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileTabViewModel extends BaseViewModel<ProfileTabNavigator>{
-  GetUserDataUseCase useCase ;
+class ProfileTabViewModel extends BaseViewModel<ProfileTabNavigator> {
+  GetUserDataUseCase useCase;
+
   DeleteWishListUseCase deleteWishListUseCase;
-  ProfileTabViewModel(this.useCase , this.deleteWishListUseCase);
+
+  ProfileTabViewModel(this.useCase, this.deleteWishListUseCase);
 
   AppConfigProvider? provider;
-  String? errorMessage ;
-  UserData? userData ;
+  String? errorMessage;
 
+  UserData? userData;
 
   void getData() async {
     errorMessage = null;
@@ -24,35 +25,38 @@ class ProfileTabViewModel extends BaseViewModel<ProfileTabNavigator>{
       var response = await useCase.invoke(provider!.token);
       userData = response;
       notifyListeners();
-    }catch (e){
+    } catch (e) {
       errorMessage = e.toString();
       notifyListeners();
     }
   }
 
-  void  onTryAgainPress(){
+  void onTryAgainPress() {
     getData();
   }
 
-  void onOrderHistoryPress(){
+  void onOrderHistoryPress() {
     navigator!.goToOrderHistory();
   }
 
-  void onPersonalDetailsPress(){
+  void onPersonalDetailsPress() {
     navigator!.goToEditUserInfo();
   }
 
-  void onLogoutPress(){
-    navigator!.showDialog("Are You Sure", onConfirmationPress);
+  void onLogoutPress() {
+    navigator!.showQuestionMessage(
+        message: "Are You Sure",
+        posAction: onConfirmationPress,
+        posActionTitle: "ok",
+        negativeActionTitle: "Cancel");
   }
-  void onConfirmationPress()async{
-    navigator!.hideDialog();
-    navigator!.showLoading("Logging You Out");
+
+  void onConfirmationPress() async {
+    navigator!.showLoading(message: "Logging You Out");
     var response = await deleteWishListUseCase.invoke();
     final pref = await SharedPreferences.getInstance();
     await pref.setString("token", '');
-    navigator!.hideDialog();
+    navigator!.goBack();
     navigator!.goToLoginScreen();
   }
-
 }

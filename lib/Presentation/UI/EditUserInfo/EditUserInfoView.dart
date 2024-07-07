@@ -1,7 +1,6 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/UpdateUserDataUseCase.dart';
 import 'package:ecommerce/Presentation/UI/EditUserInfo/EditUserInfoNavigator.dart';
@@ -166,7 +165,7 @@ class _EditUserInfoScreenState extends BaseState<EditUserInfoScreen , EditUserIn
         dialogBackgroundColor: MyTheme.lightBlue,
         disabledColor: Colors.orange,
         textTheme: const TextTheme(
-          bodyText2: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
     );

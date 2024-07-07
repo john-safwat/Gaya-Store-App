@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import "package:async/async.dart";
 import 'package:ecommerce/Data/Models/Cart/CartUpdateResponseDTO.dart';
 import 'package:ecommerce/Data/Models/Order/OrderHistoryResponseDTO.dart';
@@ -10,8 +11,9 @@ import 'package:ecommerce/Data/Models/User/CreateUserResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/LoginResponseDTO.dart';
 import 'package:ecommerce/Data/Models/User/UserDataResponseDTO.dart';
 import 'package:ecommerce/Domain/Models/Order/Order.dart';
-import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+
 import '../Models/Cart/CartItemsResponseDTO.dart';
 import '../Models/Categories/CategoriesResponseDTO.dart';
 

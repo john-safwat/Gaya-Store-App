@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'dart:ui';
+
 import 'package:blur/blur.dart';
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/UseCase/AuthUploadUserImageUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
@@ -29,16 +28,6 @@ class _PickImageScreenState extends BaseState<PickImageScreen , PickImageScreenV
   @override
   PickImageScreenViewModel initViewModel() {
     return PickImageScreenViewModel(AuthUploadUserImageUseCase(injectAuthRepository()));
-  }
-  @override
-  void initState() {
-    super.initState();
-    viewModel.provider = Provider.of<AppConfigProvider>(context,listen: false);
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.provider = null;
   }
 
   @override
@@ -122,8 +111,8 @@ class _PickImageScreenState extends BaseState<PickImageScreen , PickImageScreenV
                           },
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all(MyTheme.blue),
-                              shape: MaterialStateProperty.all(
+                                  WidgetStateProperty.all(MyTheme.blue),
+                              shape: WidgetStateProperty.all(
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(10)))),
@@ -150,7 +139,6 @@ class _PickImageScreenState extends BaseState<PickImageScreen , PickImageScreenV
 
   @override
   goToHomeScreen() {
-    Navigator.pop(context);
     Navigator.popAndPushNamed(context, HomeScreen.routeName);
   }
 }

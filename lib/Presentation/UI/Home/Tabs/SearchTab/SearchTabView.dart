@@ -1,4 +1,4 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
@@ -11,8 +11,6 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/SearchTab/SearchTabViewModel
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scroll_app_bar/scroll_app_bar.dart';
-
 class SearchTabView extends StatefulWidget {
   const SearchTabView({Key? key}) : super(key: key);
 
@@ -37,66 +35,29 @@ class _SearchTabViewState extends BaseState<SearchTabView , SearchTabViewModel>
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          toolbarHeight: 80,
+          title: TextFormField(
+            style: const TextStyle(
+              color: MyTheme.darkBlue,
+              fontSize: 18,
+            ),
+            cursorColor: MyTheme.darkBlue,
+            onChanged: (query) {
+              viewModel.getProducts(query);
+            },
+            decoration: const InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+                color: MyTheme.darkBlue,
+              ),
+              hintText: "Search",
+            ),
+          ),
+        ),
         body: Column(
           children: [
-            ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(bottom: Radius.circular(15)),
-              child: ScrollAppBar(
-                controller: controller,
-                backgroundColor: Colors.transparent,
-                toolbarHeight: 80,
-                title: TextFormField(
-                  style: const TextStyle(
-                    color: MyTheme.darkBlue,
-                    fontSize: 18,
-                  ),
-                  cursorColor: MyTheme.darkBlue,
-                  onChanged: (query) {
-                    viewModel.getProducts(query);
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: MyTheme.darkBlue,
-                    ),
-                    fillColor: MyTheme.backGround,
-                    hintText: "Search",
-                    hintStyle: const TextStyle(
-                      color: MyTheme.darkBlue,
-                      fontSize: 18,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 2, color: Colors.red),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 2, color: MyTheme.lightBlue),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Consumer<SearchTabViewModel>(
               builder: (context, value, child) {
                 if (value.errorMessage != null) {

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
+
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/Models/Products/ProductDetails.dart';
 import 'package:ecommerce/Domain/UseCase/AddProductToCartUseCase.dart';
@@ -8,7 +8,6 @@ import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductDetailsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsNavigator.dart';
-import 'package:flutter/material.dart';
 
 class ProductDetailsViewModel extends BaseViewModel <ProductDetailsNavigator>{
   GetProductDetailsUseCase getProductDetailsUseCase;
@@ -20,14 +19,13 @@ class ProductDetailsViewModel extends BaseViewModel <ProductDetailsNavigator>{
 
   ProductDetails? product;
   String? errorMessage;
-  AppConfigProvider? provider;
   String? id;
   Product? abstractProduct;
   String image = '';
 
   void getProductDetails() async {
     try {
-      var response = await getProductDetailsUseCase.invoke(id!, provider!.token);
+      var response = await getProductDetailsUseCase.invoke(id!, appConfigProvider!.token);
       product = response;
       image = product!.images![0];
       notifyListeners();
@@ -50,10 +48,10 @@ class ProductDetailsViewModel extends BaseViewModel <ProductDetailsNavigator>{
   }
 
   void onAddToCartPress(String token) async{
-    navigator!.showLoading("Loading ...");
+    navigator!.showLoading(message: "Loading ...");
     var response = await addProductTOCartUseCase.invoke(product!.id!.toString(), token);
-    navigator!.hideDialog();
-    navigator!.showSuccessMessage(response ?? "data not found" , (){navigator!.hideDialog();});
+    navigator!.goBack();
+    navigator!.showSuccessMessage(message: response ?? "data not found" , posActionTitle: "ok");
   }
 
 }

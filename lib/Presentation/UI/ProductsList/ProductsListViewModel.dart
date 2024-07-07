@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetProductsByCategoryIdUseCase.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListNavigator.dart';
-import 'package:flutter/material.dart';
-
 class ProductsListViewModel extends BaseViewModel<ProductsListNavigator> {
   GetProductsByCategoryIdUseCase getProductsByCategoryIdUseCase;
   AddToWishListUseCase addToWishListUseCase;
@@ -45,15 +44,15 @@ class ProductsListViewModel extends BaseViewModel<ProductsListNavigator> {
 
   void onFavoritePress(Product product) async {
     if (!product.isInWishList!) {
-      navigator!.showLoading("Loading .... ");
+      navigator!.showLoading(message: "Loading .... ");
       var response = await addToWishListUseCase.invoke(product);
-      navigator!.hideDialog();
-      navigator!.showSuccessMessage(response , (){});
+      navigator!.goBack();
+      navigator!.showSuccessMessage(message: response , posActionTitle: "ok");
     }else {
-      navigator!.showLoading("Loading .... ");
+      navigator!.showLoading(message: "Loading .... ");
       var response = await deleteFromWishListUseCase.invoke(int.parse(product.id!.toString()));
-      navigator!.hideDialog();
-      navigator!.showSuccessMessage(response , (){});
+      navigator!.goBack();
+      navigator!.showSuccessMessage(message: response , posActionTitle: "ok");
     }
   }
 }

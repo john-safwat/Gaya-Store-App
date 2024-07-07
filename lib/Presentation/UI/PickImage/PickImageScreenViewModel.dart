@@ -1,46 +1,53 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Domain/UseCase/AuthUploadUserImageUseCase.dart';
 import 'package:ecommerce/Presentation/UI/PickImage/PickImageScreenNavidator.dart';
-import 'package:flutter/material.dart';
 
-class PickImageScreenViewModel extends BaseViewModel<PickImageScreenNavigator>{
-  AuthUploadUserImageUseCase useCase ;
+class PickImageScreenViewModel extends BaseViewModel<PickImageScreenNavigator> {
+  AuthUploadUserImageUseCase useCase;
+
   PickImageScreenViewModel(this.useCase);
-  AppConfigProvider? provider ;
 
-  void uploadImage (File? image)async{
-    if (image != null){
-      try{
-        navigator!.showLoading("Uploading Your Image");
-        var response =await useCase.uploadUserImage(image: image, token: provider!.token);
-        if(response=='Image Uploaded'){
-          navigator!.hideDialog();
-          navigator!.showSuccessMessage("Image Uploaded Successfully",goToHomeScreen);
-        }else{
-          navigator!.hideDialog();
-          navigator!.showErrorMessage("Can't Upload the Image");
+  void uploadImage(File? image) async {
+    if (image != null) {
+      try {
+        navigator!.showLoading(message: "Uploading Your Image");
+        var response = await useCase.uploadUserImage(
+            image: image, token: appConfigProvider!.token);
+        if (response == 'Image Uploaded') {
+          navigator!.goBack();
+          navigator!.showSuccessMessage(
+              message: "Image Uploaded Successfully",
+              posActionTitle: "ok",
+              posAction: goToHomeScreen);
+        } else {
+          navigator!.goBack();
+          navigator!.showFailMessage(
+              message: "Can't Upload the Image", posActionTitle: "ok");
         }
-      }on IOException{
-        navigator!.hideDialog();
-        navigator!.showErrorMessage("Check Your Internet");
-      } on TimeoutException catch (e){
-        navigator!.hideDialog();
-        navigator!.showErrorMessage("Request Timed Out");
-      }catch (e){
-        navigator!.hideDialog();
-        navigator!.showErrorMessage(e.toString());
+      } on IOException {
+        navigator!.goBack();
+        navigator!.showFailMessage(
+            message: "Check Your Internet", posActionTitle: "ok");
+      } on TimeoutException catch (e) {
+        navigator!.goBack();
+        navigator!.showFailMessage(
+            message: "Request Timed Out", posActionTitle: "ok");
+      } catch (e) {
+        navigator!.goBack();
+        navigator!.showFailMessage(message: e.toString(), posActionTitle: "ok");
       }
-    } else{
-      navigator!.showSuccessMessage("No Image ... No Problem \nYou Can Update It any Time",goToHomeScreen);
+    } else {
+      navigator!.showSuccessMessage(
+          message: "No Image ... No Problem \nYou Can Update It any Time",
+          posActionTitle: "ok",
+          posAction: goToHomeScreen);
     }
   }
 
-  void goToHomeScreen(){
-    navigator!.hideDialog();
+  void goToHomeScreen() {
     navigator!.goToHomeScreen();
   }
 }

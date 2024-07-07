@@ -1,11 +1,10 @@
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/Cart/CartProducts.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/UseCase/DeleteProductFromCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCartItemsUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabNavigator.dart';
-import 'package:flutter/material.dart';
 
 class CartTabViewModel extends BaseViewModel<CartTabNavigator>{
   GetCartItemsUseCase getCartItemsUseCase;
@@ -57,10 +56,10 @@ class CartTabViewModel extends BaseViewModel<CartTabNavigator>{
   }
 
   void onSlidablePress(String productId) async{
-    navigator!.showLoading("Loading....");
+    navigator!.showLoading(message: "Loading....");
     var response = await deleteProductFormCartUseCase.invoke(productId, provider!.token);
-    navigator!.hideDialog();
-    navigator!.showSuccessMessage(response! , (){navigator!.hideDialog();});
+    navigator!.goBack();
+    navigator!.showSuccessMessage(message: response!,posActionTitle: "ok");
     getCartItems();
   }
 

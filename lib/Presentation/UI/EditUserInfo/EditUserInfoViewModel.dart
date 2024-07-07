@@ -1,4 +1,4 @@
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Domain/Models/User/UserData.dart';
 import 'package:ecommerce/Domain/UseCase/UpdateUserDataUseCase.dart';
@@ -73,29 +73,29 @@ class EditUserInfoViewModel extends BaseViewModel<EditUserInfoNavigator> {
   }
 
   void onUpdateButtonPress() async {
-    navigator!.showLoading("Loading ...");
+    navigator!.showLoading(message: "Loading ...");
     if(passwordController.text.isNotEmpty){
       if(passwordController.text != rePasswordController.text){
-        navigator!.hideDialog();
-        navigator!.showErrorMessage("Password and Password Confirmation aren't the same");
+        navigator!.goBack();
+        navigator!.showFailMessage(message:"Password and Password Confirmation aren't the same" , posActionTitle: "ok");
       }else {
         try {
           var response = await useCase.invoke(provider!.token, nameController.text, phoneController.text, date.toString(), passwordController.text);
-          navigator!.hideDialog();
-          navigator!.showSuccessMessage(response! , (){navigator!.hideDialog();});
+          navigator!.goBack();
+          navigator!.showSuccessMessage(message :response ??"Non",posActionTitle: "ok");
         }catch (e){
-          navigator!.hideDialog();
-          navigator!.showErrorMessage(e.toString());
+          navigator!.goBack();
+          navigator!.showFailMessage(message: e.toString() , posActionTitle: "ok");
         }
       }
     }else{
       try {
         var response = await useCase.invoke(provider!.token, nameController.text, phoneController.text, date.toString(), null);
-        navigator!.hideDialog();
-        navigator!.showSuccessMessage(response!, (){navigator!.hideDialog();});
+        navigator!.goBack();
+        navigator!.showSuccessMessage(message: response!,posActionTitle: "ok");
       }catch (e){
-        navigator!.hideDialog();
-        navigator!.showErrorMessage(e.toString());
+        navigator!.goBack();
+        navigator!.showFailMessage(message :e.toString() , posActionTitle: "Ok");
       }
     }
   }

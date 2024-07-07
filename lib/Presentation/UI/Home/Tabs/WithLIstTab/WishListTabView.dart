@@ -1,4 +1,4 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';

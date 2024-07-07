@@ -1,4 +1,4 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
@@ -8,11 +8,11 @@ import 'package:ecommerce/Domain/UseCase/DeleteFromWishListUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetCategoriesUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/GetNewAddedProductUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/ProductWidget.dart';
+import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/HomeTabViewModel.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/BannerSlideShow.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/HomeTab/Widgets/Categories.dart';
-import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsView.dart';
 import 'package:ecommerce/Presentation/UI/ProductsList/ProductsListView.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,7 @@ class _HomeTabViewState extends BaseState<HomeTabView , HomeTabViewModel> implem
                         padding: const EdgeInsets.symmetric(vertical: 5.0 ,horizontal: 15),
                         child: Text(
                           "Categories",
-                          style: Theme.of(context).textTheme.headline1,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ],
@@ -103,7 +103,7 @@ class _HomeTabViewState extends BaseState<HomeTabView , HomeTabViewModel> implem
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
                           "New Products",
-                          style: Theme.of(context).textTheme.headline1,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ],
