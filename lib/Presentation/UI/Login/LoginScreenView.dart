@@ -1,7 +1,5 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
-import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenViewModel.dart';
@@ -19,218 +17,147 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends BaseState<LoginScreen , LoginScreenViewModel> implements LoginScreenNavigator{
-
-  final formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  bool isVisible = false;
-
+class _LoginScreenState extends BaseState<LoginScreen, LoginScreenViewModel>
+    implements LoginScreenNavigator {
   @override
   LoginScreenViewModel initViewModel() {
-    return LoginScreenViewModel(useCase:AuthLoginUserCase( repository: injectAuthRepository()),);
+    return LoginScreenViewModel(
+      useCase: AuthLoginUserCase(repository: injectAuthRepository()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => viewModel,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/Logo.png",
-                        height: 150,
+      child: Consumer<LoginScreenViewModel>(
+        builder: (context, value, child) => Scaffold(
+          body: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.all(20),
+            children: [
+              const SizedBox(height: 50,),
+              Form(
+                key: viewModel.formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/Logo.png",
+                          height: 200,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // the welcome text
+                    Text(
+                      'Welcome Back To Gaya Store',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).secondaryHeaderColor),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    // text field
+                    TextFormField(
+                      validator: (value) => viewModel.emailValidation(value!),
+                      controller: viewModel.emailController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      enableIMEPersonalizedLearning: true,
+                      autocorrect: true,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        hintText: "Email",
+                        prefixIcon: Icon(Icons.email_outlined),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // the welcome text
-                  const Text(
-                    'Welcome Back To Gaya Store',
-                    style: TextStyle(
-                        color: MyTheme.blue,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // text field
-                  TextFormField(
-                    validator: (value) => viewModel.emailValidation(value!),
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    enableIMEPersonalizedLearning: true,
-                    autocorrect: true,
-                    style: const TextStyle(
-                      height: 1.5,
-                      color: MyTheme.blue,
-                      fontSize: 18,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: "Email",
-                      hintStyle: const TextStyle(color: MyTheme.blue),
-                      contentPadding: const EdgeInsets.all(12),
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      prefixIconColor: MyTheme.blue,
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: Colors.red)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: Colors.red)),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // text field
-                  TextFormField(
-                    validator: (value) => viewModel.passwordValidation(value!),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: passwordController,
-                    enableIMEPersonalizedLearning: true,
-                    autocorrect: true,
-                    obscureText: !isVisible,
-                    style: const TextStyle(
-                      height: 1.5,
-                      color: MyTheme.blue,
-                      fontSize: 18,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      hintStyle: const TextStyle(color: MyTheme.blue),
-                      contentPadding: const EdgeInsets.all(12),
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      prefixIconColor: MyTheme.blue,
-                      suffix: InkWell(
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          onTap: () {
-                            setState(() {
-                              isVisible = !isVisible;
-                            });
-                          },
-                          child: Icon(
-                            isVisible
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            color: MyTheme.blue,
-                          )),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: Colors.red)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: Colors.red)),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(width: 2, color: MyTheme.blue)),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Forget Password ?",
-                            style: TextStyle(fontSize: 18, color: MyTheme.blue),
-                          )),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          if(formKey.currentState!.validate()){
-                            viewModel.onLoginButtonPress(emailController.text , passwordController.text);
-                          }
-                        },
-                        style: ButtonStyle(
-                            shape:
-                                MaterialStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    // text field
+                    TextFormField(
+                      validator: (value) =>
+                          viewModel.passwordValidation(value!),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: viewModel.passwordController,
+                      autocorrect: true,
+                      obscureText: !viewModel.isVisible,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: InkWell(
+                            overlayColor:
+                            WidgetStateProperty.all(Colors.transparent),
+                            onTap: (){
+                              viewModel.changeVisibilityState();
+                            },
+                            child: Icon(
+                              viewModel.isVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
                             )),
-                            backgroundColor:
-                                MaterialStateProperty.all(MyTheme.blue)),
-                        child: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            "Login",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Forget Password ?",
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).secondaryHeaderColor),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 15,),
+                    ElevatedButton(
+                      onPressed: () {
+                        viewModel.onLoginButtonPress();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Login",
+                            ),
+                          ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don’t Have Account ?",
-                            style: TextStyle(
-                                color: MyTheme.darkBlue,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                viewModel.onCreateAccountButtonPress();
-                              },
-                              child: const Text(
-                                "Create Account",
-                                style: TextStyle(
-                                    color: MyTheme.blue,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ))
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don’t Have Account ?",
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).secondaryHeaderColor),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              viewModel.onCreateAccountButtonPress();
+                            },
+                            child: Text(
+                              "Create Account",
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,),
+                            ))
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -247,11 +174,9 @@ class _LoginScreenState extends BaseState<LoginScreen , LoginScreenViewModel> im
     Navigator.popAndPushNamed(context, HomeScreen.routeName);
   }
 
-
   @override
   updateToken(String token) {
     var provider = Provider.of<AppConfigProvider>(context, listen: false);
     provider.updateToken(token);
   }
-
 }

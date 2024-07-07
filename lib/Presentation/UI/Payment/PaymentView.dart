@@ -1,8 +1,6 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Order/OrderProducts.dart';
 import 'package:ecommerce/Domain/UseCase/PlaceOrderUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Home/HomeScreenView.dart';
@@ -28,16 +26,6 @@ class _PaymentScreenState extends BaseState<PaymentScreen , PaymentViewModel> im
   @override
   PaymentViewModel initViewModel() {
     return PaymentViewModel(PlaceOrderUseCaseDTO(injectOrdersRepository()));
-  }
-  @override
-  void initState() {
-    super.initState();
-    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.provider = null;
   }
 
   @override

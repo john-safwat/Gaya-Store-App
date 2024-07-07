@@ -1,13 +1,22 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Domain/UseCase/AuthLoginUserCase.dart';
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenNavigator.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreenViewModel extends BaseViewModel<LoginScreenNavigator> {
-  AuthLoginUserCase useCase ;
+  AuthLoginUserCase useCase;
+
   LoginScreenViewModel({required this.useCase});
+
+  final formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  bool isVisible = false;
+
   // validate on the email form
   String? emailValidation(String input) {
     if (input.isEmpty) {
@@ -33,37 +42,51 @@ class LoginScreenViewModel extends BaseViewModel<LoginScreenNavigator> {
   }
 
   // code on login press
-  void onLoginButtonPress(String email , String password) async {
-    navigator!.showLoading("Logging You In");
-    try{
-      var response = await useCase.login(email: email, password: password);
-      if (response.statusCode == '200'){
-        navigator!.hideDialog();
-        navigator!.updateToken(response.token!);
-        navigator!.showSuccessMessage(response.message!, goToHome);
-      }else{
-        navigator!.hideDialog();
-        navigator!.showErrorMessage(response.message!);
+  void onLoginButtonPress() async {
+    if (formKey.currentState!.validate()) {
+      navigator!.showLoading(message: "Logging You In");
+      try {
+        var response = await useCase.login(
+            email: emailController.text, password: passwordController.text);
+        if (response.statusCode == '200') {
+          navigator!.goBack();
+          navigator!.updateToken(response.token!);
+          navigator!.showSuccessMessage(
+              message: response.message!,
+              posAction: goToHome,
+              posActionTitle: "ok");
+        } else {
+          navigator!.goBack();
+          navigator!.showFailMessage(
+              message: response.message!, posActionTitle: "ok");
+        }
+      } on IOException {
+        navigator!.goBack();
+        navigator!.showFailMessage(
+            message: "Check Your Internet", posActionTitle: "ok");
+      } on TimeoutException catch (e) {
+        navigator!.goBack();
+        navigator!.showFailMessage(
+            message: "Request Timed Out", posActionTitle: "ok");
+      } catch (e) {
+        navigator!.goBack();
+        navigator!.showFailMessage(message: e.toString(), posActionTitle: "ok");
       }
-    }on IOException{
-      navigator!.hideDialog();
-      navigator!.showErrorMessage("Check Your Internet");
-    } on TimeoutException catch (e){
-      navigator!.hideDialog();
-      navigator!.showErrorMessage("Request Timed Out");
-    }catch (e){
-      navigator!.hideDialog();
-      navigator!.showErrorMessage(e.toString());
     }
   }
+
   // code on create Account press
-  void onCreateAccountButtonPress(){
+  void onCreateAccountButtonPress() {
     navigator!.goToCreateAccountScreen();
   }
 
+  changeVisibilityState() {
+    isVisible = !isVisible;
+    notifyListeners();
+  }
+
   // code go to home screen
-  void goToHome(){
-    navigator!.hideDialog();
+  void goToHome() {
     navigator!.goToHomeScreen();
   }
 }

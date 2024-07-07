@@ -1,5 +1,4 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -14,7 +13,6 @@ import 'package:ecommerce/Presentation/UI/Payment/PaymentView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../Core/Utils/Dialog_Utils.dart';
 
 class CartTabView extends StatefulWidget {
   const CartTabView({Key? key}) : super(key: key);

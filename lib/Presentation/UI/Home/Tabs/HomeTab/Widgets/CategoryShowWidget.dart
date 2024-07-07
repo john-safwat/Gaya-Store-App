@@ -34,7 +34,7 @@ class CategoryShowWidget extends StatelessWidget {
               Text(
                 categories.name!,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.bodySmall,
               )
             ],
           ),

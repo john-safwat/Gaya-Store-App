@@ -13,7 +13,6 @@ import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenView.da
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dcdg/dcdg.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

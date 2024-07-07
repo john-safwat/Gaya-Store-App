@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ecommerce/Core/Base/Base_View_Model.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
+import 'package:ecommerce/Core/Base/BaseViewModel.dart';
 import 'package:ecommerce/Domain/UseCase/AuthRegistrationUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Registration/RegistrationScreenNavigator.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +10,10 @@ import 'package:intl/intl.dart';
 class RegistrationScreenViewModel extends BaseViewModel<RegistrationScreenNavigator>{
   AuthRegistrationUseCase useCase;
   RegistrationScreenViewModel(this.useCase);
-  AppConfigProvider? provider ;
 
 
   DateTime date = DateTime.now();
-
+  bool isVisible = false;
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -74,41 +72,57 @@ class RegistrationScreenViewModel extends BaseViewModel<RegistrationScreenNaviga
   // signup method
   void register()async {
     if (passwordController.text != rePasswordController.text){
-      navigator!.showErrorMessage("Not The Same Password");
+      navigator!.showFailMessage(message: "Not The Same Password" , posActionTitle: "Ok");
       return;
     }
     String datetime = DateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-    try{
-      navigator!.showLoading("Creating Your Account");
-      var response = await useCase.invoke(name: nameController.text,
-                          email: emailController.text,
-                          password: passwordController.text,
-                          phone: phoneController.text,
-                          dateTime: datetime);
-      navigator!.hideDialog();
-      if (response.statusCode == "409"){
-        navigator!.showErrorMessage(response.message!);
-      }else if (response.statusCode == "400") {
-        navigator!.showErrorMessage(response.message!);
-      }else {
-        navigator!.updateToken(response.token!);
-        navigator!.showSuccessMessage(response.message!, goToHome);
+    if(formKey.currentState!.validate()){
+      try{
+        navigator!.showLoading(message: "Creating Your Account");
+        var response = await useCase.invoke(name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            phone: phoneController.text,
+            dateTime: datetime);
+        navigator!.goBack();
+        if (response.statusCode == "409"){
+          navigator!.showFailMessage(message: response.message! , posActionTitle: "ok");
+        }else if (response.statusCode == "400") {
+          navigator!.showFailMessage(message: response.message! , posActionTitle: "ok");
+        }else {
+          appConfigProvider!.updateToken(response.token??"");
+          navigator!.showSuccessMessage(message:response.message!, posAction: goToHome , posActionTitle: "ok");
+        }
+      }on IOException{
+        navigator!.goBack();
+        navigator!.showFailMessage(message: "Check Your Internet" , posActionTitle: "ok");
+      } on TimeoutException catch (e){
+        navigator!.goBack();
+        navigator!.showFailMessage(message: "Request Timed Out" , posActionTitle: "ok");
+
+      }catch (e){
+        navigator!.goBack();
+        navigator!.showFailMessage(message: e.toString() , posActionTitle: "ok");
       }
-    }on IOException{
-      navigator!.hideDialog();
-      navigator!.showErrorMessage("Check Your Internet");
-    } on TimeoutException catch (e){
-      navigator!.hideDialog();
-      navigator!.showErrorMessage("Request Timed Out");
-    }catch (e){
-      navigator!.hideDialog();
-      navigator!.showErrorMessage(e.toString());
     }
   }
 
   void goToHome(){
-    navigator!.hideDialog();
+    navigator!.goBack();
     navigator!.goToPickImageScreen();
+  }
+
+  changeDate(DateTime? dateTime){
+    if(dateTime != null){
+      date = dateTime;
+      notifyListeners();
+    }
+  }
+
+
+  void changeVisibilityState() {
+    isVisible = !isVisible;
+    notifyListeners();
   }
 
 }

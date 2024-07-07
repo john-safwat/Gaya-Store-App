@@ -1,8 +1,6 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
-import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddProductToCartUseCase.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
@@ -14,11 +12,11 @@ import 'package:ecommerce/Presentation/UI/ProductDetails/ProductDetailsViewModel
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/BrandAndRatingWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/ButtonsWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/DescriptionImageWidget.dart';
+import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/DescriptionWIdget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/FeedBacksWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/ImageWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/ImagesListWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/NameWidget.dart';
-import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/DescriptionWIdget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/PriceWidget.dart';
 import 'package:ecommerce/Presentation/UI/ProductDetails/Widgets/UserRatingWidget.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +39,6 @@ class _ProductDetailsScreenState extends BaseState<ProductDetailsScreen ,Product
       DeleteFromWishListUseCase(injectProductRepository()),
       AddProductToCartUseCase(injectProductRepository()),
     );
-  }
-  @override
-  void initState() {
-    super.initState();
-    viewModel.provider = Provider.of<AppConfigProvider>(context, listen: false);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.provider = null;
   }
 
   @override

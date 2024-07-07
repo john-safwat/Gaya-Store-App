@@ -1,7 +1,6 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Core/Utils/Dialog_Utils.dart';
 import 'package:ecommerce/Domain/Models/Categories/Categories.dart';
 import 'package:ecommerce/Domain/Models/Products/Prdouct.dart';
 import 'package:ecommerce/Domain/UseCase/AddToWishListUseCase.dart';
@@ -25,18 +24,6 @@ class ProductsListScreen extends StatefulWidget {
 
 class _ProductsListScreenState extends BaseState<ProductsListScreen , ProductsListViewModel>
     implements ProductsListNavigator {
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel.navigator = this;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.navigator = null;
-  }
 
   @override
   Widget build(BuildContext context) {

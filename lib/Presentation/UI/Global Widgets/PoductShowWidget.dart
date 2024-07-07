@@ -66,11 +66,7 @@ class ProductShowWidget extends StatelessWidget {
                       children: [
                         Text(
                           product.name!,
-                          style:const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: MyTheme.darkBlue,
-                          ),
+                          style:Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -100,11 +96,7 @@ class ProductShowWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Text(
                             '${product.price!} EGP',
-                            style:const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: MyTheme.darkBlue
-                            ),
+                            style:Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
                         ElevatedButton(
@@ -112,16 +104,16 @@ class ProductShowWidget extends StatelessWidget {
                             onViewNowPress(product);
                           },
                           style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(MyTheme.darkBlue),
-                              shape: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(MyTheme.darkBlue),
+                              shape: WidgetStateProperty.all(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   )
                               )
                           ),
-                          child:Row(
+                          child:const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const[
+                            children: [
                               Text(
                                 "View Now",
                                 style: TextStyle(

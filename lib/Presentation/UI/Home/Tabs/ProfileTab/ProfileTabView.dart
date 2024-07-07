@@ -1,6 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
@@ -13,9 +13,8 @@ import 'package:ecommerce/Presentation/UI/Home/Tabs/ProfileTab/ProfileTabViewMod
 import 'package:ecommerce/Presentation/UI/Login/LoginScreenView.dart';
 import 'package:ecommerce/Presentation/UI/OrderHistory/OrderHistoryView.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../Core/Utils/Dialog_Utils.dart';
 
 class ProfileTabView extends StatefulWidget {
   const ProfileTabView({Key? key}) : super(key: key);
@@ -70,7 +69,7 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
                         alignment: Alignment.bottomCenter,
                         children: [
                           value.userData!.image == null
-                              ? Image.asset('assets/images/ImageNotFound.jpg')
+                              ? Container(color: Theme.of(context).primaryColor, height: 250,)
                               : CachedNetworkImage(
                                   imageUrl: value.userData!.image!,
                                   imageBuilder: (context, imageProvider) => Image(
@@ -116,11 +115,10 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             value.userData!.image == null
-                                ? const CircleAvatar(
+                                ? CircleAvatar(
                                     radius: 70,
-                                    backgroundImage: AssetImage(
-                                        'assets/images/ImageNotFound.jpg'),
-                                  )
+                                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                                    child: Lottie.asset("assets/animations/noImage.json"))
                                 : CircleAvatar(
                                     radius: 70,
                                     backgroundImage:
@@ -185,16 +183,16 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
                                 value.onPersonalDetailsPress();
                               },
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
+                                  backgroundColor: WidgetStateProperty.all(
                                       MyTheme.lightBlue),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15)))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.account_circle_outlined,
                                       color: MyTheme.darkBlue,
@@ -219,16 +217,16 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
                                 viewModel.onOrderHistoryPress();
                               },
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
+                                  backgroundColor: WidgetStateProperty.all(
                                       MyTheme.lightBlue),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15)))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.local_mall_outlined,
                                       color: MyTheme.darkBlue,
@@ -253,16 +251,16 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
                                 value.onLogoutPress();
                               },
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
+                                  backgroundColor: WidgetStateProperty.all(
                                       MyTheme.lightBlue),
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15)))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(10.0),
                                 child: Row(
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.logout,
                                       color: Colors.red,
@@ -307,8 +305,4 @@ class _ProfileTabViewState extends BaseState<ProfileTabView , ProfileTabViewMode
     Navigator.popAndPushNamed(context, LoginScreen.routeName);
   }
 
-  @override
-  void showDialog(String message, Function onConfirmationPress) {
-    MyDialogUtils.showConfirmationDialog(context: context, message: message , action: onConfirmationPress);
-  }
 }

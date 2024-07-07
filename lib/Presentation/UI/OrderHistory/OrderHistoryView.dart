@@ -1,9 +1,10 @@
-import 'package:ecommerce/Core/Base/Base_State.dart';
+import 'package:ecommerce/Core/Base/BaseState.dart';
 import 'package:ecommerce/Core/DI/di.dart';
 import 'package:ecommerce/Core/Provider/AppConfigProvider.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
 import 'package:ecommerce/Domain/UseCase/GetOrdersHistoryUseCase.dart';
 import 'package:ecommerce/Presentation/UI/Global%20Widgets/errorWidget.dart';
+import 'package:ecommerce/Presentation/UI/OrderHistory/OrderHistoryNavigator.dart';
 import 'package:ecommerce/Presentation/UI/OrderHistory/OrderHistoryViewModel.dart';
 import 'package:ecommerce/Presentation/UI/OrderHistory/Widgets/OrdersCardWidget.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,12 @@ class OrderHistoryScreen extends StatefulWidget {
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
 }
 
-class _OrderHistoryScreenState extends BaseState<OrderHistoryScreen , OrderHistoryViewModel>{
+class _OrderHistoryScreenState extends BaseState<OrderHistoryScreen , OrderHistoryViewModel> implements OrderHistoryNavigator{
 
   @override
   void initState() {
     super.initState();
-    viewModel.provider = Provider.of<AppConfigProvider>(context , listen: false);
     viewModel.getData();
-
   }
   @override
   Widget build(BuildContext context) {

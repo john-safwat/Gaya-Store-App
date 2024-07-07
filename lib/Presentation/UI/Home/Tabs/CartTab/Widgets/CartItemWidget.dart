@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/Core/Theme/MyTheme.dart';
-import 'package:ecommerce/Domain/Models/Cart/CartProduct.dart';
 import 'package:ecommerce/Presentation/UI/Home/Tabs/CartTab/CartTabViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -30,22 +29,26 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         color: MyTheme.lightBlue,
         borderRadius: BorderRadius.circular(15),
       ),
-      height:170,
+      height: 170,
       child: Slidable(
         endActionPane: ActionPane(
-          key:const ValueKey(1),
+          key: const ValueKey(1),
           extentRatio: 0.3,
-          motion:const ScrollMotion(),
+          motion: const ScrollMotion(),
           children: [
             SlidableAction(
               backgroundColor: Colors.red,
-              borderRadius: const BorderRadius.only(topRight: Radius.circular(20) ,bottomRight: Radius.circular(20)),
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
               flex: 2,
               autoClose: true,
-              label: "Delete" ,
-              icon: Icons.delete ,
+              label: "Delete",
+              icon: Icons.delete,
               onPressed: (context) {
-                widget.onSlibablePress(viewModel.products![widget.productIndex].productId.toString());
+                widget.onSlibablePress(viewModel
+                    .products![widget.productIndex].productId
+                    .toString());
               },
             ),
           ],
@@ -89,11 +92,10 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             .products![widget.productIndex].cartProduct!.name!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: MyTheme.darkBlue,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: Container()),
                       Row(
@@ -127,17 +129,16 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         '${viewModel.products![widget.productIndex].cartProduct!.price!.toString()} EGP',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: MyTheme.darkBlue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Container(
-                        height: 40,
+                        height: 30,
                         decoration: BoxDecoration(
                             color: MyTheme.darkBlue,
                             borderRadius: BorderRadius.circular(10)),
@@ -145,60 +146,57 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           children: [
                             Expanded(
                                 child: InkWell(
-                                onTap: () {
-                                  viewModel.products![widget.productIndex]
-                                          .cartProduct!.orderedQuantity =
-                                      widget.onMinusButtonPress(viewModel
-                                          .products![widget.productIndex]
-                                          .cartProduct!
-                                          .orderedQuantity!);
+                              onTap: () {
+                                viewModel.products![widget.productIndex]
+                                        .cartProduct!.orderedQuantity =
+                                    widget.onMinusButtonPress(viewModel
+                                        .products![widget.productIndex]
+                                        .cartProduct!
+                                        .orderedQuantity!);
 
-                                  setState(() {});
-                                  },
-                                  child: const Text(
-                                    "-",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                setState(() {});
+                              },
+                              child: Text(
+                                "-",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(fontWeight: FontWeight.bold , color: Theme.of(context).scaffoldBackgroundColor),
+                                textAlign: TextAlign.center,
+                              ),
                             )),
                             Expanded(
                                 child: Text(
                               viewModel.products![widget.productIndex]
                                   .cartProduct!.orderedQuantity!
                                   .toString(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.bold , color: Theme.of(context).scaffoldBackgroundColor),
                               textAlign: TextAlign.center,
                             )),
                             Expanded(
                                 child: InkWell(
-                                onTap: () {
-                                  viewModel.products![widget.productIndex]
-                                          .cartProduct!.orderedQuantity =
-                                      widget.onPlusButtonPress(
-                                          int.parse(viewModel
-                                              .products![widget.productIndex]
-                                              .cartProduct!
-                                              .quantity!
-                                              .toString()),
-                                          viewModel.products![widget.productIndex]
-                                              .cartProduct!.orderedQuantity!);
-                                  setState(() {});
-                                },
-                                child: const Text(
+                              onTap: () {
+                                viewModel.products![widget.productIndex]
+                                        .cartProduct!.orderedQuantity =
+                                    widget.onPlusButtonPress(
+                                        int.parse(viewModel
+                                            .products![widget.productIndex]
+                                            .cartProduct!
+                                            .quantity!
+                                            .toString()),
+                                        viewModel.products![widget.productIndex]
+                                            .cartProduct!.orderedQuantity!);
+                                setState(() {});
+                              },
+                              child: Text(
                                 '+',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(fontWeight: FontWeight.bold , color: Theme.of(context).scaffoldBackgroundColor),
                                 textAlign: TextAlign.center,
                               ),
                             ))

@@ -55,17 +55,14 @@ class _ProductWidgetState extends State<ProductWidget> {
             )),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.product.name!,
-                      style: const TextStyle(
-                          color: MyTheme.darkBlue,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleSmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -96,10 +93,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                       children: [
                         Text(
                           "${widget.product.price} EGP",
-                          style: const TextStyle(
-                              color: MyTheme.darkBlue,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.bodyMedium
                         ),
                         InkWell(
                             onTap: () {
@@ -112,12 +106,12 @@ class _ProductWidgetState extends State<ProductWidget> {
                                 ? const Icon(
                                     Icons.favorite_rounded,
                                     color: MyTheme.blue,
-                                    size: 30,
+                                    size: 24,
                                   )
                                 : const Icon(
                                     Icons.favorite_border_rounded,
                                     color: MyTheme.blue,
-                                    size: 30,
+                                    size: 24,
                             ))
                       ],
                     )
